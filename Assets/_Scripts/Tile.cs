@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -15,8 +15,8 @@ public class Tile : MonoBehaviour
             if (_empty)
             {
                 _empty.Tile = this;
-                transform.SetParent(_empty.transform);
-                transform.DOLocalMove(Vector2.zero, 0.5f).OnComplete(() =>
+                transform.SetParent(_empty.transform); //Set lại parent sau khi đổi Empty
+                transform.DOLocalMove(Vector2.zero, 0.5f).OnComplete(() => //Di chuyển tile về vị trí của Empty
                 {
                     EventManager.EndSwapTileAction();
                 });

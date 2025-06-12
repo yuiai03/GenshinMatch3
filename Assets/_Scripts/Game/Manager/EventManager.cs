@@ -8,9 +8,9 @@ public class EventManager : MonoBehaviour
     {
         OnEndSwapTile?.Invoke();
     }
-    public static event Action OnStartSwapTile;
-    public static void StartSwapTileAction()
+    public static event Action<Tile, Tile> OnStartSwapTile;
+    public static void StartSwapTileAction(Tile selectedTile, Tile targetTile)
     {
-        OnStartSwapTile?.Invoke();
+        OnStartSwapTile?.Invoke(selectedTile, targetTile);
     }
 }

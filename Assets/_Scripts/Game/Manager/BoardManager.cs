@@ -13,6 +13,18 @@ public class BoardManager : Singleton<BoardManager>
     public int Width { get; } = Config.BoardWidth;
     public int Height { get; } = Config.BoardHeight;
 
+    private void OnEnable()
+    {
+        EventManager.OnStartSwapTile += OnStartSwapTile;
+    }
+    private void OnDisable()
+    {
+        EventManager.OnStartSwapTile -= OnStartSwapTile;
+    }
+    private void OnStartSwapTile(Tile selectedTile, Tile targetTile)
+    {
+
+    }
     void Start()
     {
         InitialData();
@@ -60,14 +72,23 @@ public class BoardManager : Singleton<BoardManager>
         return (TileType)UnityEngine.Random.Range(0, Config.TileTypesCount);
     }
 
-    public void SwapTiles(Tile selectedTile, Tile targetTile)
+    public void HandeSwapTiles(Tile selectedTile, Tile targetTile)
     {
-        EventManager.StartSwapTileAction();
-        var tempEmpty = selectedTile.Empty;
-        selectedTile.Empty = targetTile.Empty;
-        targetTile.Empty = tempEmpty;
-    }
+        //EventManager.StartSwapTileAction(selectedTile, targetTile);
 
+        //Đổi Empty của 2 tile
+        Helper.SwapEmpty(selectedTile, targetTile);
+
+        //Kiểm tra xem có match nào không
+
+        //Nếu có match thì thực hiện chuyển đổi Tile
+
+        //Neeus không match thì đổi lại Empty cũ của 2 tiles
+    }
+    public void CheckAfterSwapTiles(Tile selectedTile, Tile targetTile)
+    {
+        CheckAndExplodeMatches();
+    }
     public void CheckAndExplodeMatches()
     {
         var matches = FindAllMatches();
@@ -102,7 +123,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         if (y + 2 >= Height) return new Match();
         var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
-        var type = tiles[0]?.TileType ?? TileType.Hydro; // Lấy loại của ô đầu tiên
+        var type = tiles[0].TileType; 
         for (int i = 1; i < 3; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x, y + i));
@@ -116,7 +137,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         if (x + 2 >= Width) return new Match();
         var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
-        var type = tiles[0]?.TileType ?? TileType.Hydro;
+        var type = tiles[0].TileType;
         for (int i = 1; i < 3; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x + i, y));
@@ -176,10 +197,10 @@ public class BoardManager : Singleton<BoardManager>
 
     public void ClearMatchHistory() => _matchHistory.Clear();
 
-    //public Tile GetTileAtPos(Vector2Int position)
-    //{
-    //    return _emptys[position.x, position.y];
-    //}
+    public Tile GetTileAtPos(Vector2Int position)
+    {
+        return _emptys[position.x, position.y].Tile;
+    }
 }
 
 public class Match
