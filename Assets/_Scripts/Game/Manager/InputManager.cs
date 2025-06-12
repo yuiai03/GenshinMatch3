@@ -50,6 +50,7 @@ public class InputManager : Singleton<InputManager>
     {
         if(!selectedTile || !targetTile) return;
         IsSwapping = true;
+        boardManager.ClearMatchHistory();
     }
 
     void Update()

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     private Tween _moveTween;
-    public TileType TileType { get; private set; }
+    public TileType TileType { get; set; }
 
     private Empty _empty;
     public Empty Empty
