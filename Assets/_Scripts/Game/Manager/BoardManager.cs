@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : Singleton<BoardManager>
@@ -55,99 +57,120 @@ public class BoardManager : Singleton<BoardManager>
 
     private TileType GetRandomTileType()
     {
-        return (TileType)Random.Range(0, Config.TileTypesCount);
+        return (TileType)UnityEngine.Random.Range(0, Config.TileTypesCount);
     }
 
-    public bool SwapTiles(Tile selectedTile, Tile targetTile)
+    public void SwapTiles(Tile selectedTile, Tile targetTile)
     {
+        EventManager.StartSwapTileAction();
         var tempEmpty = selectedTile.Empty;
         selectedTile.Empty = targetTile.Empty;
         targetTile.Empty = tempEmpty;
-        return true;
     }
 
-    //public void CheckAndExplodeMatches()
-    //{
-    //    var matches = FindAllMatches();
-    //    if (matches.Count > 0)
-    //    {
-    //        foreach (var match in matches)
-    //        {
-    //            ExplodeMatch(match);
-    //            _matchHistory.Add(new MatchData(match.TileType, match.Tiles.Count));
-    //        }
-    //        RefillBoard();
-    //        CheckAndExplodeMatches(); // Kiểm tra lại nếu có match mới sau khi refill
-    //    }
-    //}
+    public void CheckAndExplodeMatches()
+    {
+        var matches = FindAllMatches();
+        if (matches.Count > 0)
+        {
+            foreach (var match in matches)
+            {
+                ExplodeMatch(match);
+                _matchHistory.Add(new MatchData(match.TileType, match.Tiles.Count));
+            }
+            RefillBoard();
+            CheckAndExplodeMatches(); // Kiểm tra lại nếu có match mới sau khi refill
+        }
+    }
 
-    //private List<Match> FindAllMatches()
-    //{
-    //    var matches = new List<Match>();
-    //    for (int x = 0; x < Width; x++)
-    //    {
-    //        for (int y = 0; y < Height; y++)
-    //        {
-    //            var horizontal = CheckHorizontalMatch(x, y);
-    //            if (horizontal.Tiles.Count >= 3) matches.Add(horizontal);
-    //            var vertical = CheckVerticalMatch(x, y);
-    //            if (vertical.Tiles.Count >= 3) matches.Add(vertical);
-    //        }
-    //    }
-    //    return matches;
-    //}
-    //private Match CheckHorizontalMatch(int x, int y)
-    //{
-    //    if (y + 2 >= Height) return new Match();
-    //    var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x,y)) };
-    //    var type = tiles[0]?.TileType ?? TileType.Hydro; // Lấy loại của ô đầu tiên
-    //    for (int i = 1; i < 3; i++)
-    //    {
-    //        Tile nextTile = GetTileAtPos(new Vector2Int(x, y + i));
-    //        if (nextTile != null && nextTile.TileType == type) tiles.Add(nextTile);
-    //        else break;
-    //    }
-    //    return new Match { TileType = type, Tiles = tiles };
-    //}
+    private List<Match> FindAllMatches()
+    {
+        var matches = new List<Match>();
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                var horizontal = CheckHorizontalMatch(x, y);
+                if (horizontal.Tiles.Count >= 3) matches.Add(horizontal);
+                var vertical = CheckVerticalMatch(x, y);
+                if (vertical.Tiles.Count >= 3) matches.Add(vertical);
+            }
+        }
+        return matches;
+    }
+    private Match CheckHorizontalMatch(int x, int y)
+    {
+        if (y + 2 >= Height) return new Match();
+        var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
+        var type = tiles[0]?.TileType ?? TileType.Hydro; // Lấy loại của ô đầu tiên
+        for (int i = 1; i < 3; i++)
+        {
+            Tile nextTile = GetTileAtPos(new Vector2Int(x, y + i));
+            if (nextTile != null && nextTile.TileType == type) tiles.Add(nextTile);
+            else break;
+        }
+        return new Match { TileType = type, Tiles = tiles };
+    }
 
-    //private Match CheckVerticalMatch(int x, int y)
-    //{
-    //    if (x + 2 >= Width) return new Match();
-    //    var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
-    //    var type = tiles[0]?.TileType ?? TileType.Hydro;
-    //    for (int i = 1; i < 3; i++)
-    //    {
-    //        Tile nextTile = GetTileAtPos(new Vector2Int(x + i, y));
-    //        if (nextTile != null && nextTile.TileType == type) tiles.Add(nextTile);
-    //        else break;
-    //    }
-    //    return new Match { TileType = type, Tiles = tiles };
-    //}
+    private Match CheckVerticalMatch(int x, int y)
+    {
+        if (x + 2 >= Width) return new Match();
+        var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
+        var type = tiles[0]?.TileType ?? TileType.Hydro;
+        for (int i = 1; i < 3; i++)
+        {
+            Tile nextTile = GetTileAtPos(new Vector2Int(x + i, y));
+            if (nextTile != null && nextTile.TileType == type) tiles.Add(nextTile);
+            else break;
+        }
+        return new Match { TileType = type, Tiles = tiles };
+    }
 
-    //private void ExplodeMatch(Match match)
-    //{
-    //    foreach (var tile in match.Tiles)
-    //    {
-    //        emptys[tile.IntPos.x, tile.IntPos.y] = null;
-    //        Destroy(tile.gameObject);
-    //    }
-    //}
+    private void ExplodeMatch(Match match)
+    {
+        foreach (var tile in match.Tiles)
+        {
+            _emptys[tile.Empty.IntPos.x, tile.Empty.IntPos.y].Tile = null;
+            Destroy(tile.gameObject);
+        }
+    }
 
-    //private void RefillBoard()
-    //{
-    //    for (int x = 0; x < Width; x++)
-    //    {
-    //        for (int y = 0; y < Height; y++)
-    //        {
-    //            if (emptys[x, y] == null)
-    //            {
-    //                Tile tile = Instantiate(tilePrefab, new Vector2(x, y), Quaternion.identity, transform);
-    //                tile.InitialData(GetRandomTileType(), new Vector2Int(x, y), emptys[x,y]);
-    //                emptys[x, y].Tile = tile;
-    //            }
-    //        }
-    //    }
-    //}
+    private void RefillBoard()
+    {
+        StartCoroutine(RefillBoardCoroutine());
+    }
+    private IEnumerator RefillBoardCoroutine()
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (_emptys[x, y].Tile == null)
+                {
+                    Vector2 startPos = new Vector2(x, Height + 1);
+                    Tile tile = Instantiate(_tilePrefab, startPos, Quaternion.identity, transform);
+                    tile.InitialData(GetRandomTileType(), _emptys[x, y]);
+                    _emptys[x, y].Tile = tile;
+
+                    // Di chuyển tile từ trên xuống vị trí đích
+                    float duration = 0.5f; // Thời gian di chuyển (0.5 giây)
+                    float elapsed = 0f;
+                    Vector2 targetPos = new Vector2(x, y);
+
+                    while (elapsed < duration)
+                    {
+                        elapsed += Time.deltaTime;
+                        float t = elapsed / duration;
+                        tile.transform.position = Vector2.Lerp(startPos, targetPos, t);
+                        yield return null; // Chờ frame tiếp theo
+                    }
+
+                    // Đặt vị trí chính xác sau khi di chuyển
+                    tile.transform.position = targetPos;
+                }
+            }
+        }
+    }
 
     public List<MatchData> GetMatchHistory() => new List<MatchData>(_matchHistory);
 
