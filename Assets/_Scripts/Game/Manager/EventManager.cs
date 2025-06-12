@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-    public static event Action OnEndSwapTile;
-    public static void EndSwapTileAction()
+    public static event Action<Tile, Tile> OnEndSwapTile;
+    public static void EndSwapTileAction(Tile selectedTile, Tile targetTile)
     {
-        OnEndSwapTile?.Invoke();
+        OnEndSwapTile?.Invoke(selectedTile, targetTile);
     }
     public static event Action<Tile, Tile> OnStartSwapTile;
     public static void StartSwapTileAction(Tile selectedTile, Tile targetTile)

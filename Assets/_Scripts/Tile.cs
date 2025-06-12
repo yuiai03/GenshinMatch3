@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    private Tween _moveTween;
     public TileType TileType { get; private set; }
 
     private Empty _empty;
@@ -16,9 +17,16 @@ public class Tile : MonoBehaviour
             {
                 _empty.Tile = this;
                 transform.SetParent(_empty.transform); //Set lại parent sau khi đổi Empty
-                transform.DOLocalMove(Vector2.zero, 0.5f).OnComplete(() => //Di chuyển tile về vị trí của Empty
+                if (_moveTween != null && _moveTween.IsActive()) _moveTween.Kill();
+                _moveTween = transform.DOLocalMove(Vector2.zero, 0.5f).OnComplete(() => //Di chuyển tile về vị trí của Empty
                 {
-                    EventManager.EndSwapTileAction();
+                    var selectedTile = InputManager.Instance.SelectedTile;
+                    var targetTile = InputManager.Instance.TargetTile;
+                    if (this == selectedTile)
+                    {
+                        Debug.Log("Tile");
+                        EventManager.EndSwapTileAction(selectedTile, targetTile);
+                    }
                 });
             }
         }
@@ -30,5 +38,10 @@ public class Tile : MonoBehaviour
         Empty = empty;
         spriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = LoadManager.SpriteLoad($"Tile/{type}");
+    }
+
+    private void OnDisable()
+    {
+        _moveTween?.Kill();
     }
 }

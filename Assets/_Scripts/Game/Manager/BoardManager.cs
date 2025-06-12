@@ -13,18 +13,6 @@ public class BoardManager : Singleton<BoardManager>
     public int Width { get; } = Config.BoardWidth;
     public int Height { get; } = Config.BoardHeight;
 
-    private void OnEnable()
-    {
-        EventManager.OnStartSwapTile += OnStartSwapTile;
-    }
-    private void OnDisable()
-    {
-        EventManager.OnStartSwapTile -= OnStartSwapTile;
-    }
-    private void OnStartSwapTile(Tile selectedTile, Tile targetTile)
-    {
-
-    }
     void Start()
     {
         InitialData();
@@ -72,9 +60,9 @@ public class BoardManager : Singleton<BoardManager>
         return (TileType)UnityEngine.Random.Range(0, Config.TileTypesCount);
     }
 
-    public void HandeSwapTiles(Tile selectedTile, Tile targetTile)
+    public void HandleSwapTiles(Tile selectedTile, Tile targetTile)
     {
-        //EventManager.StartSwapTileAction(selectedTile, targetTile);
+        EventManager.StartSwapTileAction(selectedTile, targetTile);
 
         //Đổi Empty của 2 tile
         Helper.SwapEmpty(selectedTile, targetTile);
@@ -85,11 +73,8 @@ public class BoardManager : Singleton<BoardManager>
 
         //Neeus không match thì đổi lại Empty cũ của 2 tiles
     }
-    public void CheckAfterSwapTiles(Tile selectedTile, Tile targetTile)
-    {
-        CheckAndExplodeMatches();
-    }
-    public void CheckAndExplodeMatches()
+
+    public void CheckAndDeleteMatches()
     {
         var matches = FindAllMatches();
         if (matches.Count > 0)
@@ -100,10 +85,8 @@ public class BoardManager : Singleton<BoardManager>
                 _matchHistory.Add(new MatchData(match.TileType, match.Tiles.Count));
             }
             RefillBoard();
-            CheckAndExplodeMatches(); // Kiểm tra lại nếu có match mới sau khi refill
         }
     }
-
     private List<Match> FindAllMatches()
     {
         var matches = new List<Match>();
@@ -122,8 +105,14 @@ public class BoardManager : Singleton<BoardManager>
     private Match CheckHorizontalMatch(int x, int y)
     {
         if (y + 2 >= Height) return new Match();
-        var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
-        var type = tiles[0].TileType; 
+
+        var firstTile = GetTileAtPos(new Vector2Int(x, y));
+        // Kiểm tra nếu tile đầu tiên là null
+        if (firstTile == null) return new Match();
+
+        var tiles = new List<Tile> { firstTile };
+        var type = firstTile.TileType;
+
         for (int i = 1; i < 3; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x, y + i));
@@ -136,8 +125,14 @@ public class BoardManager : Singleton<BoardManager>
     private Match CheckVerticalMatch(int x, int y)
     {
         if (x + 2 >= Width) return new Match();
-        var tiles = new List<Tile> { GetTileAtPos(new Vector2Int(x, y)) };
-        var type = tiles[0].TileType;
+
+        var firstTile = GetTileAtPos(new Vector2Int(x, y));
+        // Kiểm tra nếu tile đầu tiên là null
+        if (firstTile == null) return new Match();
+
+        var tiles = new List<Tile> { firstTile };
+        var type = firstTile.TileType;
+
         for (int i = 1; i < 3; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x + i, y));
@@ -162,37 +157,52 @@ public class BoardManager : Singleton<BoardManager>
     }
     private IEnumerator RefillBoardCoroutine()
     {
+        // Đợi một chút để hoàn thành việc xóa các tile
+        yield return new WaitForSeconds(0.2f);
+
+        // Xử lý từng cột một
         for (int x = 0; x < Width; x++)
         {
+            // Đếm số khoảng trống trong mỗi cột
+            int emptyCount = 0;
+
+            // Từ dưới lên trên, đếm khoảng trống và di chuyển tile xuống
             for (int y = 0; y < Height; y++)
             {
                 if (_emptys[x, y].Tile == null)
                 {
-                    Vector2 startPos = new Vector2(x, Height + 1);
-                    Tile tile = Instantiate(_tilePrefab, startPos, Quaternion.identity, transform);
-                    tile.InitialData(GetRandomTileType(), _emptys[x, y]);
-                    _emptys[x, y].Tile = tile;
+                    emptyCount++;
+                }
+                else if (emptyCount > 0)
+                {
+                    // Di chuyển tile xuống emptyCount vị trí
+                    Tile tile = _emptys[x, y].Tile;
+                    _emptys[x, y].Tile = null;
 
-                    // Di chuyển tile từ trên xuống vị trí đích
-                    float duration = 0.5f; // Thời gian di chuyển (0.5 giây)
-                    float elapsed = 0f;
-                    Vector2 targetPos = new Vector2(x, y);
-
-                    while (elapsed < duration)
-                    {
-                        elapsed += Time.deltaTime;
-                        float t = elapsed / duration;
-                        tile.transform.position = Vector2.Lerp(startPos, targetPos, t);
-                        yield return null; // Chờ frame tiếp theo
-                    }
-
-                    // Đặt vị trí chính xác sau khi di chuyển
-                    tile.transform.position = targetPos;
+                    // Gán tile vào vị trí mới
+                    tile.Empty = _emptys[x, y - emptyCount];
                 }
             }
-        }
-    }
 
+            // Tạo tile mới ở phía trên cùng
+            for (int i = 0; i < emptyCount; i++)
+            {
+                int newY = Height - i - 1;
+
+                // Vị trí bắt đầu (trên cùng màn hình)
+                Vector2 startPos = new Vector2(x, Height + i + 1);
+
+                // Tạo tile mới
+                Tile newTile = Instantiate(_tilePrefab, startPos, Quaternion.identity, transform);
+                newTile.InitialData(GetRandomTileType(), _emptys[x, newY]);
+            }
+        }
+
+        // Đợi cho animation di chuyển hoàn tất
+        yield return new WaitForSeconds(0.6f);
+
+        CheckAndDeleteMatches();
+    }
     public List<MatchData> GetMatchHistory() => new List<MatchData>(_matchHistory);
 
     public void ClearMatchHistory() => _matchHistory.Clear();

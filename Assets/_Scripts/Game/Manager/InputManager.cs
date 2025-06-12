@@ -3,8 +3,10 @@
 public class InputManager : Singleton<InputManager>
 {
     public bool IsSwapping { get; set; }
-    [SerializeField] private Tile _selectedTile;
-    [SerializeField] private Tile _targetTile;
+    public bool IsBackSwapping { get; set; }
+    public Tile SelectedTile { get; private set; }
+    public Tile TargetTile { get; private set; }
+
     [SerializeField] private Empty _selectedEmpty;
     [SerializeField] private Vector2 _touchStartPosition;
     [SerializeField] private Vector2Int _swapDirection;
@@ -21,19 +23,27 @@ public class InputManager : Singleton<InputManager>
         EventManager.OnEndSwapTile -= OnEndSwapTile;
         EventManager.OnStartSwapTile -= OnStartSwapTile;
     }
-    private void OnEndSwapTile()
+    private void OnEndSwapTile(Tile selectedTile, Tile targetTile)
     {
         IsSwapping = false;
-        //boardManager.CheckAndExplodeMatches();
-        //if (boardManager.GetMatchHistory().Count == 0)
-        //{
-        //    boardManager.HandeSwapTiles(_targetTile, _selectedTile);
-        //}
-        //else
-        //{
-        //    _selectedTile = null;
-        //    _targetTile = null;
-        //}
+
+        boardManager.CheckAndDeleteMatches();
+
+        Debug.Log(boardManager.GetMatchHistory().Count == 0);
+        //Nếu không matches thì hoán đổi lại như cũ
+        if (boardManager.GetMatchHistory().Count == 0) 
+        {
+            IsBackSwapping = !IsBackSwapping;
+            if (IsBackSwapping)
+            {
+                boardManager.HandleSwapTiles(selectedTile, targetTile);
+                return;
+            }
+        }
+
+        //Nếu có matches thì set lại ref tiles = null
+        SelectedTile = TargetTile = null;
+
     }
 
     private void OnStartSwapTile(Tile selectedTile, Tile targetTile)
@@ -53,6 +63,8 @@ public class InputManager : Singleton<InputManager>
             Touch touch = Input.GetTouch(0);
             var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
             RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
+
+            if (!hit.collider || IsSwapping) return;
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -71,31 +83,26 @@ public class InputManager : Singleton<InputManager>
     }
     private void BeganPhase(Touch touch, RaycastHit2D hit)
     {
-        if (hit.collider)
-        {
-            _selectedTile = hit.collider.GetComponent<Tile>();
-            if (_selectedTile)
-            {
-                _touchStartPosition = touch.position;
-            }
-        }
+        SelectedTile = hit.collider.GetComponent<Tile>();
+        if (!SelectedTile) return;
+
+        _touchStartPosition = touch.position;
     }
     private void MovedPhase(Touch touch, RaycastHit2D hit)
     {
-        if (_selectedTile && !IsSwapping)
-        {
-            Vector2 touchPosition = touch.position;
-            Vector2 direction = touchPosition - _touchStartPosition;
-            _currentSwapDirection = GetSwapDirection(direction);
-            _targetTile = hit.collider.GetComponent<Tile>();
+        if (!SelectedTile) return;
 
-            if (_selectedTile != _targetTile) CheckToSwapTiles();
-        }
+        Vector2 touchPosition = touch.position;
+        Vector2 direction = touchPosition - _touchStartPosition;
+        _currentSwapDirection = GetSwapDirection(direction);
+        TargetTile = hit.collider.GetComponent<Tile>();
+
+        if (SelectedTile != TargetTile) CheckToSwapTiles();
     }
     private void EndedPhase(Touch touch, RaycastHit2D hit)
     {
-        if (_selectedTile) _selectedTile = null;
-        if (_targetTile) _targetTile = null;
+        if(IsSwapping) return;
+        SelectedTile = TargetTile = null;
     }
 
     private Vector2Int GetSwapDirection(Vector2 direction)
@@ -109,10 +116,10 @@ public class InputManager : Singleton<InputManager>
     //Check befo
     private void CheckToSwapTiles()
     {
-        Vector2Int newPos = _selectedTile.Empty.IntPos + _currentSwapDirection;
-        if(IsValidPos(newPos) && newPos == _targetTile.Empty.IntPos)
+        Vector2Int newPos = SelectedTile.Empty.IntPos + _currentSwapDirection;
+        if(IsValidPos(newPos) && newPos == TargetTile.Empty.IntPos)
         {
-            boardManager.HandeSwapTiles(_selectedTile, _targetTile);
+            boardManager.HandleSwapTiles(SelectedTile, TargetTile);
         }
     }
 
