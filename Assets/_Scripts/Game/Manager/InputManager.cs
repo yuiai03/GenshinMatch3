@@ -2,6 +2,7 @@
 
 public class InputManager : Singleton<InputManager>
 {
+    public bool CanSwap { get; set; }
     public bool IsSwapping { get; set; }
     public bool IsBackSwapping { get; set; }
     public Tile SelectedTile { get; private set; }
@@ -17,15 +18,18 @@ public class InputManager : Singleton<InputManager>
     {
         EventManager.OnEndSwapTile += OnEndSwapTile;
         EventManager.OnStartSwapTile += OnStartSwapTile;
+        EventManager.OnBoardStateChanged +=  (isBusy) => CanSwap = !isBusy;
     }
     private void OnDisable()
     {
         EventManager.OnEndSwapTile -= OnEndSwapTile;
         EventManager.OnStartSwapTile -= OnStartSwapTile;
+        EventManager.OnBoardStateChanged -= (isBusy) => CanSwap = !isBusy;
     }
     private void OnEndSwapTile(Tile selectedTile, Tile targetTile)
     {
         IsSwapping = false;
+        EventManager.BoardStateChanged(IsSwapping);
 
         boardManager.CheckAndDeleteMatches();
 
@@ -55,7 +59,10 @@ public class InputManager : Singleton<InputManager>
 
     void Update()
     {
-        InputHandle();
+        if (CanSwap)
+        {
+            InputHandle();
+        }
     }
     private void InputHandle()
     {

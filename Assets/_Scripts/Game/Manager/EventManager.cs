@@ -8,9 +8,16 @@ public class EventManager : MonoBehaviour
     {
         OnEndSwapTile?.Invoke(selectedTile, targetTile);
     }
+    
     public static event Action<Tile, Tile> OnStartSwapTile;
     public static void StartSwapTileAction(Tile selectedTile, Tile targetTile)
     {
         OnStartSwapTile?.Invoke(selectedTile, targetTile);
+    }
+
+    public static event Action<bool> OnBoardStateChanged;
+    public static void BoardStateChanged(bool isBusy)
+    {
+        OnBoardStateChanged?.Invoke(isBusy);
     }
 }
