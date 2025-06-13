@@ -64,12 +64,12 @@ public class BoardManager : Singleton<BoardManager>
                 tile.InitialData(tileType, _emptys[x, y]);
 
                 // Đợi một chút trước khi tạo tile tiếp theo để tạo hiệu ứng chuỗi
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(0.02f);
             }
         }
 
         // Đợi cho animation rơi hoàn tất
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.6f);
 
         // Kiểm tra xem có khả năng tạo match hay không
         if (!HasPotentialMatches())
@@ -241,10 +241,10 @@ public class BoardManager : Singleton<BoardManager>
         return new Match { TileType = type, Tiles = tiles };
     }
 
-    // Kiểm tra xem còn khả năng tạo match không bằng cách thử swap ảo
+    // Kiểm tra xem còn khả năng tạo match không
     private bool HasPotentialMatches()
     {
-        // Thực hiện swap ảo giữa tất cả các cặp tile kề nhau và kiểm tra match
+        // Kiểm tra tất cả các cặp tile kề nhau
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -258,8 +258,16 @@ public class BoardManager : Singleton<BoardManager>
                     Tile rightTile = GetTileAtPos(new Vector2Int(x + 1, y));
                     if (rightTile != null)
                     {
-                        if (CheckSwapCreateMatch(currentTile, rightTile))
-                            return true;
+                        // Swap tạm thời
+                        SwapTileTypes(currentTile, rightTile);
+
+                        // Kiểm tra có match không
+                        bool hasMatch = HasMatchAt(x, y) || HasMatchAt(x + 1, y);
+
+                        // Swap lại như cũ
+                        SwapTileTypes(currentTile, rightTile);
+
+                        if (hasMatch) return true;
                     }
                 }
 
@@ -269,114 +277,22 @@ public class BoardManager : Singleton<BoardManager>
                     Tile upTile = GetTileAtPos(new Vector2Int(x, y + 1));
                     if (upTile != null)
                     {
-                        if (CheckSwapCreateMatch(currentTile, upTile))
-                            return true;
-                    }
-                }
+                        // Swap tạm thời
+                        SwapTileTypes(currentTile, upTile);
 
-                // Kiểm tra swap với tile bên trái
-                if (x > 0)
-                {
-                    Tile leftTile = GetTileAtPos(new Vector2Int(x - 1, y));
-                    if (leftTile != null)
-                    {
-                        if (CheckSwapCreateMatch(currentTile, leftTile))
-                            return true;
-                    }
-                }
+                        // Kiểm tra có match không
+                        bool hasMatch = HasMatchAt(x, y) || HasMatchAt(x, y + 1);
 
-                // Kiểm tra swap với tile bên dưới
-                if (y > 0)
-                {
-                    Tile downTile = GetTileAtPos(new Vector2Int(x, y - 1));
-                    if (downTile != null)
-                    {
-                        if (CheckSwapCreateMatch(currentTile, downTile))
-                            return true;
+                        // Swap lại như cũ
+                        SwapTileTypes(currentTile, upTile);
+
+                        if (hasMatch) return true;
                     }
                 }
             }
         }
 
         return false;
-    }
-
-    // Kiểm tra xem việc swap hai tile có tạo match không
-    private bool CheckSwapCreateMatch(Tile tile1, Tile tile2)
-    {
-        // Swap ảo
-        TileType tempType = tile1.TileType;
-        tile1.TileType = tile2.TileType;
-        tile2.TileType = tempType;
-
-        // Kiểm tra xem có match được tạo ở cả hai vị trí
-        bool match1 = CheckTileForMatches(tile1);
-        bool match2 = CheckTileForMatches(tile2);
-
-        // Swap lại như cũ
-        tile2.TileType = tile1.TileType;
-        tile1.TileType = tempType;
-
-        return match1 || match2;
-    }
-
-    // Kiểm tra xem một tile có tạo match không (horizontal và vertical)
-    private bool CheckTileForMatches(Tile tile)
-    {
-        if (tile == null) return false;
-
-        Vector2Int pos = tile.Empty.IntPos;
-        TileType type = tile.TileType;
-
-        // Kiểm tra match ngang
-        int horizontalMatches = 1;
-
-        // Kiểm tra bên trái
-        for (int i = pos.x - 1; i >= 0; i--)
-        {
-            Tile checkTile = GetTileAtPos(new Vector2Int(i, pos.y));
-            if (checkTile != null && checkTile.TileType == type)
-                horizontalMatches++;
-            else
-                break;
-        }
-
-        // Kiểm tra bên phải
-        for (int i = pos.x + 1; i < Width; i++)
-        {
-            Tile checkTile = GetTileAtPos(new Vector2Int(i, pos.y));
-            if (checkTile != null && checkTile.TileType == type)
-                horizontalMatches++;
-            else
-                break;
-        }
-
-        if (horizontalMatches >= 3) return true;
-
-        // Kiểm tra match dọc
-        int verticalMatches = 1;
-
-        // Kiểm tra bên dưới
-        for (int i = pos.y - 1; i >= 0; i--)
-        {
-            Tile checkTile = GetTileAtPos(new Vector2Int(pos.x, i));
-            if (checkTile != null && checkTile.TileType == type)
-                verticalMatches++;
-            else
-                break;
-        }
-
-        // Kiểm tra bên trên
-        for (int i = pos.y + 1; i < Height; i++)
-        {
-            Tile checkTile = GetTileAtPos(new Vector2Int(pos.x, i));
-            if (checkTile != null && checkTile.TileType == type)
-                verticalMatches++;
-            else
-                break;
-        }
-
-        return verticalMatches >= 3;
     }
 
     // Đổi chỗ TileType của 2 tile
@@ -458,7 +374,7 @@ public class BoardManager : Singleton<BoardManager>
     private IEnumerator RefillBoardCoroutine()
     {
         // Đợi một chút để hoàn thành việc xóa các tile
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         // Xử lý từng cột một
         for (int x = 0; x < Width; x++)

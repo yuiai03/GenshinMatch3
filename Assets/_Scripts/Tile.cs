@@ -18,7 +18,7 @@ public class Tile : MonoBehaviour
                 _empty.Tile = this;
                 transform.SetParent(_empty.transform); //Set lại parent sau khi đổi Empty
                 if (_moveTween != null && _moveTween.IsActive()) _moveTween.Kill();
-                _moveTween = transform.DOLocalMove(Vector2.zero, 0.5f).OnComplete(() => //Di chuyển tile về vị trí của Empty
+                _moveTween = transform.DOLocalMove(Vector2.zero, 1f).OnComplete(() => //Di chuyển tile về vị trí của Empty
                 {
                     var selectedTile = InputManager.Instance.SelectedTile;
                     var targetTile = InputManager.Instance.TargetTile;
