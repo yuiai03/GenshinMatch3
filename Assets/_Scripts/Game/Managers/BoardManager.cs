@@ -71,7 +71,7 @@ public class BoardManager : Singleton<BoardManager>
         else
         {
             EventManager.BoardStateChangedAction(false);
-            EventManager.OnGameStateChangedAction(GameState.PlayerTurn);
+            EventManager.GameStateChangedAction(GameState.PlayerTurn);
         }
     }
 
@@ -153,7 +153,7 @@ public class BoardManager : Singleton<BoardManager>
             else
             {
                 if (_matchHistory.Count == 0) return;
-                EventManager.OnGameStateChangedAction(GameState.PlayerEndedAction);
+                EventManager.GameStateChangedAction(GameState.PlayerEndedAction);
             }
         }
     }

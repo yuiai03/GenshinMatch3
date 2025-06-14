@@ -1,18 +1,18 @@
+using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadManager : Singleton<LoadManager>
 {
+    private Coroutine transitionCoroutine;
+
     public void ReLoadScene()
     {
         SceneManager.LoadScene(0);
     }
 
-    /// <summary>
-    /// Sprites/path
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
+
     public static Sprite SpriteLoad(string path)
     {
         var spritePath = $"Sprites/{path}";
@@ -23,13 +23,6 @@ public class LoadManager : Singleton<LoadManager>
         }
         return sprite;
     }
-
-    /// <summary>
-    /// Prefabs/path
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="path"></param>
-    /// <returns></returns>
     public static T PrefabLoad<T>(string path) where T : Component
     {
         var prefabPath = $"Prefabs/{path}";
@@ -41,4 +34,36 @@ public class LoadManager : Singleton<LoadManager>
         return prefab;
     }
 
+
+    public void TransitionLevel(SceneType sceneType)
+    {
+        if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
+        transitionCoroutine = StartCoroutine(TransitionCoroutine(sceneType));
+    }
+
+    private IEnumerator TransitionCoroutine(SceneType sceneType)
+    {
+        var levelTransiton = UIManager.Instance.LevelTransiton;
+        levelTransiton.Close();
+
+        yield return new WaitForSeconds(1f);
+
+        DOTween.KillAll();
+
+        var loadScene = SceneManager.LoadSceneAsync(sceneType.ToString());
+        loadScene.allowSceneActivation = false;
+        while (!loadScene.isDone)
+        {
+            if (loadScene.progress >= 0.9f)
+            {
+                loadScene.allowSceneActivation = true;
+                EventManager.SceneChangedAction(sceneType);
+            }
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.1f);
+
+        levelTransiton.Open();
+        EventManager.SceneChangedAction(sceneType);
+    }
 }

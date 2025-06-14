@@ -8,9 +8,7 @@ public class InputManager : Singleton<InputManager>
     public Tile SelectedTile { get; private set; }
     public Tile TargetTile { get; private set; }
 
-    [SerializeField] private Empty _selectedEmpty;
     [SerializeField] private Vector2 _touchStartPosition;
-    [SerializeField] private Vector2Int _swapDirection;
     [SerializeField] private Vector2Int _currentSwapDirection;
     private BoardManager _boardManager => BoardManager.Instance;
 

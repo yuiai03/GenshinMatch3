@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
+    public SceneType SceneType { get; private set; }
     public GameState GameState { get; private set; }
     private BoardManager _boardManager => BoardManager.Instance;
     private UIManager _uiManager => UIManager.Instance;
@@ -11,18 +12,19 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        EventManager.OnGameStateChangedAction(GameState.GameStart);
+        EventManager.GameStateChangedAction(GameState.GameWaiting);
     }
 
     private void OnEnable()
     {
         EventManager.OnGameStateChanged += SetGameState;
+        EventManager.OnSceneChanged += OnSceneChange;
     }
     private void OnDisable()
     {
         EventManager.OnGameStateChanged -= SetGameState;
+        EventManager.OnSceneChanged -= OnSceneChange;
     }
-
     private void SetGameState(GameState state)
     {
         GameState = state;
@@ -48,8 +50,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnGameStart()
     {
-        _boardManager.InitializeEmpty();
-        _boardManager.InitializeTiles();
+
     }
 
     private void OnPlayerTurn()
@@ -74,6 +75,15 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    private void OnSceneChange(SceneType sceneType)
+    {
+        SceneType = sceneType;
+        if (sceneType == SceneType.Game)
+        {
+            EventManager.GameStateChangedAction(GameState.GameStart);
+            UIManager.Instance.ActionPanel.gameObject.SetActive(false);
+        }
+    }
 
     private IEnumerator OnPlayerEndedActionCoroutine()
     {

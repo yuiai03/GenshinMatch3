@@ -22,8 +22,14 @@ public class EventManager : MonoBehaviour
     }
 
     public static event Action<GameState> OnGameStateChanged;
-    public static void OnGameStateChangedAction(GameState state)
+    public static void GameStateChangedAction(GameState gameState)
     {
-        OnGameStateChanged?.Invoke(state);
+        OnGameStateChanged?.Invoke(gameState);
+    }
+
+    public static event Action<SceneType> OnSceneChanged;
+    public static void SceneChangedAction(SceneType sceneType)
+    {
+        OnSceneChanged?.Invoke(sceneType);
     }
 }

@@ -37,6 +37,7 @@ public enum EntityType
 
 public enum GameState
 {
+    GameWaiting,
     GameStart,
     GameOver,
     GameWin,
@@ -48,4 +49,10 @@ public enum GameState
     EnemyEndedAction,
 
     GamePause,
+}
+
+public enum SceneType
+{
+    Map,
+    Game
 }
