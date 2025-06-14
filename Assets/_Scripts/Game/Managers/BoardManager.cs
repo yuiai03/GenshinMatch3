@@ -5,66 +5,59 @@ using UnityEngine;
 
 public class BoardManager : Singleton<BoardManager>
 {
-    private Tile _tilePrefab;
-    private Empty _emptyPrefab;
+    public GameObject BoardBg;
+    public GameObject EmptyHolder;
     private Empty[,] _emptys;
     private List<MatchData> _matchHistory = new List<MatchData>();
-    public GameObject EmptyHolder { get; private set; }
     public int Width { get; } = Config.BoardWidth;
     public int Height { get; } = Config.BoardHeight;
 
     private Coroutine _initialTilesCoroutine;
 
-    void Start()
+    public void InitializeEmpty()
     {
-        InitialData();
-        InitialEmpty();
-        InitialTiles();
-    }
-
-    private void InitialData()
-    {
-        _tilePrefab = LoadManager.PrefabLoad<Tile>("Tile");
-        _emptyPrefab = LoadManager.PrefabLoad<Empty>("Empty");
-        EmptyHolder = transform.GetChild(0).gameObject;
-    }
-
-    private void InitialEmpty()
-    {
-        if (!_emptyPrefab) return;
-
+        if (!EmptyHolder || !BoardBg) return;
+        
         _emptys = new Empty[Width, Height];
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
-                Empty empty = Instantiate(_emptyPrefab, new Vector2(x, y), Quaternion.identity);
-                empty.transform.SetParent(EmptyHolder.transform);
+                Empty empty = PoolManager.Instance.GetObject<Empty>
+                    (PoolType.Empty, new Vector2(x, y), EmptyHolder.transform);
                 _emptys[x, y] = empty;
                 _emptys[x, y].IntPos = new Vector2Int(x, y);
             }
         }
     }
-    private void InitialTiles()
+    public void InitializeTiles()
     {
         if(_initialTilesCoroutine != null) StopCoroutine(_initialTilesCoroutine);
         _initialTilesCoroutine = StartCoroutine(InitialTilesCoroutine());
     }
-
+    public void InitializeMatchedTiles()
+    {
+        foreach (var match in _matchHistory)
+        {
+            var holder = UIManager.Instance.GamePanel.MatchedTilesViewHolder;
+            MatchedTileView matchedTileView = 
+                PoolManager.Instance.GetObject<MatchedTileView>(
+                PoolType.MatchedTileView, Vector2.zero, holder.transform);
+            matchedTileView.InitialData(match.TypeType, match.Count);
+        }
+    }
     private IEnumerator InitialTilesCoroutine()
     {
-        if (!_tilePrefab || _emptys.Length == 0) yield break;
+        if (_emptys.Length == 0) yield break;
 
-        EventManager.BoardStateChanged(true);
-
+        EventManager.BoardStateChangedAction(true);
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 Vector2 startPos = new Vector2(x, Height + y);
-                Tile tile = Instantiate(_tilePrefab, startPos, Quaternion.identity, transform);
-
-                //Lấy loại tile không matching ngay khi vừa tạo
+                Tile tile = PoolManager.Instance.GetObject<Tile>
+                    (PoolType.Tile, startPos, EmptyHolder.transform);
                 TileType tileType = GetNoMatchingTileType(x, y);
 
                 tile.InitialData(tileType, _emptys[x, y]);
@@ -74,10 +67,12 @@ public class BoardManager : Singleton<BoardManager>
         }
         yield return new WaitForSeconds(Config.TileMoveDuration);
 
-        EventManager.BoardStateChanged(false);
-
-        //Nếu không có tile nào có khả năng tạo match
         if (!BoardCanMatches()) RecreateBoard();
+        else
+        {
+            EventManager.BoardStateChangedAction(false);
+            EventManager.OnGameStateChangedAction(GameState.PlayerTurn);
+        }
     }
 
     private TileType GetNoMatchingTileType(int x, int y)
@@ -147,14 +142,19 @@ public class BoardManager : Singleton<BoardManager>
             foreach (var match in matches)
             {
                 ClearMatch(match);
-                _matchHistory.Add(new MatchData(match.TileType, match.Tiles.Count));
+                AddElementMatchHistory(match.TileType, match.Tiles.Count);
+                //_matchHistory.Add(new MatchData(match.TileType, match.Tiles.Count));
             }
             RefillBoard();
         }
         else
         {
-            //Nếu không có tile nào có khả năng tạo match
             if (!BoardCanMatches()) RecreateBoard();
+            else
+            {
+                if (_matchHistory.Count == 0) return;
+                EventManager.OnGameStateChangedAction(GameState.PlayerEndedAction);
+            }
         }
     }
 
@@ -302,21 +302,21 @@ public class BoardManager : Singleton<BoardManager>
     {
         Debug.Log("Recreate Board");
         
-        for (int x = 0; x < Width; x++)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                if (_emptys[x, y].Tile != null)
-                {
-                    Destroy(_emptys[x, y].Tile.gameObject);
-                    _emptys[x, y].Tile = null;
-                }
-            }
-        }
+        //for (int x = 0; x < Width; x++)
+        //{
+        //    for (int y = 0; y < Height; y++)
+        //    {
+        //        if (_emptys[x, y].Tile)
+        //        {
+        //            Tile tile = _emptys[x, y].Tile;
+        //            PoolManager.Instance.ReturnObject(PoolType.Tile, tile.gameObject);
+        //            _emptys[x, y].Tile = null;
+        //        }
+        //    }
+        //}
 
-        // Tạo lại bảng
-        if (_initialTilesCoroutine != null) StopCoroutine(_initialTilesCoroutine);
-        _initialTilesCoroutine = StartCoroutine(InitialTilesCoroutine());
+        //if (_initialTilesCoroutine != null) StopCoroutine(_initialTilesCoroutine);
+        //_initialTilesCoroutine = StartCoroutine(InitialTilesCoroutine());
     }
 
     private void ClearMatch(Match match)
@@ -324,7 +324,7 @@ public class BoardManager : Singleton<BoardManager>
         foreach (var tile in match.Tiles)
         {
             _emptys[tile.Empty.IntPos.x, tile.Empty.IntPos.y].Tile = null;
-            Destroy(tile.gameObject);
+            PoolManager.Instance.ReturnObject(PoolType.Tile ,tile.gameObject);
         }
     }
 
@@ -335,26 +335,23 @@ public class BoardManager : Singleton<BoardManager>
 
     private IEnumerator RefillBoardCoroutine()
     {
-        EventManager.BoardStateChanged(true);
+        EventManager.BoardStateChangedAction(true);
         yield return new WaitForSeconds(0.01f);
 
         for (int x = 0; x < Width; x++)
         {
             MoveExistingTilesDown(x);
 
-            //Đếm số vị trí còn trống sau khi di chuyển
             int emptyCount = CountEmptyPositions(x);
 
             if (emptyCount > 0)
             {
-                // Tạo tile mới từ trên xuống theo thứ tự
                 CreateNewTilesInColumn(x, emptyCount);
             }
         }
         yield return new WaitForSeconds(Config.TileMoveDuration);
-        EventManager.BoardStateChanged(false);
+        EventManager.BoardStateChangedAction(false);
 
-        // Kiểm tra matches mới và kiểm tra xem bảng còn khả năng match không
         CheckAndDeleteMatches();
     }
 
@@ -397,7 +394,6 @@ public class BoardManager : Singleton<BoardManager>
     // Tạo tile mới cho các vị trí trống trong một cột
     private void CreateNewTilesInColumn(int column, int emptyCount)
     {
-        // Thu thập tất cả các vị trí trống
         List<int> emptyPositions = new List<int>();
         for (int y = 0; y < Height; y++)
         {
@@ -407,16 +403,14 @@ public class BoardManager : Singleton<BoardManager>
             }
         }
 
-        // Tạo tile mới cho từng vị trí trống, xếp chúng thẳng hàng từ trên xuống
         for (int i = 0; i < emptyPositions.Count; i++)
         {
             int targetY = emptyPositions[i];
 
-            // Vị trí bắt đầu - xếp theo thứ tự ở phía trên bảng
             Vector2 startPos = new Vector2(column, Height + i);
 
-            // Tạo tile mới
-            Tile newTile = Instantiate(_tilePrefab, startPos, Quaternion.identity, transform);
+            Tile newTile = PoolManager.Instance.GetObject<Tile>
+                (PoolType.Tile, startPos, EmptyHolder.transform);
             newTile.InitialData(GetRandomTileType(), _emptys[column, targetY]);
         }
     }
@@ -427,5 +421,18 @@ public class BoardManager : Singleton<BoardManager>
     public Tile GetTileAtPos(Vector2Int position)
     {
         return _emptys[position.x, position.y].Tile;
+    }
+    public void SetBoardState(bool state) => BoardBg.SetActive(state);
+    private void AddElementMatchHistory(TileType type, int count)
+    {
+        foreach (var match in _matchHistory)
+        {
+            if (match.TypeType == type)
+            {
+                match.Count += count;
+                return;
+            }
+        }
+        _matchHistory.Add(new MatchData { TypeType = type, Count = count });
     }
 }

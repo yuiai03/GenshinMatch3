@@ -8,3 +8,44 @@ public enum TileType
     Geo,
     Anemo,
 }
+
+public enum PoolType
+{
+    Empty,
+    Tile,
+    MatchedTileView
+}
+
+public enum EntityType
+{
+    //Player
+    Buba,
+    Olek,
+    Puffy,
+    Ena,
+
+    //Enemy
+    TreantFlowering,
+    TreantFighter,
+    Slime,
+    SlimeForestB,
+    BearMom,
+    BearDad,
+    DryadFighter,
+    UFO,
+}
+
+public enum GameState
+{
+    GameStart,
+    GameOver,
+    GameWin,
+
+    PlayerTurn,
+    EnemyTurn,
+    
+    PlayerEndedAction,
+    EnemyEndedAction,
+
+    GamePause,
+}

@@ -18,15 +18,11 @@ public class Tile : MonoBehaviour
                 _empty.Tile = this;
                 transform.SetParent(_empty.transform); //Set parent sau khi nhận Empty
                 if (_moveTween != null && _moveTween.IsActive()) _moveTween.Kill();
-                _moveTween = transform.DOLocalMove(Vector2.zero, Config.TileMoveDuration).OnComplete(() => //Di chuyển tile về vị trí của Empty
+                _moveTween = transform.DOLocalMove(Vector2.zero, Config.TileMoveDuration).OnComplete(() =>
                 {
                     var selectedTile = InputManager.Instance.SelectedTile;
                     var targetTile = InputManager.Instance.TargetTile;
-                    if (this == selectedTile)
-                    {
-                        Debug.Log("Tile");
-                        EventManager.EndSwapTileAction(selectedTile, targetTile);
-                    }
+                    if (this == selectedTile) EventManager.EndSwapTileAction(selectedTile, targetTile);
                 });
             }
         }

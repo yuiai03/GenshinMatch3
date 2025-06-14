@@ -1,7 +1,13 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadManager : Singleton<LoadManager>
 {
+    public void ReLoadScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     /// <summary>
     /// Sprites/path
     /// </summary>

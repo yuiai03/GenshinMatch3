@@ -12,7 +12,7 @@ public class InputManager : Singleton<InputManager>
     [SerializeField] private Vector2 _touchStartPosition;
     [SerializeField] private Vector2Int _swapDirection;
     [SerializeField] private Vector2Int _currentSwapDirection;
-    private BoardManager boardManager => BoardManager.Instance;
+    private BoardManager _boardManager => BoardManager.Instance;
 
     private void OnEnable()
     {
@@ -29,22 +29,19 @@ public class InputManager : Singleton<InputManager>
     private void OnEndSwapTile(Tile selectedTile, Tile targetTile)
     {
         IsSwapping = false;
-        EventManager.BoardStateChanged(IsSwapping);
+        EventManager.BoardStateChangedAction(IsSwapping);
+        _boardManager.CheckAndDeleteMatches();
 
-        boardManager.CheckAndDeleteMatches();
-
-        Debug.Log(boardManager.GetMatchHistory().Count == 0);
         //Nếu không matches thì hoán đổi lại như cũ
-        if (boardManager.GetMatchHistory().Count == 0) 
+        if (_boardManager.GetMatchHistory().Count == 0) 
         {
             IsBackSwapping = !IsBackSwapping;
             if (IsBackSwapping)
             {
-                boardManager.HandleSwapTiles(selectedTile, targetTile);
+                _boardManager.HandleSwapTiles(selectedTile, targetTile);
                 return;
             }
         }
-
         //Nếu có matches thì set lại ref tiles = null
         SelectedTile = TargetTile = null;
 
@@ -54,12 +51,12 @@ public class InputManager : Singleton<InputManager>
     {
         if(!selectedTile || !targetTile) return;
         IsSwapping = true;
-        boardManager.ClearMatchHistory();
+        _boardManager.ClearMatchHistory();
     }
 
     void Update()
     {
-        if (CanSwap)
+        if (CanSwap && GameManager.Instance.GameState == GameState.PlayerTurn)
         {
             InputHandle();
         }
@@ -127,13 +124,13 @@ public class InputManager : Singleton<InputManager>
         Vector2Int newPos = SelectedTile.Empty.IntPos + _currentSwapDirection;
         if(IsValidPos(newPos) && newPos == TargetTile.Empty.IntPos)
         {
-            boardManager.HandleSwapTiles(SelectedTile, TargetTile);
+            _boardManager.HandleSwapTiles(SelectedTile, TargetTile);
         }
     }
 
     private bool IsValidPos(Vector2Int pos)
     {
-        return pos.x >= 0 && pos.x < boardManager.Width 
-            && pos.y >= 0 && pos.y < boardManager.Height;
+        return pos.x >= 0 && pos.x < _boardManager.Width 
+            && pos.y >= 0 && pos.y < _boardManager.Height;
     }
 }

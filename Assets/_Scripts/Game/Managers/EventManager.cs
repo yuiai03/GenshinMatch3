@@ -16,8 +16,14 @@ public class EventManager : MonoBehaviour
     }
 
     public static event Action<bool> OnBoardStateChanged;
-    public static void BoardStateChanged(bool isBusy)
+    public static void BoardStateChangedAction(bool isBusy)
     {
         OnBoardStateChanged?.Invoke(isBusy);
+    }
+
+    public static event Action<GameState> OnGameStateChanged;
+    public static void OnGameStateChangedAction(GameState state)
+    {
+        OnGameStateChanged?.Invoke(state);
     }
 }
