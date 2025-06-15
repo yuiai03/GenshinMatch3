@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 5016514825671310905}
   - component: {fileID: 9011722455367638332}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Buba
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

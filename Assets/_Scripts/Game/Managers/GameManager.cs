@@ -6,6 +6,7 @@ public class GameManager : Singleton<GameManager>
 {
     public SceneType SceneType { get; private set; }
     public GameState GameState { get; private set; }
+    public LevelData CurrentLevelData { get; set; }
     private BoardManager _boardManager => BoardManager.Instance;
     private UIManager _uiManager => UIManager.Instance;
     private Coroutine _onPlayerEndedActionCoroutine;

@@ -32,4 +32,10 @@ public class EventManager : MonoBehaviour
     {
         OnSceneChanged?.Invoke(sceneType);
     }
+
+    public static event Action<float, EntityType> OnHPChanged;
+    public static void HPChangedAction(float HP, EntityType entityType)
+    {
+        OnHPChanged?.Invoke(HP, entityType);
+    }
 }

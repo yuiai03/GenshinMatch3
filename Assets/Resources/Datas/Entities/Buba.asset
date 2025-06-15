@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 827db7c61af0ba7419fd61d74cd3e3c7, type: 3}
-  m_Name: Player
+  m_Name: Buba
   m_EditorClassIdentifier: 
   entityConfig:
     entityType: 0

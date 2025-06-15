@@ -34,6 +34,17 @@ public class LoadManager : Singleton<LoadManager>
         return prefab;
     }
 
+    public static T DataLoad<T>(string path) where T : Object
+    {
+        var dataPath = $"Datas/{path}";
+        T data = Resources.Load<T>(dataPath);
+        if (data == null)
+        {
+            Debug.LogError($"Data not found at path: {dataPath}");
+        }
+        return data;
+    }
+
 
     public void TransitionLevel(SceneType sceneType)
     {

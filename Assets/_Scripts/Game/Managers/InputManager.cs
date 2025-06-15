@@ -60,35 +60,33 @@ public class InputManager : Singleton<InputManager>
     }
     private void HandleGameInput()
     {
-        if (CanSwap && GameManager.Instance.GameState == GameState.PlayerTurn)
+        if (!CanSwap || GameManager.Instance.GameState != GameState.PlayerTurn) return;
+        if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Game)
         {
-            if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Game)
+            Touch touch = Input.GetTouch(0);
+            var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
+            if (!hit.collider || IsSwapping) return;
+
+            switch (touch.phase)
             {
-                Touch touch = Input.GetTouch(0);
-                var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-                RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
-                if (!hit.collider || IsSwapping) return;
+                case TouchPhase.Began:
+                    BeganPhase(touch, hit);
+                    break;
 
-                switch (touch.phase)
-                {
-                    case TouchPhase.Began:
-                        BeganPhase(touch, hit);
-                        break;
+                case TouchPhase.Moved:
+                    MovedPhase(touch, hit);
+                    break;
 
-                    case TouchPhase.Moved:
-                        MovedPhase(touch, hit);
-                        break;
-
-                    case TouchPhase.Ended:
-                        EndedPhase(touch, hit);
-                        break;
-                }
+                case TouchPhase.Ended:
+                    EndedPhase(touch, hit);
+                    break;
             }
         }
-
     }
     private void HandleMapInput()
     {
+        if (UIManager.Instance.MapPanel.IsActive) return;
         if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Map)
         {
             Touch touch = Input.GetTouch(0);
@@ -110,10 +108,7 @@ public class InputManager : Singleton<InputManager>
                     IsTeleportTouch = false;
 
                     Teleport teleport = hit.collider.GetComponent<Teleport>();
-                    if (teleport)
-                    {
-                        Debug.Log($"Teleport");
-                    }
+                    if (teleport) teleport.OpenLevelPanel();
                     break;
             }
         }

@@ -10,7 +10,9 @@ public class LevelData : ScriptableObject
 [Serializable]
 public class LevelConfig
 {
-    public int LevelNumber;
+    public LevelType levelType;
+    public string levelName;
+
     public int turnsNumber;
     public EntityType playerType;
     public EntityType enemyType;
