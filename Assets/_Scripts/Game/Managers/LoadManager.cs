@@ -43,7 +43,7 @@ public class LoadManager : Singleton<LoadManager>
 
     private IEnumerator TransitionCoroutine(SceneType sceneType)
     {
-        var levelTransiton = UIManager.Instance.LevelTransiton;
+        var levelTransiton = UIManager.Instance.SceneTransiton;
         levelTransiton.Close();
 
         yield return new WaitForSeconds(1f);

@@ -5,6 +5,7 @@ public class InputManager : Singleton<InputManager>
     public bool CanSwap { get; set; }
     public bool IsSwapping { get; set; }
     public bool IsBackSwapping { get; set; }
+    public bool IsTeleportTouch { get; private set; }
     public Tile SelectedTile { get; private set; }
     public Tile TargetTile { get; private set; }
 
@@ -54,32 +55,65 @@ public class InputManager : Singleton<InputManager>
 
     void Update()
     {
+        HandleGameInput();
+        HandleMapInput();
+    }
+    private void HandleGameInput()
+    {
         if (CanSwap && GameManager.Instance.GameState == GameState.PlayerTurn)
         {
-            InputHandle();
+            if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Game)
+            {
+                Touch touch = Input.GetTouch(0);
+                var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+                RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
+                if (!hit.collider || IsSwapping) return;
+
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        BeganPhase(touch, hit);
+                        break;
+
+                    case TouchPhase.Moved:
+                        MovedPhase(touch, hit);
+                        break;
+
+                    case TouchPhase.Ended:
+                        EndedPhase(touch, hit);
+                        break;
+                }
+            }
         }
+
     }
-    private void InputHandle()
+    private void HandleMapInput()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Map)
         {
             Touch touch = Input.GetTouch(0);
             var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
             RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
+            if (!hit.collider)
+            {
+                IsTeleportTouch = false; return;
+            }
 
-            if (!hit.collider || IsSwapping) return;
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    BeganPhase(touch, hit);
-                    break;
-
-                case TouchPhase.Moved:
-                    MovedPhase(touch, hit);
+                    IsTeleportTouch = true;
                     break;
 
                 case TouchPhase.Ended:
-                    EndedPhase(touch, hit);
+                    if (!IsTeleportTouch) return;
+                    IsTeleportTouch = false;
+
+                    Teleport teleport = hit.collider.GetComponent<Teleport>();
+                    if (teleport)
+                    {
+                        Debug.Log($"Teleport");
+                    }
                     break;
             }
         }

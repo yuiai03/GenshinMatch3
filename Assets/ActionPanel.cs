@@ -16,6 +16,7 @@ public class ActionPanel : PanelBase
 
     private void OnActionButtonClicked()
     {
+        HidePanel();
         LoadManager.Instance.TransitionLevel(SceneType.Game);
     }
 }

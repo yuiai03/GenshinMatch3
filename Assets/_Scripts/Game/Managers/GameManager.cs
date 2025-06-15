@@ -81,7 +81,6 @@ public class GameManager : Singleton<GameManager>
         if (sceneType == SceneType.Game)
         {
             EventManager.GameStateChangedAction(GameState.GameStart);
-            UIManager.Instance.ActionPanel.gameObject.SetActive(false);
         }
     }
 
