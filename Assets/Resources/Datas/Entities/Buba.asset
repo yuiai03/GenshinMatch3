@@ -15,8 +15,8 @@ MonoBehaviour:
   entityConfig:
     entityType: 0
     HP: 100
-    idle: {fileID: 0}
-    hurt: {fileID: 0}
-    die: {fileID: 0}
-    attack: {fileID: 0}
+    idle: {fileID: 11400000, guid: b572cd090d3369f40ba50c78bda5915f, type: 2}
+    hurt: {fileID: 11400000, guid: ab6afb05854a02140b5336c7b865deb9, type: 2}
+    die: {fileID: 11400000, guid: c77d5269b9384fc4cab157ada0a2131b, type: 2}
+    attack: {fileID: 11400000, guid: 1bc17330cfe79434db26ff6951b2b66c, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: b49379cb4c0ea41ad8687d360ccaa72b, type: 2}

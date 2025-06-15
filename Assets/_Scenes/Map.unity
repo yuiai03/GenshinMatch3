@@ -741,6 +741,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Menu: {fileID: 1808304583}
   MatchedTilesViewHolder: {fileID: 1763187315}
+  PlayerHPBar: {fileID: 1666864380}
+  EnemyHPBar: {fileID: 1593656239}
 --- !u!1 &558968853
 GameObject:
   m_ObjectHideFlags: 0

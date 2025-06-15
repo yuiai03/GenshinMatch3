@@ -8,18 +8,16 @@ public class EntityAnim : MonoBehaviour
     [SerializeField] public AnimationReferenceAsset die;
     [SerializeField] public AnimationReferenceAsset attack;
 
-    public SkeletonAnimation anim { get; private set; }
+    public SkeletonAnimation anim;
     private Coroutine dieCoroutine;
     private Animator animator;
 
     protected virtual void Awake()
     {
         animator = GetComponentInChildren<Animator>();
-        anim = GetComponentInChildren<SkeletonAnimation>();
     }
     private void OnEnable()
     {
-        if (dieCoroutine != null) StopCoroutine(dieCoroutine);
     }
     public void Idle()
     {

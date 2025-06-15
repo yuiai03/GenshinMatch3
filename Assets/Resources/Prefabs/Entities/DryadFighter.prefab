@@ -138,6 +138,7 @@ MonoBehaviour:
   hurt: {fileID: 0}
   die: {fileID: 0}
   attack: {fileID: 0}
+  anim: {fileID: 8558906807376985266}
 --- !u!1 &8995954010263011912
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +205,17 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b26e75be71fdd493f8e870022321c5da, type: 2}
+  - {fileID: 2100000, guid: 3207002d98f0044e7b688d9689e63f05, type: 2}
+  - {fileID: 2100000, guid: 6eec0340a711c6042992edd583c900a0, type: 2}
+  - {fileID: 2100000, guid: 3207002d98f0044e7b688d9689e63f05, type: 2}
+  - {fileID: 2100000, guid: 6eec0340a711c6042992edd583c900a0, type: 2}
+  - {fileID: 2100000, guid: 3207002d98f0044e7b688d9689e63f05, type: 2}
+  - {fileID: 2100000, guid: 6eec0340a711c6042992edd583c900a0, type: 2}
+  - {fileID: 2100000, guid: 3207002d98f0044e7b688d9689e63f05, type: 2}
+  - {fileID: 2100000, guid: 6eec0340a711c6042992edd583c900a0, type: 2}
+  - {fileID: 2100000, guid: 3207002d98f0044e7b688d9689e63f05, type: 2}
+  - {fileID: 2100000, guid: 6eec0340a711c6042992edd583c900a0, type: 2}
+  - {fileID: 2100000, guid: 3207002d98f0044e7b688d9689e63f05, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -238,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 746488e4088634ceabd3bca7e9fb5f89, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 9c5f971d81c5b4ca88949ad1d9548f71, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
