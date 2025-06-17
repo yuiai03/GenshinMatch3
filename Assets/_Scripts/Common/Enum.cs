@@ -13,7 +13,8 @@ public enum PoolType
 {
     Empty,
     Tile,
-    MatchedTileView
+    MatchedTileView,
+    PlayerBullet,
 }
 
 public enum EntityType

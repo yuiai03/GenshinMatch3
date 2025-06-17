@@ -4,27 +4,53 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
+    private int _turnNumber;
+    public int TurnNumber
+    {
+        get => _turnNumber;
+        set
+        {
+            _turnNumber = value;
+            EventManager.TurnChanged(_turnNumber);
+        }
+    }
+    private LevelData _currentLevelData;
+    public LevelData CurrentLevelData
+    {
+        get => _currentLevelData;
+        set
+        {
+            _currentLevelData = value;
+            TurnNumber = _currentLevelData.levelConfig.turnsNumber;
+        }
+    }
     public SceneType SceneType { get; private set; }
     public GameState GameState { get; private set; }
-    public LevelData CurrentLevelData { get; set; }
+    public TileData TileData { get; private set; }
     private BoardManager _boardManager => BoardManager.Instance;
-    private UIManager _uiManager => UIManager.Instance;
     private Coroutine _onPlayerEndedActionCoroutine;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        TileData = LoadManager.DataLoad<TileData>("TileData");
+    }
     private void Start()
     {
-        EventManager.GameStateChangedAction(GameState.GameWaiting);
+        EventManager.GameStateChanged(GameState.GameWaiting);
     }
 
     private void OnEnable()
     {
         EventManager.OnGameStateChanged += SetGameState;
         EventManager.OnSceneChanged += OnSceneChange;
+        EventManager.OnOpenLevelPanel += (levelData, entityType) => CurrentLevelData = levelData;
     }
     private void OnDisable()
     {
         EventManager.OnGameStateChanged -= SetGameState;
         EventManager.OnSceneChanged -= OnSceneChange;
+        EventManager.OnOpenLevelPanel -= (levelData, entityData) => CurrentLevelData = levelData;
     }
     private void SetGameState(GameState state)
     {
@@ -81,7 +107,7 @@ public class GameManager : Singleton<GameManager>
         SceneType = sceneType;
         if (sceneType == SceneType.Game)
         {
-            EventManager.GameStateChangedAction(GameState.GameStart);
+            EventManager.GameStateChanged(GameState.GameStart);
         }
     }
 
@@ -90,6 +116,8 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(1f);
         _boardManager.SetBoardState(false);
         _boardManager.InitializeMatchedTiles();
+        yield return new WaitForSeconds(1f);
+        LevelManager.Instance.PlayerAction();
     }
 
 }

@@ -13,27 +13,27 @@ public class Entity : MonoBehaviour
         }
     }
     public EntityType EntityType;
-    private EntityAnim _entityAnim;
-    private EntityData _entityData;
+    protected EntityAnim _entityAnim;
+    protected EntityData _entityData;
 
     public virtual void GetData(EntityData entityData)
     {
         gameObject.name = EntityType.ToString();
         _entityAnim = GetComponent<EntityAnim>();
         _entityData = entityData;
-        HP = entityData.entityConfig.HP;
+        HP = _entityData.entityConfig.HP;
         
-        _entityAnim.idle = entityData.entityConfig.idle;
-        _entityAnim.hurt = entityData.entityConfig.hurt;
-        _entityAnim.die = entityData.entityConfig.die;
-        _entityAnim.attack = entityData.entityConfig.attack;
-        _entityAnim.anim.skeletonDataAsset = entityData.entityConfig.skeletonDataAsset;
+        _entityAnim.idle = _entityData.entityConfig.idle;
+        _entityAnim.hurt = _entityData.entityConfig.hurt;
+        _entityAnim.die = _entityData.entityConfig.die;
+        _entityAnim.attack = _entityData.entityConfig.attack;
+        _entityAnim.anim.skeletonDataAsset = _entityData.entityConfig.skeletonDataAsset;
         _entityAnim.anim.Initialize(true);
         _entityAnim.Idle();
 
     }
 
-    public virtual void Hurt(float damage)
+    public virtual void TakeDamage(float damage)
     {
         HP -= damage;
         _entityAnim.Hurt();
@@ -44,8 +44,6 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public virtual void HPChanged(float hp)
-    {
-
-    }
+    public virtual void HPChanged(float hp) { }
+    public virtual void Attack(Entity target) { }
 }

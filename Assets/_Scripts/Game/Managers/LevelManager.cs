@@ -53,4 +53,9 @@ public class LevelManager : Singleton<LevelManager>
         Player.GetData(playerData);
         Enemy.GetData(enemyData);
     }
+
+    public void PlayerAction()
+    {
+        Player.Attack(Enemy);
+    }
 }

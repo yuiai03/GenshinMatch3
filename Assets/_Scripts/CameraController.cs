@@ -3,16 +3,13 @@ using System;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("Camera Movement")]
     [SerializeField] private float movementSpeed = 3f;
-
-    [Header("Map Boundaries")]
     [SerializeField] private Transform mapContainer;
 
+    private bool isDragging = false;
     private Camera mainCamera;
     private Vector2 dragStartPosition;
     private Vector2 cameraStartPosition;
-    private bool isDragging = false;
     private Vector3 velocity = Vector3.zero;
     private Vector2 targetPosition;
     private Bounds mapBounds;
@@ -117,24 +114,5 @@ public class CameraController : MonoBehaviour
         }
 
         return position;
-    }
-
-    public void SetBoundaries(Bounds bounds)
-    {
-        mapBounds = bounds;
-    }
-
-    public void MoveToPosition(Vector2 position)
-    {
-        targetPosition = ConstrainToBounds(position);
-        isDragging = false;
-    }
-
-    public void MoveToTarget(Transform targetObject)
-    {
-        if (targetObject != null)
-        {
-            MoveToPosition(targetObject.position);
-        }
     }
 }

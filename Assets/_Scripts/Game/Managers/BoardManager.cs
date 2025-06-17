@@ -43,14 +43,14 @@ public class BoardManager : Singleton<BoardManager>
             MatchedTileView matchedTileView = 
                 PoolManager.Instance.GetObject<MatchedTileView>(
                 PoolType.MatchedTileView, Vector2.zero, holder.transform);
-            matchedTileView.InitialData(match.TypeType, match.Count);
+            matchedTileView.InitialData(match.TileType, match.Count);
         }
     }
     private IEnumerator InitialTilesCoroutine()
     {
         if (_emptys.Length == 0) yield break;
 
-        EventManager.BoardStateChangedAction(true);
+        EventManager.BoardStateChanged(true);
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -70,8 +70,8 @@ public class BoardManager : Singleton<BoardManager>
         if (!BoardCanMatches()) RecreateBoard();
         else
         {
-            EventManager.BoardStateChangedAction(false);
-            EventManager.GameStateChangedAction(GameState.PlayerTurn);
+            EventManager.BoardStateChanged(false);
+            EventManager.GameStateChanged(GameState.PlayerTurn);
         }
     }
 
@@ -129,7 +129,7 @@ public class BoardManager : Singleton<BoardManager>
 
     public void HandleSwapTiles(Tile selectedTile, Tile targetTile)
     {
-        EventManager.StartSwapTileAction(selectedTile, targetTile);
+        EventManager.StartSwapTile(selectedTile, targetTile);
 
         Helper.SwapEmpty(selectedTile, targetTile);
     }
@@ -153,7 +153,7 @@ public class BoardManager : Singleton<BoardManager>
             else
             {
                 if (_matchHistory.Count == 0) return;
-                EventManager.GameStateChangedAction(GameState.PlayerEndedAction);
+                EventManager.GameStateChanged(GameState.PlayerEndedAction);
             }
         }
     }
@@ -335,7 +335,7 @@ public class BoardManager : Singleton<BoardManager>
 
     private IEnumerator RefillBoardCoroutine()
     {
-        EventManager.BoardStateChangedAction(true);
+        EventManager.BoardStateChanged(true);
         yield return new WaitForSeconds(0.01f);
 
         for (int x = 0; x < Width; x++)
@@ -350,7 +350,7 @@ public class BoardManager : Singleton<BoardManager>
             }
         }
         yield return new WaitForSeconds(Config.TileMoveDuration);
-        EventManager.BoardStateChangedAction(false);
+        EventManager.BoardStateChanged(false);
 
         CheckAndDeleteMatches();
     }
@@ -427,12 +427,12 @@ public class BoardManager : Singleton<BoardManager>
     {
         foreach (var match in _matchHistory)
         {
-            if (match.TypeType == type)
+            if (match.TileType == type)
             {
                 match.Count += count;
                 return;
             }
         }
-        _matchHistory.Add(new MatchData { TypeType = type, Count = count });
+        _matchHistory.Add(new MatchData { TileType = type, Count = count });
     }
 }

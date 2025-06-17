@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    private Tween _moveTween;
-    public TileType TileType { get; set; }
-
     private Empty _empty;
     public Empty Empty
     {
@@ -20,13 +17,16 @@ public class Tile : MonoBehaviour
                 if (_moveTween != null && _moveTween.IsActive()) _moveTween.Kill();
                 _moveTween = transform.DOLocalMove(Vector2.zero, Config.TileMoveDuration).OnComplete(() =>
                 {
-                    var selectedTile = InputManager.Instance.SelectedTile;
-                    var targetTile = InputManager.Instance.TargetTile;
-                    if (this == selectedTile) EventManager.EndSwapTileAction(selectedTile, targetTile);
+                    var selectedTile = GameInputManager.Instance.SelectedTile;
+                    var targetTile = GameInputManager.Instance.TargetTile;
+                    if (this == selectedTile) EventManager.EndSwapTile(selectedTile, targetTile);
                 });
             }
         }
     }
+
+    public TileType TileType { get; set; }
+    private Tween _moveTween;
     private SpriteRenderer spriteRenderer;
     public void InitialData(TileType type, Empty empty)
     {

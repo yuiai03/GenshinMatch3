@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class MatchData
 {
-    public TileType TypeType { get; set; }
+    public TileType TileType { get; set; }
     public int Count { get; set; }
 }
 

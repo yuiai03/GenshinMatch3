@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
-public class InputManager : Singleton<InputManager>
+public class GameInputManager : Singleton<GameInputManager>
 {
     public bool CanSwap { get; set; }
     public bool IsSwapping { get; set; }
     public bool IsBackSwapping { get; set; }
-    public bool IsTeleportTouch { get; private set; }
     public Tile SelectedTile { get; private set; }
     public Tile TargetTile { get; private set; }
 
@@ -25,10 +24,14 @@ public class InputManager : Singleton<InputManager>
         EventManager.OnStartSwapTile -= OnStartSwapTile;
         EventManager.OnBoardStateChanged -= (isBusy) => CanSwap = !isBusy;
     }
+    void Update()
+    {
+        HandleGameInput();
+    }
     private void OnEndSwapTile(Tile selectedTile, Tile targetTile)
     {
         IsSwapping = false;
-        EventManager.BoardStateChangedAction(IsSwapping);
+        EventManager.BoardStateChanged(IsSwapping);
         _boardManager.CheckAndDeleteMatches();
 
         //Nếu không matches thì hoán đổi lại như cũ
@@ -43,7 +46,6 @@ public class InputManager : Singleton<InputManager>
         }
         //Nếu có matches thì set lại ref tiles = null
         SelectedTile = TargetTile = null;
-
     }
 
     private void OnStartSwapTile(Tile selectedTile, Tile targetTile)
@@ -51,12 +53,6 @@ public class InputManager : Singleton<InputManager>
         if(!selectedTile || !targetTile) return;
         IsSwapping = true;
         _boardManager.ClearMatchHistory();
-    }
-
-    void Update()
-    {
-        HandleGameInput();
-        HandleMapInput();
     }
     private void HandleGameInput()
     {
@@ -84,35 +80,7 @@ public class InputManager : Singleton<InputManager>
             }
         }
     }
-    private void HandleMapInput()
-    {
-        if (UIManager.Instance.MapPanel.IsActive) return;
-        if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Map)
-        {
-            Touch touch = Input.GetTouch(0);
-            var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
-            if (!hit.collider)
-            {
-                IsTeleportTouch = false; return;
-            }
 
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    IsTeleportTouch = true;
-                    break;
-
-                case TouchPhase.Ended:
-                    if (!IsTeleportTouch) return;
-                    IsTeleportTouch = false;
-
-                    Teleport teleport = hit.collider.GetComponent<Teleport>();
-                    if (teleport) teleport.OpenLevelPanel();
-                    break;
-            }
-        }
-    }
     private void BeganPhase(Touch touch, RaycastHit2D hit)
     {
         SelectedTile = hit.collider.GetComponent<Tile>();
@@ -145,7 +113,6 @@ public class InputManager : Singleton<InputManager>
             return new Vector2Int(0, Mathf.RoundToInt(Mathf.Sign(direction.y))); 
     }
 
-    //Check befo
     private void CheckToSwapTiles()
     {
         Vector2Int newPos = SelectedTile.Empty.IntPos + _currentSwapDirection;

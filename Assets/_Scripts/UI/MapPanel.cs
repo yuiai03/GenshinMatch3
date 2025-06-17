@@ -19,6 +19,19 @@ public class MapPanel : PanelBase
         }
     }
 
+    private void OnEnable()
+    {
+        EventManager.OnOpenLevelPanel += OnOpenLevelPanel;
+    }
+    private void OnDisable()
+    {
+        EventManager.OnOpenLevelPanel -= OnOpenLevelPanel;
+    }
+    private void OnOpenLevelPanel(LevelData levelData, EntityType entityType)
+    {
+        ShowPanel();
+        SetInfo(levelData.levelConfig.turnsNumber, entityType);
+    }
     private void OnActionButtonClicked()
     {
         HidePanel();

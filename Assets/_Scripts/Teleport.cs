@@ -11,10 +11,7 @@ public class Teleport : MonoBehaviour
 
     public void OpenLevelPanel()
     {
-        GameManager.Instance.CurrentLevelData = _levelData;
-        UIManager.Instance.MapPanel.ShowPanel();
-        UIManager.Instance.MapPanel.SetInfo(
-            _levelData.levelConfig.turnsNumber, _entityType);
+        EventManager.OpenLevelPanel(_levelData, _entityType);
     }
 
     public void InitializeData()

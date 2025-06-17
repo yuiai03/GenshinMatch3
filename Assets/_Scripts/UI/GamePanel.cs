@@ -1,68 +1,51 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GamePanel : MonoBehaviour
 {
-    public GameObject Menu;
-    public GameObject MatchedTilesViewHolder;
+    [SerializeField] public GameObject Menu;
+    [SerializeField] public GameObject MatchedTilesViewHolder;
 
-    public Slider PlayerHPBar;
-    public Slider EnemyHPBar;
+    [SerializeField] public HPBar PlayerHPBar;
+    [SerializeField] public HPBar EnemyHPBar;
 
-    private float playerMaxHP;
-    private float enemyMaxHP;
-    private Coroutine playerHPUpdateCoroutine;
-    private Coroutine enemyHPUpdateCoroutine;
+    [SerializeField] public TextMeshProUGUI TurnText;
 
     private void Awake()
     {
         Menu.SetActive(false);
     }
 
-    public void SetPlayerMaxHealth(float maxHealth)
+    private void OnEnable()
     {
-        playerMaxHP = maxHealth;
-        PlayerHPBar.maxValue = maxHealth;
-        PlayerHPBar.value = maxHealth;
+        EventManager.OnMaxHPChanged +=  OnMaxHPChanged;
+        EventManager.OnHPChanged += OnHPChanged;
+        EventManager.OnTurnChanged += SetTurnText;
     }
 
-    public void SetEnemyMaxHealth(float maxHealth)
+    private void OnDisable()
     {
-        enemyMaxHP = maxHealth;
-        EnemyHPBar.maxValue = maxHealth;
-        EnemyHPBar.value = maxHealth;
+        EventManager.OnMaxHPChanged -= OnMaxHPChanged;
+        EventManager.OnHPChanged -= OnHPChanged;
+        EventManager.OnTurnChanged -= SetTurnText;
     }
 
-    public void UpdatePlayerHealth(float currentHealth)
+    private void OnMaxHPChanged(float hpValue, bool isPlayer)
     {
-        if (playerHPUpdateCoroutine != null)
-            StopCoroutine(playerHPUpdateCoroutine);
-
-        playerHPUpdateCoroutine = StartCoroutine(SmoothHealthUpdate(PlayerHPBar, currentHealth));
+        if (isPlayer) PlayerHPBar.SetMaxHP(hpValue);
+        else EnemyHPBar.SetMaxHP(hpValue);
+    }
+    private void OnHPChanged(float hpValue, bool isPlayer)
+    {
+        if (isPlayer) PlayerHPBar.SetHP(hpValue);
+        else EnemyHPBar.SetHP(hpValue);
     }
 
-    public void UpdateEnemyHealth(float currentHealth)
+    public void SetTurnText(int value)
     {
-        if (enemyHPUpdateCoroutine != null)
-            StopCoroutine(enemyHPUpdateCoroutine);
-
-        enemyHPUpdateCoroutine = StartCoroutine(SmoothHealthUpdate(EnemyHPBar, currentHealth));
+        TurnText.text = $"{value}";
     }
 
-    private IEnumerator SmoothHealthUpdate(Slider healthBar, float targetValue)
-    {
-        float startValue = healthBar.value;
-        float elapsedTime = 0f;
-        float duration = 0.5f; // Duration of the animation in seconds
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            healthBar.value = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
-            yield return null;
-        }
-
-        healthBar.value = targetValue;
-    }
 }

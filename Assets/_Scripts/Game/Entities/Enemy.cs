@@ -5,10 +5,10 @@ public class Enemy : Entity
     public override void GetData(EntityData entityData)
     {
         base.GetData(entityData);
-        UIManager.Instance.GamePanel.SetPlayerMaxHealth(entityData.entityConfig.HP);
+        EventManager.MaxHPChanged(entityData.entityConfig.HP, false);
     }
     public override void HPChanged(float hp)
     {
-        UIManager.Instance.GamePanel.UpdatePlayerHealth(hp);
+        EventManager.HPChanged(hp, false);
     }
 }

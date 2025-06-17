@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Map : Singleton<Map>
+public class MapManager : Singleton<MapManager>
 {
     private GameObject _teleportHolder;
 

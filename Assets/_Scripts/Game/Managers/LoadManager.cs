@@ -68,13 +68,13 @@ public class LoadManager : Singleton<LoadManager>
             if (loadScene.progress >= 0.9f)
             {
                 loadScene.allowSceneActivation = true;
-                EventManager.SceneChangedAction(sceneType);
+                EventManager.SceneChanged(sceneType);
             }
             yield return null;
         }
         yield return new WaitForSeconds(0.1f);
 
         levelTransiton.Open();
-        EventManager.SceneChangedAction(sceneType);
+        EventManager.SceneChanged(sceneType);
     }
 }
