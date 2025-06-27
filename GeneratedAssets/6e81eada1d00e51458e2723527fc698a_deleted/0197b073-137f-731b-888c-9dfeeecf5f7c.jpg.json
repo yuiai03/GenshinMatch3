@@ -1,0 +1,20 @@
+{
+    "asset": "6e81eada1d00e51458e2723527fc698a",
+    "fileName": "0197b073-137f-731b-888c-9dfeeecf5f7c.jpg",
+    "prompt": "\"Create a high-quality, glowing green element icon with soft gradients, vibrant colors, and a magical aura effect.\"",
+    "negativePrompt": "",
+    "model": "03d5ab0c-51c5-44a0-ba07-822e93561aca",
+    "modelName": "Game Icons",
+    "customSeed": -1,
+    "w3CTraceId": "0015b80d0d0fdc2ec245d7aae5ccaba8",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

@@ -8,6 +8,18 @@ TextureImporter:
   - first:
       213: -2395273896806452337
     second: Dendro_1
+  - first:
+      213: 6979948908510945677
+    second: Dendro_2
+  - first:
+      213: -6291523255189692906
+    second: Dendro_3
+  - first:
+      213: -7261420627881454764
+    second: Dendro_4
+  - first:
+      213: 1983106868591283708
+    second: Dendro_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +87,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -99,45 +111,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -145,10 +118,10 @@ TextureImporter:
       name: Dendro_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 790
-        height: 612
+        x: 40
+        y: 369
+        width: 75
+        height: 62
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,10 +140,10 @@ TextureImporter:
       name: Dendro_1
       rect:
         serializedVersion: 2
-        x: 328
-        y: 548
-        width: 134
-        height: 202
+        x: 86
+        y: 23
+        width: 424
+        height: 393
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,6 +154,94 @@ TextureImporter:
       bones: []
       spriteID: f83f511e41742ced0800000000000000
       internalID: -2395273896806452337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dendro_2
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 388
+        width: 87
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d81ab2a0d82cdd060800000000000000
+      internalID: 6979948908510945677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dendro_3
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 369
+        width: 76
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61e1f4eeee400b8a0800000000000000
+      internalID: -6291523255189692906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dendro_4
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 221
+        width: 62
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4539e6e59604a3b90800000000000000
+      internalID: -7261420627881454764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dendro_5
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 221
+        width: 62
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfd4506a039658b10800000000000000
+      internalID: 1983106868591283708
       vertices: []
       indices: 
       edges: []
@@ -201,6 +262,10 @@ TextureImporter:
     nameFileIdTable:
       Dendro_0: 3912158471429977558
       Dendro_1: -2395273896806452337
+      Dendro_2: 6979948908510945677
+      Dendro_3: -6291523255189692906
+      Dendro_4: -7261420627881454764
+      Dendro_5: 1983106868591283708
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

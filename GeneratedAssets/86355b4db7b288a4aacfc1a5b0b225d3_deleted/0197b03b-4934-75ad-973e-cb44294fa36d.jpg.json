@@ -1,0 +1,20 @@
+{
+    "asset": "86355b4db7b288a4aacfc1a5b0b225d3",
+    "fileName": "0197b03b-4934-75ad-973e-cb44294fa36d.jpg",
+    "prompt": "\"Create a high-quality, glowing fire element icon with soft gradients, vibrant colors, and a magical aura effect.\"",
+    "negativePrompt": "",
+    "model": "03d5ab0c-51c5-44a0-ba07-822e93561aca",
+    "modelName": "Game Icons",
+    "customSeed": -1,
+    "w3CTraceId": "3edfb392d2cf3fec847705a863c30671",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

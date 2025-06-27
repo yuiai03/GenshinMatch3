@@ -1,0 +1,20 @@
+{
+    "asset": "84e2777bdcf59ef49853a6054ff29109",
+    "fileName": "0197b063-7e4c-78a7-bbb9-e95995c8898f.png",
+    "prompt": "high-quality",
+    "negativePrompt": "",
+    "model": "03d5ab0c-51c5-44a0-ba07-822e93561aca",
+    "modelName": "Game Icons",
+    "customSeed": -1,
+    "w3CTraceId": "458fa26c2dccd187ec6ccb3a8ccfcc4a",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

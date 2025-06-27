@@ -1,0 +1,20 @@
+{
+    "asset": "3ea00f2a947291547adc5af1db382078",
+    "fileName": "0197b09f-3f18-731d-b64c-753d9ed6095a.png",
+    "prompt": "make high quality and light",
+    "negativePrompt": "",
+    "model": "717d8d30-097c-44a5-8680-0a537212ab8a",
+    "modelName": "Gem Icons",
+    "customSeed": -1,
+    "w3CTraceId": "1710046ec915ca5ab70f97bbd69d94a3",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

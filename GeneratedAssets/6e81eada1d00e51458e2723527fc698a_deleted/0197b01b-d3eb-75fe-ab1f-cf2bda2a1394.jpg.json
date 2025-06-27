@@ -1,0 +1,20 @@
+{
+    "asset": "6e81eada1d00e51458e2723527fc698a",
+    "fileName": "0197b01b-d3eb-75fe-ab1f-cf2bda2a1394.jpg",
+    "prompt": "\"Create a high-quality, glowing wind element icon with soft gradients, vibrant colors, and a magical aura effect.\"",
+    "negativePrompt": "",
+    "model": "03d5ab0c-51c5-44a0-ba07-822e93561aca",
+    "modelName": "Game Icons",
+    "customSeed": -1,
+    "w3CTraceId": "920bb4fc521aa59c0bfc8fd6749b9095",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

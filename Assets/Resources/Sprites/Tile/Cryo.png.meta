@@ -1,10 +1,25 @@
 fileFormatVersion: 2
-guid: 12c1e1bfdea93494380386cba64a7c20
+guid: 865f7393043230f4ca82b13fe5d3e4dd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2848609034392703132
-    second: Cyro_0
+      213: 8594864350454926954
+    second: Cryo_0
+  - first:
+      213: -1788087202382847856
+    second: Cryo_1
+  - first:
+      213: 4443196533639144454
+    second: Cryo_2
+  - first:
+      213: -8734603533748647654
+    second: Cryo_3
+  - first:
+      213: -2665873656574682237
+    second: Cryo_4
+  - first:
+      213: -1540143559136445744
+    second: Cryo_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +67,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 512
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 0, y: 0, z: 60, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -72,7 +87,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -96,66 +111,137 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cyro_0
+      name: Cryo_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 690
-        height: 790
+        x: 14
+        y: 290
+        width: 198
+        height: 131
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c9012fef2da488720800000000000000
-      internalID: 2848609034392703132
+      spriteID: a6ec885d697174770800000000000000
+      internalID: 8594864350454926954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cryo_1
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 206
+        width: 173
+        height: 152
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0906c82c9207f27e0800000000000000
+      internalID: -1788087202382847856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cryo_2
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 326
+        width: 160
+        height: 230
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 604eecec4b769ad30800000000000000
+      internalID: 4443196533639144454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cryo_3
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 144
+        width: 197
+        height: 276
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a194a0d2d5478c680800000000000000
+      internalID: -8734603533748647654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cryo_4
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 144
+        width: 198
+        height: 131
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38b5bc3a80ae00bd0800000000000000
+      internalID: -2665873656574682237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cryo_5
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 10
+        width: 154
+        height: 222
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0daf09ec79f40aae0800000000000000
+      internalID: -1540143559136445744
       vertices: []
       indices: 
       edges: []
@@ -165,7 +251,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -174,7 +260,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Cyro_0: 2848609034392703132
+      Cryo_0: 8594864350454926954
+      Cryo_1: -1788087202382847856
+      Cryo_2: 4443196533639144454
+      Cryo_3: -8734603533748647654
+      Cryo_4: -2665873656574682237
+      Cryo_5: -1540143559136445744
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

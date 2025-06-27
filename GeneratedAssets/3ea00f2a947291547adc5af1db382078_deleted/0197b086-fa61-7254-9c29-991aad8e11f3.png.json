@@ -1,0 +1,20 @@
+{
+    "asset": "3ea00f2a947291547adc5af1db382078",
+    "fileName": "0197b086-fa61-7254-9c29-991aad8e11f3.png",
+    "prompt": "cut to 7 image with 7 icon and make high quality",
+    "negativePrompt": "",
+    "model": "717d8d30-097c-44a5-8680-0a537212ab8a",
+    "modelName": "Gem Icons",
+    "customSeed": -1,
+    "w3CTraceId": "3a8ec32f733b18b16572176a2dd037d4",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

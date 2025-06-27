@@ -1,0 +1,20 @@
+{
+    "asset": "083b4f1c2514f6c47adc88c98c76cf28",
+    "fileName": "0197aff0-364e-7150-a75b-abfe0bcfdc45.png",
+    "prompt": "Làm đẹp các sprite với Unity AI",
+    "negativePrompt": "",
+    "model": "717d8d30-097c-44a5-8680-0a537212ab8a",
+    "modelName": "Gem Icons",
+    "customSeed": -1,
+    "w3CTraceId": "360e56a12eb330e86900347d6d216003",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}
