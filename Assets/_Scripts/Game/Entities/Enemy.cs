@@ -29,6 +29,6 @@ public class Enemy : Entity
         var matchData = new MatchData(TileType.Dendro, 5);
         bullet.Initialize(matchData);
         yield return new WaitForSeconds(1f);
-        EventManager.GameStateChanged(GameState.PlayerTurn);
+        EventManager.GameStateChanged(GameState.EndRound);
     }
 }

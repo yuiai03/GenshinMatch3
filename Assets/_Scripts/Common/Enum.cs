@@ -1,4 +1,4 @@
-public enum TileType
+﻿public enum TileType
 {
     Hydro,
     Pyro,
@@ -7,6 +7,65 @@ public enum TileType
     Dendro,
     Geo,
     Anemo,
+    None
+}
+
+public enum ReactionType
+{
+    /// <summary>
+    /// Bốc hơi
+    /// </summary>
+    Vaporize,
+
+    /// <summary>
+    /// Tan chảy
+    /// </summary>
+    Melt, 
+
+    /// <summary>
+    /// Đóng băng
+    /// </summary>
+    Frozen, 
+
+    /// <summary>
+    /// Quá tải
+    /// </summary>
+    Overloaded, 
+
+    /// <summary>
+    /// Siêu dẫn
+    /// </summary>
+    Superconduct, 
+
+    /// <summary>
+    /// điện cảm
+    /// </summary>
+    ElectroCharged, 
+    
+    /// <summary>
+    /// Khuếch tán
+    /// </summary>
+    Swirl, 
+
+    /// <summary>
+    /// Kết tinh
+    /// </summary>
+    Crystallize,
+    
+    /// <summary>
+    /// Thiêu đối
+    /// </summary>
+    Burning, 
+
+    /// <summary>
+    /// Nở rộ
+    /// </summary>
+    Bloom,
+
+    /// <summary>
+    /// Tăng cường
+    /// </summary>
+    Aggravate
 }
 
 public enum PoolType
@@ -28,19 +87,20 @@ public enum EntityType
     Ena,
 
     //Enemy
-    TreantFlowering,
-    TreantFighter,
-    Slime,
-    SlimeForestB,
+    DryadFighter,
     BearMom,
     BearDad,
-    DryadFighter,
+    Slime,
+    SlimeForestB,
+    TreantFlowering,
+    TreantFighter,
     UFO,
 }
 
 public enum GameState
 {
     GameWaiting,
+    GameEnded,
     GameStart,
     GameOver,
     GameWin,
@@ -51,6 +111,7 @@ public enum GameState
     PlayerEndTurn,
     EnemyEndTurn,
 
+    EndRound,
     GamePause,
 }
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2709612704631515683}
   - component: {fileID: 8250312617338801890}
   m_Layer: 0
-  m_Name: DryadFighter
+  m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,11 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4681c4877868d444ab0bdcd0c1926215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idle: {fileID: 0}
-  hurt: {fileID: 0}
-  die: {fileID: 0}
-  attack: {fileID: 0}
-  anim: {fileID: 8558906807376985266}
 --- !u!1 &2572841825069091459
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +196,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 808687636872105764}

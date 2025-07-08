@@ -10,6 +10,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public Player Player { get; set; }
     public Enemy Enemy { get; set; }
+
     private LevelData _levelData;
     private BoardManager _boardManager;
     protected override void Awake()
@@ -35,11 +36,11 @@ public class LevelManager : Singleton<LevelManager>
 
     public void InitializeEntities()
     {
-        var playerPath = $"Entities/{_levelData.levelConfig.playerType}";
-        var enemyPath = $"Entities/{_levelData.levelConfig.enemyType}";
+        var playerPath = $"Entities/Player/{_levelData.levelConfig.playerType}";
+        var enemyPath = $"Entities/Enemies/{_levelData.levelConfig.enemyType}";
 
-        var playerPrefab = LoadManager.PrefabLoad<Player>(playerPath);
-        var enemyPrefab = LoadManager.PrefabLoad<Enemy>(enemyPath);
+        var playerPrefab = LoadManager.PrefabLoad<Player>("Entities/Player");
+        var enemyPrefab = LoadManager.PrefabLoad<Enemy>("Entities/Enemy");
 
         var playerData = LoadManager.DataLoad<EntityData>(playerPath);
         var enemyData = LoadManager.DataLoad<EntityData>(enemyPath);

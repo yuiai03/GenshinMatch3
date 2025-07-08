@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827db7c61af0ba7419fd61d74cd3e3c7, type: 3}
+  m_Name: BearMom
+  m_EditorClassIdentifier: 
+  entityConfig:
+    entityType: 5
+    MaxHP: 100
+    idle: {fileID: 11400000, guid: 7738a6359c09f704aa09923d3ad3da53, type: 2}
+    hurt: {fileID: 11400000, guid: 75721c917dd0a604e81286d9c570c5ab, type: 2}
+    die: {fileID: 11400000, guid: 9b6da3657950a8243bb18e6c7226d761, type: 2}
+    attack: {fileID: 11400000, guid: c5d871d2ed761f44eacbfadd43ccae71, type: 2}
+    skeletonDataAsset: {fileID: 11400000, guid: c0518a4cd06cd434bbcb5ec67d068f37, type: 2}

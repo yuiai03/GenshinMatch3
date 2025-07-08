@@ -14,7 +14,7 @@ public class EnemyBullet : BulletBase
             var player = collision.GetComponent<Player>();
             if (player)
             {
-                player.TakeDamage(_damage);
+                player.TakeDamage(_damage, _tileConfig);
                 PoolManager.Instance.ReturnObject(PoolType.EnemyBullet, gameObject);
             }
         }

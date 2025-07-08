@@ -22,14 +22,14 @@ public class GamePanel : MonoBehaviour
     {
         EventManager.OnMaxHPChanged +=  OnMaxHPChanged;
         EventManager.OnHPChanged += OnHPChanged;
-        EventManager.OnTurnChanged += SetTurnText;
+        EventManager.OnTurnNumberChanged += SetTurnText;
     }
 
     private void OnDisable()
     {
         EventManager.OnMaxHPChanged -= OnMaxHPChanged;
         EventManager.OnHPChanged -= OnHPChanged;
-        EventManager.OnTurnChanged -= SetTurnText;
+        EventManager.OnTurnNumberChanged -= SetTurnText;
     }
 
     private void OnMaxHPChanged(float hpValue, bool isPlayer)

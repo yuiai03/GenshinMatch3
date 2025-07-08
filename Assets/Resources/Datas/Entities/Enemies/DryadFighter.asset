@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DryadFighter
   m_EditorClassIdentifier: 
   entityConfig:
-    entityType: 10
+    entityType: 4
     MaxHP: 100
     idle: {fileID: 11400000, guid: 68f98db945905634da8c46cbcff85055, type: 2}
     hurt: {fileID: 11400000, guid: 04b7b8c3873ff5b42a0fcc38201bdf83, type: 2}

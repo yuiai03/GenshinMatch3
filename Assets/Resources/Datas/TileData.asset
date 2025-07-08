@@ -46,10 +46,10 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 3
   - tileType: 1
-    color: {r: 1, g: 0.216981, b: 0.216981, a: 1}
+    color: {r: 1, g: 0.1718334, b: 0.111320674, a: 1}
     gradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.21568628, b: 0.21568628, a: 1}
+      key0: {r: 1, g: 0.25585356, b: 0.17254901, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0.39215687}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -78,10 +78,10 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 3
   - tileType: 2
-    color: {r: 0.40566033, g: 0.80065614, b: 1, a: 1}
+    color: {r: 0.48113203, g: 0.8880873, b: 1, a: 1}
     gradient:
       serializedVersion: 2
-      key0: {r: 0.40392157, g: 0.8, b: 1, a: 1}
+      key0: {r: 0.48113203, g: 0.8880873, b: 1, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0.39215687}
       key3: {r: 0, g: 0, b: 0, a: 0}

@@ -5,13 +5,13 @@ using UnityEngine;
 public class Teleport : MonoBehaviour
 {
     [SerializeField] private LevelType _levelType;
-    [SerializeField] private EntityType _entityType;
     private LevelData _levelData;
     private TextMeshPro _levelText;
 
     public void OpenLevelPanel()
     {
-        EventManager.OpenLevelPanel(_levelData, _entityType);
+        if (!_levelData) return;
+        EventManager.OpenLevelPanel(_levelData, _levelData.levelConfig.enemyType);
     }
 
     public void InitializeData()

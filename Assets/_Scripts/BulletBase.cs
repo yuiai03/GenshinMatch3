@@ -6,6 +6,7 @@ public class BulletBase : MonoBehaviour
     protected Vector2 _direction = Vector2.right;
     protected int _damage = 0;
     protected float _speed = 10f;
+    protected TileConfig _tileConfig;
     private SpriteRenderer _spriteRenderer;
     private TrailRenderer _trailRenderer;
     private Rigidbody2D _rb2d;
@@ -19,11 +20,11 @@ public class BulletBase : MonoBehaviour
 
     public void Initialize(MatchData matchData)
     {
-        var tileConfig = GameManager.Instance.TileData.GetTileConfig(matchData.TileType);
-        if (tileConfig == null) return;
+        _tileConfig = GameManager.Instance.TileData.GetTileConfig(matchData.TileType);
+        if (_tileConfig == null) return;
 
-        _spriteRenderer.color = tileConfig.color;
-        _trailRenderer.colorGradient = tileConfig.gradient;
+        _spriteRenderer.color = _tileConfig.color;
+        _trailRenderer.colorGradient = _tileConfig.gradient;
         _damage = matchData.Count;
 
         MoveToTarget();
@@ -33,6 +34,11 @@ public class BulletBase : MonoBehaviour
     {
         if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
         _moveCoroutine = StartCoroutine(MoveToTargetCoroutine());
+    }
+
+    private void OnDisable()
+    {
+        if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
     }
 
     private IEnumerator MoveToTargetCoroutine()

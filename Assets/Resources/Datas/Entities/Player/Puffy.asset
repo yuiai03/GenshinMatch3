@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827db7c61af0ba7419fd61d74cd3e3c7, type: 3}
+  m_Name: Puffy
+  m_EditorClassIdentifier: 
+  entityConfig:
+    entityType: 2
+    MaxHP: 100
+    idle: {fileID: 11400000, guid: 69ef0443730f7b94fb5935a02311c9be, type: 2}
+    hurt: {fileID: 11400000, guid: fbdaec584f6385f459d984588f4defd2, type: 2}
+    die: {fileID: 11400000, guid: 90da6c244ef1afb4286cb3e08ffd3d8f, type: 2}
+    attack: {fileID: 11400000, guid: 2529d449473f6cd44a71c5d126e2cff9, type: 2}
+    skeletonDataAsset: {fileID: 11400000, guid: 17b8d394a4a3048c6b388872700353a8, type: 2}

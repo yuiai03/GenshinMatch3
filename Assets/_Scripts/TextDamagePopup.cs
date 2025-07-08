@@ -24,9 +24,15 @@ public class TextDamagePopup : MonoBehaviour
         if (hideSequence != null) hideSequence.Kill();
         if (hideCoroutine != null) StopCoroutine(hideCoroutine);
     }
-    public void SetTakeDamageText(int textValue)
+    public void SetTakeDamageData(int textValue, Color color)
     {
         text.text = $"-{textValue}";
+        text.color = color;
+        
+        float randomX = Random.Range(-0.5f, 0.5f);
+        float randomY = Random.Range(-0.5f, 0.5f);
+        Vector3 randomOffset = new Vector3(randomX, randomY, 0f);
+        transform.position += randomOffset;
     }
 
     private IEnumerator HidePopup()

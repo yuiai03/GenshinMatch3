@@ -16,5 +16,5 @@ MonoBehaviour:
     levelType: 2
     levelName: 1-3
     turnsNumber: 10
-    playerType: 0
-    enemyType: 10
+    playerType: 2
+    enemyType: 6

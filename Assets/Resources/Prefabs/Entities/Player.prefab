@@ -30,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 617256197683743273}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -63,6 +63,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -84,6 +86,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1118600945
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -161,7 +164,7 @@ GameObject:
   - component: {fileID: 5016514825671310905}
   - component: {fileID: 9011722455367638332}
   m_Layer: 0
-  m_Name: Buba
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -245,7 +248,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.06533325, y: 0.5255385}
+  m_Offset: {x: -0.06533325, y: 0.663606}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -255,7 +258,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.4182804, y: 0.97751606}
+  m_Size: {x: 1.4182804, y: 1.253651}
   m_EdgeRadius: 0
 --- !u!114 &5016514825671310905
 MonoBehaviour:
@@ -269,7 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb49a6e9243ab84993159a7a89b0872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntityType: 0
   shootPoint: {fileID: 8062661706274579318}
 --- !u!114 &9011722455367638332
 MonoBehaviour:
@@ -283,11 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b72df3a999219428873e1478d73c09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idle: {fileID: 0}
-  hurt: {fileID: 0}
-  die: {fileID: 0}
-  attack: {fileID: 0}
-  anim: {fileID: 7787498625196415514}
 --- !u!1 &8207629253501918888
 GameObject:
   m_ObjectHideFlags: 0

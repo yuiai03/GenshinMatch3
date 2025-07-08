@@ -47,6 +47,10 @@ public class MapPanel : PanelBase
     private void SetEnemyImage(EntityType entityType)
     {
         var sprite = LoadManager.SpriteLoad($"Entities/{entityType}");
-        if(sprite) _enemyImage.sprite = sprite;
+        if (sprite)
+        {
+            _enemyImage.sprite = sprite;
+            _enemyImage.SetNativeSize();
+        }
     }
 }

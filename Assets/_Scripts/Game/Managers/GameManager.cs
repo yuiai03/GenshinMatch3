@@ -11,7 +11,11 @@ public class GameManager : Singleton<GameManager>
         set
         {
             _turnNumber = value;
-            EventManager.TurnChanged(_turnNumber);
+            EventManager.TurnNumberChanged(_turnNumber);
+            if (_turnNumber <= 0)
+            {
+                EventManager.GameStateChanged(GameState.GameEnded);
+            }
         }
     }
     private LevelData _currentLevelData;
@@ -72,17 +76,26 @@ public class GameManager : Singleton<GameManager>
             case GameState.EnemyEndTurn:
                 OnEnemyEndedAction();
                 break;
+            case GameState.EndRound:
+                EndRoundAction();
+                break;
+            case GameState.GameEnded:
+                OnGameEnded();
+                break;
         }
     }
 
+    private void EndRoundAction()
+    {
+        TurnNumber--;
+        EventManager.GameStateChanged(GameState.PlayerTurn);
+    }
     private void OnGameStart() { }
-
+    private void OnGameEnded() { }
     private void OnPlayerTurn()
     {
         _boardManager.SetBoardState(true);
-
     }
-
     private void OnEnemyTurn()
     {
         EventManager.GameStateChanged(GameState.EnemyEndTurn);

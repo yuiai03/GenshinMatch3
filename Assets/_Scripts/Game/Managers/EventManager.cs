@@ -51,9 +51,9 @@ public class EventManager : MonoBehaviour
         OnHPChanged?.Invoke(hpValue, isPlayer);
     }
 
-    public static event Action<int> OnTurnChanged;
-    public static void TurnChanged(int turn)
+    public static event Action<int> OnTurnNumberChanged;
+    public static void TurnNumberChanged(int turn)
     {
-        OnTurnChanged?.Invoke(turn);
+        OnTurnNumberChanged?.Invoke(turn);
     }
 }
