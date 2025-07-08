@@ -560,7 +560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -200}
+  m_AnchoredPosition: {x: 0, y: -300}
   m_SizeDelta: {x: 1284, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &384729550
@@ -720,17 +720,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDontDestroy: 1
   pools:
-  - IsUI: 0
-    poolType: 0
-    initialSize: 49
-  - IsUI: 0
-    poolType: 1
-    initialSize: 49
-  - IsUI: 1
-    poolType: 2
-    initialSize: 7
-  - IsUI: 0
-    poolType: 3
+  - poolType: 0
+    initialSize: 1
+  - poolType: 1
+    initialSize: 1
+  - poolType: 2
+    initialSize: 1
+  - poolType: 3
+    initialSize: 1
+  - poolType: 4
+    initialSize: 1
+  - poolType: 5
     initialSize: 1
 --- !u!4 &808840323
 Transform:
@@ -1327,7 +1327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -185}
+  m_AnchoredPosition: {x: 0, y: -295}
   m_SizeDelta: {x: 120, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1146268822
@@ -2110,7 +2110,7 @@ Transform:
   m_GameObject: {fileID: 1254509242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.05, y: 0.88, z: 0}
+  m_LocalPosition: {x: -2.05, y: 1.098, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children:

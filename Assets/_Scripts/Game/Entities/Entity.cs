@@ -12,17 +12,18 @@ public class Entity : MonoBehaviour
             HPChanged(_hp);
         }
     }
-    public EntityType EntityType;
     protected EntityAnim _entityAnim;
     protected EntityData _entityData;
 
+    [SerializeField] protected Transform shootPoint;
+
     public virtual void GetData(EntityData entityData)
     {
-        gameObject.name = EntityType.ToString();
-        _entityAnim = GetComponent<EntityAnim>();
         _entityData = entityData;
-        HP = _entityData.entityConfig.HP;
+        gameObject.name = _entityData.entityConfig.entityType.ToString();
+        HP = _entityData.entityConfig.MaxHP;
         
+        _entityAnim = GetComponent<EntityAnim>();
         _entityAnim.idle = _entityData.entityConfig.idle;
         _entityAnim.hurt = _entityData.entityConfig.hurt;
         _entityAnim.die = _entityData.entityConfig.die;
@@ -42,6 +43,8 @@ public class Entity : MonoBehaviour
             HP = 0;
             _entityAnim.Die();
         }
+        var takeDamagePopup = PoolManager.Instance.GetObject<TextDamagePopup>(PoolType.TextDamagePopup, transform.position, transform);
+        takeDamagePopup.SetTakeDamageText((int)damage);
     }
 
     public virtual void HPChanged(float hp) { }

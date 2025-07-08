@@ -66,19 +66,16 @@ public class GameManager : Singleton<GameManager>
             case GameState.EnemyTurn:
                 OnEnemyTurn();
                 break;
-            case GameState.PlayerEndedAction:
+            case GameState.PlayerEndTurn:
                 OnPlayerEndedAction();
                 break;
-            case GameState.EnemyEndedAction:
+            case GameState.EnemyEndTurn:
                 OnEnemyEndedAction();
                 break;
         }
     }
 
-    private void OnGameStart()
-    {
-
-    }
+    private void OnGameStart() { }
 
     private void OnPlayerTurn()
     {
@@ -88,8 +85,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnemyTurn()
     {
-        _boardManager.SetBoardState(true);
-
+        EventManager.GameStateChanged(GameState.EnemyEndTurn);
     }
 
     private void OnPlayerEndedAction()
@@ -99,7 +95,8 @@ public class GameManager : Singleton<GameManager>
     }
     private void OnEnemyEndedAction()
     {
-
+        BoardManager.Instance.ClearMatchedTileViews();
+        LevelManager.Instance.EnemyAction();
     }
 
     private void OnSceneChange(SceneType sceneType)

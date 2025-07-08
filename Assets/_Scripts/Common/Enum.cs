@@ -15,6 +15,8 @@ public enum PoolType
     Tile,
     MatchedTileView,
     PlayerBullet,
+    EnemyBullet,
+    TextDamagePopup,
 }
 
 public enum EntityType
@@ -46,8 +48,8 @@ public enum GameState
     PlayerTurn,
     EnemyTurn,
     
-    PlayerEndedAction,
-    EnemyEndedAction,
+    PlayerEndTurn,
+    EnemyEndTurn,
 
     GamePause,
 }

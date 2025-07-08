@@ -37,7 +37,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         var playerPath = $"Entities/{_levelData.levelConfig.playerType}";
         var enemyPath = $"Entities/{_levelData.levelConfig.enemyType}";
-        
+
         var playerPrefab = LoadManager.PrefabLoad<Player>(playerPath);
         var enemyPrefab = LoadManager.PrefabLoad<Enemy>(enemyPath);
 
@@ -57,5 +57,10 @@ public class LevelManager : Singleton<LevelManager>
     public void PlayerAction()
     {
         Player.Attack(Enemy);
+    }
+
+    public void EnemyAction()
+    {
+        Enemy.Attack(Player);
     }
 }

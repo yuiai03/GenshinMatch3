@@ -30,10 +30,18 @@ public class EntityAnim : MonoBehaviour
     public void Hurt()
     {
         anim.state.SetAnimation(0, hurt, false);
+        AddAnim(idle, true);
     }
     public void Attack()
     {
         anim.state.SetAnimation(0, attack, false);
+        AddAnim(idle, true);
+    }
+
+
+    public void AddAnim(AnimationReferenceAsset anim, bool loop)
+    {
+        this.anim.state.AddAnimation(0, anim, loop, 0f);
     }
 
 }

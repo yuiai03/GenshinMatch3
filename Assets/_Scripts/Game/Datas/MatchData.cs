@@ -7,6 +7,12 @@ public class MatchData
 {
     public TileType TileType { get; set; }
     public int Count { get; set; }
+
+    public MatchData(TileType tileType, int count)
+    {
+        TileType = tileType;
+        Count = count;
+    }
 }
 
 public class Match

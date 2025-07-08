@@ -5,7 +5,6 @@ using UnityEngine;
 [Serializable]
 public class Pool
 {
-    public bool IsUI;
     public PoolType poolType;
     public int initialSize;
 

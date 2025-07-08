@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityConfig:
     entityType: 0
-    HP: 100
+    MaxHP: 100
     idle: {fileID: 11400000, guid: b572cd090d3369f40ba50c78bda5915f, type: 2}
     hurt: {fileID: 11400000, guid: ab6afb05854a02140b5336c7b865deb9, type: 2}
     die: {fileID: 11400000, guid: c77d5269b9384fc4cab157ada0a2131b, type: 2}

@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class BoardManager : Singleton<BoardManager>
 {
-    public GameObject BoardBg;
-    public GameObject EmptyHolder;
-    private Empty[,] _emptys;
-    private List<MatchData> _matchHistory = new List<MatchData>();
+    [SerializeField] private GameObject BoardBg;
+    [SerializeField] private GameObject EmptyHolder;
     public int Width { get; } = Config.BoardWidth;
     public int Height { get; } = Config.BoardHeight;
+
+    private Empty[,] _emptys;
+    private List<MatchData> _matchsHistory = new List<MatchData>();
+    private List<MatchedTileView> _matchedTileViews = new List<MatchedTileView>();
 
     private Coroutine _initialTilesCoroutine;
 
@@ -37,13 +39,15 @@ public class BoardManager : Singleton<BoardManager>
     }
     public void InitializeMatchedTiles()
     {
-        foreach (var match in _matchHistory)
+        foreach (var match in _matchsHistory)
         {
             var holder = UIManager.Instance.GamePanel.MatchedTilesViewHolder;
             MatchedTileView matchedTileView = 
                 PoolManager.Instance.GetObject<MatchedTileView>(
                 PoolType.MatchedTileView, Vector2.zero, holder.transform);
             matchedTileView.InitialData(match.TileType, match.Count);
+
+            _matchedTileViews.Add(matchedTileView);
         }
     }
     private IEnumerator InitialTilesCoroutine()
@@ -139,12 +143,39 @@ public class BoardManager : Singleton<BoardManager>
         var matches = FindAllMatches();
         if (matches.Count > 0)
         {
+            // Tập hợp tất cả tile sẽ bị xóa (không trùng lặp)
+            var allTilesToRemove = new HashSet<Tile>();
+            var tileTypeCount = new Dictionary<TileType, int>();
+
+            // Thu thập tất cả tile từ các match
             foreach (var match in matches)
             {
-                ClearMatch(match);
-                AddElementMatchHistory(match.TileType, match.Tiles.Count);
-                //_matchHistory.Add(new MatchData(match.TileType, match.Tiles.Count));
+                foreach (var tile in match.Tiles)
+                {
+                    if (allTilesToRemove.Add(tile)) 
+                    {
+                        if (tileTypeCount.ContainsKey(tile.TileType))
+                            tileTypeCount[tile.TileType]++;
+                        else
+                            tileTypeCount[tile.TileType] = 1;
+                    }
+                }
             }
+
+            // Xóa các tile (mỗi tile chỉ xóa một lần)
+            foreach (var tile in allTilesToRemove)
+            {
+                _emptys[tile.Empty.IntPos.x, tile.Empty.IntPos.y].Tile = null;
+                PoolManager.Instance.ReturnObject(PoolType.Tile, tile.gameObject);
+            }
+
+            // Cập nhật match history với số lượng chính xác
+            foreach (var kvp in tileTypeCount)
+            {
+                var matchData = new MatchData(kvp.Key, kvp.Value);
+                AddElementMatchHistory(matchData);
+            }
+
             RefillBoard();
         }
         else
@@ -152,8 +183,8 @@ public class BoardManager : Singleton<BoardManager>
             if (!BoardCanMatches()) RecreateBoard();
             else
             {
-                if (_matchHistory.Count == 0) return;
-                EventManager.GameStateChanged(GameState.PlayerEndedAction);
+                if (_matchsHistory.Count == 0) return;
+                EventManager.GameStateChanged(GameState.PlayerEndTurn);
             }
         }
     }
@@ -161,57 +192,124 @@ public class BoardManager : Singleton<BoardManager>
     private List<Match> FindAllMatches()
     {
         var matches = new List<Match>();
+
+        // Tìm TẤT CẢ match ngang
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 var horizontal = CheckHorizontalMatch(x, y);
-                if (horizontal.Tiles.Count >= 3) matches.Add(horizontal);
-                var vertical = CheckVerticalMatch(x, y);
-                if (vertical.Tiles.Count >= 3) matches.Add(vertical);
+                if (horizontal.Tiles.Count >= 3)
+                {
+                    matches.Add(horizontal);
+                }
             }
         }
-        return matches;
+
+        // Tìm TẤT CẢ match dọc
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                var vertical = CheckVerticalMatch(x, y);
+                if (vertical.Tiles.Count >= 3)
+                {
+                    matches.Add(vertical);
+                }
+            }
+        }
+
+        // Loại bỏ các match trùng lặp (cùng tile set)
+        var uniqueMatches = new List<Match>();
+        for (int i = 0; i < matches.Count; i++)
+        {
+            bool isDuplicate = false;
+            for (int j = 0; j < uniqueMatches.Count; j++)
+            {
+                if (AreMatchesIdentical(matches[i], uniqueMatches[j]))
+                {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (!isDuplicate)
+            {
+                uniqueMatches.Add(matches[i]);
+            }
+        }
+
+        return uniqueMatches;
+    }
+
+    // Helper method để kiểm tra 2 match có giống nhau không
+    private bool AreMatchesIdentical(Match match1, Match match2)
+    {
+        if (match1.Tiles.Count != match2.Tiles.Count) return false;
+
+        foreach (var tile1 in match1.Tiles)
+        {
+            bool found = false;
+            foreach (var tile2 in match2.Tiles)
+            {
+                if (tile1 == tile2)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+        return true;
     }
 
     private Match CheckHorizontalMatch(int x, int y)
     {
-        if (y + 2 >= Height) return new Match();
-
         var firstTile = GetTileAtPos(new Vector2Int(x, y));
-        // Kiểm tra nếu tile đầu tiên là null
         if (firstTile == null) return new Match();
 
         var tiles = new List<Tile> { firstTile };
         var type = firstTile.TileType;
 
-        for (int i = 1; i < 3; i++)
+        // Extend match to the right as far as possible
+        for (int i = 1; y + i < Height; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x, y + i));
-            if (nextTile != null && nextTile.TileType == type) tiles.Add(nextTile);
-            else break;
+            if (nextTile != null && nextTile.TileType == type)
+                tiles.Add(nextTile);
+            else
+                break;
         }
-        return new Match { TileType = type, Tiles = tiles };
+
+        // Only return match if we have 3 or more tiles
+        if (tiles.Count >= 3)
+            return new Match { TileType = type, Tiles = tiles };
+        else
+            return new Match();
     }
 
     private Match CheckVerticalMatch(int x, int y)
     {
-        if (x + 2 >= Width) return new Match();
-
         var firstTile = GetTileAtPos(new Vector2Int(x, y));
-        // Kiểm tra nếu tile đầu tiên là null
         if (firstTile == null) return new Match();
 
         var tiles = new List<Tile> { firstTile };
         var type = firstTile.TileType;
 
-        for (int i = 1; i < 3; i++)
+        // Extend match downward as far as possible
+        for (int i = 1; x + i < Width; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x + i, y));
-            if (nextTile != null && nextTile.TileType == type) tiles.Add(nextTile);
-            else break;
+            if (nextTile != null && nextTile.TileType == type)
+                tiles.Add(nextTile);
+            else
+                break;
         }
-        return new Match { TileType = type, Tiles = tiles };
+
+        // Only return match if we have 3 or more tiles
+        if (tiles.Count >= 3)
+            return new Match { TileType = type, Tiles = tiles };
+        else
+            return new Match();
     }
 
     private bool BoardCanMatches()
@@ -301,33 +399,36 @@ public class BoardManager : Singleton<BoardManager>
     private void RecreateBoard()
     {
         Debug.Log("Recreate Board");
-        
-        //for (int x = 0; x < Width; x++)
+
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (_emptys[x, y].Tile)
+                {
+                    Tile tile = _emptys[x, y].Tile;
+                    PoolManager.Instance.ReturnObject(PoolType.Tile, tile.gameObject);
+                    _emptys[x, y].Tile = null;
+                }
+            }
+        }
+
+        if (_initialTilesCoroutine != null) StopCoroutine(_initialTilesCoroutine);
+        _initialTilesCoroutine = StartCoroutine(InitialTilesCoroutine());
+    }
+
+    private void AddElementMatchHistory(MatchData newMatch)
+    {
+        //foreach (var matchHistory in _matchsHistory)
         //{
-        //    for (int y = 0; y < Height; y++)
+        //    if (matchHistory.TileType == newMatch.TileType)
         //    {
-        //        if (_emptys[x, y].Tile)
-        //        {
-        //            Tile tile = _emptys[x, y].Tile;
-        //            PoolManager.Instance.ReturnObject(PoolType.Tile, tile.gameObject);
-        //            _emptys[x, y].Tile = null;
-        //        }
+        //        matchHistory.Count += newMatch.Count;
+        //        return;
         //    }
         //}
-
-        //if (_initialTilesCoroutine != null) StopCoroutine(_initialTilesCoroutine);
-        //_initialTilesCoroutine = StartCoroutine(InitialTilesCoroutine());
+        _matchsHistory.Add(newMatch);
     }
-
-    private void ClearMatch(Match match)
-    {
-        foreach (var tile in match.Tiles)
-        {
-            _emptys[tile.Empty.IntPos.x, tile.Empty.IntPos.y].Tile = null;
-            PoolManager.Instance.ReturnObject(PoolType.Tile ,tile.gameObject);
-        }
-    }
-
     private void RefillBoard()
     {
         StartCoroutine(RefillBoardCoroutine());
@@ -415,24 +516,22 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
-    public List<MatchData> GetMatchHistory() => new List<MatchData>(_matchHistory);
-    public void ClearMatchHistory() => _matchHistory.Clear();
+    public List<MatchData> GetMatchHistory() => new List<MatchData>(_matchsHistory);
+    public void ClearMatchHistory() => _matchsHistory.Clear();
+    public void ClearMatchedTileViews()
+    {
+        foreach (var matchedTileView in _matchedTileViews)
+        {
+            PoolManager.Instance.ReturnObject(PoolType.MatchedTileView, matchedTileView.gameObject);
+        }
+        _matchedTileViews.Clear();
+    }
 
     public Tile GetTileAtPos(Vector2Int position)
     {
         return _emptys[position.x, position.y].Tile;
     }
     public void SetBoardState(bool state) => BoardBg.SetActive(state);
-    private void AddElementMatchHistory(TileType type, int count)
-    {
-        foreach (var match in _matchHistory)
-        {
-            if (match.TileType == type)
-            {
-                match.Count += count;
-                return;
-            }
-        }
-        _matchHistory.Add(new MatchData { TileType = type, Count = count });
-    }
+
+
 }

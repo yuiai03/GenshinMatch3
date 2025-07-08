@@ -11,7 +11,7 @@ public class EntityData : ScriptableObject
 public class EntityConfig
 {
     public EntityType entityType;
-    public float HP = 100;
+    public float MaxHP = 100;
 
     public AnimationReferenceAsset idle;
     public AnimationReferenceAsset hurt;

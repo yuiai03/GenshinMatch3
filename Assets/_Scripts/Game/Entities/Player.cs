@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    [SerializeField] private Transform shootPoint;
     private Coroutine attackCoroutine;
     public override void GetData(EntityData entityData)
     {
         base.GetData(entityData);
-        EventManager.MaxHPChanged(entityData.entityConfig.HP, true);
+        EventManager.MaxHPChanged(entityData.entityConfig.MaxHP, true);
     }
     public override void HPChanged(float hp)
     {
@@ -30,6 +29,7 @@ public class Player : Entity
             bullet.Initialize(matchData);
             yield return new WaitForSeconds(0.5f); 
         }
-        _entityAnim.anim.state.AddAnimation(0, _entityAnim.idle, true, 0f);
+        yield return new WaitForSeconds(1f);
+        EventManager.GameStateChanged(GameState.EnemyTurn);
     }
 }
