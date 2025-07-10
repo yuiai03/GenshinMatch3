@@ -44,7 +44,7 @@ public class BulletBase : MonoBehaviour
     private IEnumerator MoveToTargetCoroutine()
     {
         float distance = _speed * Time.deltaTime;
-        _rb2d.linearVelocity = _direction * _speed;
+        _rb2d.velocity = _direction * _speed;
         yield return null;
     }
 }

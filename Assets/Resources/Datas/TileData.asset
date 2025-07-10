@@ -18,8 +18,8 @@ MonoBehaviour:
     gradient:
       serializedVersion: 2
       key0: {r: 0, g: 0.78431374, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key1: {r: 0, g: 0.78431374, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -50,8 +50,8 @@ MonoBehaviour:
     gradient:
       serializedVersion: 2
       key0: {r: 1, g: 0.25585356, b: 0.17254901, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key1: {r: 1, g: 0.25490198, b: 0.17254902, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -82,8 +82,8 @@ MonoBehaviour:
     gradient:
       serializedVersion: 2
       key0: {r: 0.48113203, g: 0.8880873, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key1: {r: 0.48235294, g: 0.8862745, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -110,12 +110,12 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 3
   - tileType: 3
-    color: {r: 1, g: 0.216981, b: 0.9993066, a: 1}
+    color: {r: 1, g: 0.4669811, b: 1, a: 1}
     gradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.21568628, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key0: {r: 1, g: 0.46666667, b: 1, a: 1}
+      key1: {r: 1, g: 0.46666667, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -146,8 +146,8 @@ MonoBehaviour:
     gradient:
       serializedVersion: 2
       key0: {r: 0.41960785, g: 1, b: 0.4117647, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key1: {r: 0.41960785, g: 1, b: 0.4117647, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -178,8 +178,8 @@ MonoBehaviour:
     gradient:
       serializedVersion: 2
       key0: {r: 0.9647059, g: 0.8862745, b: 0, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key1: {r: 0.9647059, g: 0.8862745, b: 0, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -206,12 +206,12 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 3
   - tileType: 6
-    color: {r: 0.14117646, g: 1, b: 0.5058912, a: 1}
+    color: {r: 0, g: 0.9245283, b: 0.39260796, a: 1}
     gradient:
       serializedVersion: 2
-      key0: {r: 0.14117648, g: 1, b: 0.5058824, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.39215687}
+      key0: {r: 0, g: 0.9254902, b: 0.39215687, a: 1}
+      key1: {r: 0, g: 0.9254902, b: 0.39215687, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
