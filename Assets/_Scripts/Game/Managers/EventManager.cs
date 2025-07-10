@@ -51,6 +51,12 @@ public class EventManager : MonoBehaviour
         OnHPChanged?.Invoke(hpValue, isPlayer);
     }
 
+    public static event Action<TileType, bool> OnCurrentTileTypeChanged;
+    public static void CurrentTileTypeChanged(TileType tileType, bool isPlayer)
+    {
+        OnCurrentTileTypeChanged?.Invoke(tileType, isPlayer);
+    }
+
     public static event Action<int> OnTurnNumberChanged;
     public static void TurnNumberChanged(int turn)
     {

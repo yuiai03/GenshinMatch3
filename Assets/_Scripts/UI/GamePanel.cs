@@ -11,6 +11,9 @@ public class GamePanel : MonoBehaviour
     [SerializeField] public HPBar PlayerHPBar;
     [SerializeField] public HPBar EnemyHPBar;
 
+    [SerializeField] public ElementalReactionView PlayerElementalReactionView;
+    [SerializeField] public ElementalReactionView EnemyElementalReactionView;
+
     [SerializeField] public TextMeshProUGUI TurnText;
 
     private void Awake()
@@ -23,6 +26,11 @@ public class GamePanel : MonoBehaviour
         EventManager.OnMaxHPChanged +=  OnMaxHPChanged;
         EventManager.OnHPChanged += OnHPChanged;
         EventManager.OnTurnNumberChanged += SetTurnText;
+        EventManager.OnCurrentTileTypeChanged += (tileType, isPlayer) =>
+        {
+            if (isPlayer) PlayerElementalReactionView.SetTypeImage(tileType);
+            else EnemyElementalReactionView.SetTypeImage(tileType);
+        };
     }
 
     private void OnDisable()
@@ -30,6 +38,11 @@ public class GamePanel : MonoBehaviour
         EventManager.OnMaxHPChanged -= OnMaxHPChanged;
         EventManager.OnHPChanged -= OnHPChanged;
         EventManager.OnTurnNumberChanged -= SetTurnText;
+        EventManager.OnCurrentTileTypeChanged -= (tileType, isPlayer) =>
+        {
+            if (isPlayer) PlayerElementalReactionView.SetTypeImage(tileType);
+            else EnemyElementalReactionView.SetTypeImage(tileType);
+        };
     }
 
     private void OnMaxHPChanged(float hpValue, bool isPlayer)

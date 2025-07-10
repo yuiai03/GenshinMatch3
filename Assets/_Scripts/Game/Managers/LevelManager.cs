@@ -8,8 +8,8 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField] private Transform _playerSpawnPoint;
     [SerializeField] private Transform _enemySpawnPoint;
 
-    public Player Player { get; set; }
-    public Enemy Enemy { get; set; }
+    public Player Player { get; private set; }
+    public Enemy Enemy { get; private set; }
 
     private LevelData _levelData;
     private BoardManager _boardManager;
@@ -62,6 +62,12 @@ public class LevelManager : Singleton<LevelManager>
 
     public void EnemyAction()
     {
+        if (Enemy.IsFreeze)
+        {
+            Enemy.IsFreeze = false; 
+            EventManager.GameStateChanged(GameState.EndRound);
+            return;
+        }
         Enemy.Attack(Player);
     }
 }

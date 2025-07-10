@@ -12,6 +12,8 @@
 
 public enum ReactionType
 {
+    None,
+
     /// <summary>
     /// Bốc hơi
     /// </summary>
@@ -25,7 +27,7 @@ public enum ReactionType
     /// <summary>
     /// Đóng băng
     /// </summary>
-    Frozen, 
+    Freeze, 
 
     /// <summary>
     /// Quá tải
@@ -76,6 +78,8 @@ public enum PoolType
     PlayerBullet,
     EnemyBullet,
     TextDamagePopup,
+    Shield,
+    DendroCore,
 }
 
 public enum EntityType

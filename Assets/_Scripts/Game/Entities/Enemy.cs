@@ -10,7 +10,8 @@ public class Enemy : Entity
         base.GetData(entityData);
         EventManager.MaxHPChanged(entityData.entityConfig.MaxHP, false);
     }
-    public override void HPChanged(float hp)
+
+    protected override void HPChanged(float hp)
     {
         EventManager.HPChanged(hp, false);
     }
@@ -20,6 +21,7 @@ public class Enemy : Entity
         if (attackCoroutine != null) StopCoroutine(attackCoroutine);
         attackCoroutine = StartCoroutine(AttackCoroutine(target));
     }
+
     private IEnumerator AttackCoroutine(Entity target)
     {
         _entityAnim.Attack();
@@ -30,5 +32,10 @@ public class Enemy : Entity
         bullet.Initialize(matchData);
         yield return new WaitForSeconds(1f);
         EventManager.GameStateChanged(GameState.EndRound);
+    }
+
+    protected override void CurrentTileTypeChanged()
+    {
+        EventManager.CurrentTileTypeChanged(CurrentTileType, false);
     }
 }

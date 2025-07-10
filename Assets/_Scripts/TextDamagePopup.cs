@@ -8,6 +8,7 @@ public class TextDamagePopup : MonoBehaviour
     private TextMeshPro text;
     private Coroutine hideCoroutine;
     private Sequence hideSequence;
+    private float distance = 1f;
     private void Awake()
     {
         if (text == null)
@@ -24,14 +25,14 @@ public class TextDamagePopup : MonoBehaviour
         if (hideSequence != null) hideSequence.Kill();
         if (hideCoroutine != null) StopCoroutine(hideCoroutine);
     }
-    public void SetTakeDamageData(int textValue, Color color)
+    public void SetTakeDamageData(Color color, ElementalReactionData data)
     {
-        text.text = $"-{textValue}";
+        text.text = $"-{data.damage} {Helper.ReactionText(data.reactionType)}";
         text.color = color;
         
-        float randomX = Random.Range(-0.5f, 0.5f);
-        float randomY = Random.Range(-0.5f, 0.5f);
-        Vector3 randomOffset = new Vector3(randomX, randomY, 0f);
+        float randomX = Random.Range(-distance, distance);
+        float randomY = Random.Range(-distance, distance);
+        Vector3 randomOffset = new Vector2(randomX, randomY);
         transform.position += randomOffset;
     }
 

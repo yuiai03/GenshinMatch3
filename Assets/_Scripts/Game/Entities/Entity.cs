@@ -1,7 +1,9 @@
+using System.Net.Http.Headers;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+
     private float _hp;
     public float HP
     {
@@ -12,8 +14,19 @@ public class Entity : MonoBehaviour
             HPChanged(_hp);
         }
     }
-    
-    public TileType CurrentTileType { get; set; }
+    private TileType _currentTileType;
+    public TileType CurrentTileType
+    {
+        get => _currentTileType;
+        set
+        {
+            _currentTileType = value;
+
+            CurrentTileTypeChanged();
+        }
+    }
+    public bool IsFreeze { get; set; }
+    public bool IsShield { get; set; }
     protected EntityAnim _entityAnim { get; private set; }
     protected EntityData _entityData {get; private set;}
 
@@ -38,13 +51,16 @@ public class Entity : MonoBehaviour
 
     public virtual void TakeDamage(float damage, TileConfig tileConfig)
     {
-        float finalDamage = Helper.ElementalReaction(tileConfig, damage, this);
-        ApplyDamage(finalDamage, tileConfig);
+        if (IsShield) return;
+
+        var elementalReactionData = ElementalReactionManager.Instance.ElementalReaction(tileConfig, damage, this);
+        ApplyDamage(tileConfig, elementalReactionData);
     }
 
-    public virtual void ApplyDamage(float damage, TileConfig tileConfig)
+    public virtual void ApplyDamage( TileConfig tileConfig, ElementalReactionData elementalReactionData)
     {
-        HP -= damage;
+        var data = elementalReactionData;
+        HP -= data.damage;
         _entityAnim.Hurt();
         if (HP <= 0)
         {
@@ -54,9 +70,10 @@ public class Entity : MonoBehaviour
 
         var takeDamagePopup = PoolManager.Instance.GetObject<TextDamagePopup>(
             PoolType.TextDamagePopup, shootPoint.position, transform);
-        takeDamagePopup.SetTakeDamageData((int)damage, tileConfig.color);
+        takeDamagePopup.SetTakeDamageData(tileConfig.color, data);
     }
 
-    public virtual void HPChanged(float hp) { }
     public virtual void Attack(Entity target) { }
+    protected virtual void HPChanged(float hp) { }
+    protected virtual void CurrentTileTypeChanged() { }
 }

@@ -9,7 +9,7 @@ public class Player : Entity
         base.GetData(entityData);
         EventManager.MaxHPChanged(entityData.entityConfig.MaxHP, true);
     }
-    public override void HPChanged(float hp)
+    protected override void HPChanged(float hp)
     {
         EventManager.HPChanged(hp, true);
     }
@@ -31,5 +31,10 @@ public class Player : Entity
         }
         yield return new WaitForSeconds(1f);
         EventManager.GameStateChanged(GameState.EnemyTurn);
+    }
+
+    protected override void CurrentTileTypeChanged()
+    {
+        EventManager.CurrentTileTypeChanged(CurrentTileType, true);
     }
 }
