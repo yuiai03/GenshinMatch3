@@ -16,6 +16,15 @@ public class BoardManager : Singleton<BoardManager>
 
     private Coroutine _initialTilesCoroutine;
 
+    private void OnEnable()
+    {
+        EventManager.OnTileMatch += AddElementMatchHistory;
+    }
+    private void OnDisable()
+    {
+        EventManager.OnTileMatch -= AddElementMatchHistory;
+    }
+
     public void InitializeEmpty()
     {
         if (!EmptyHolder || !BoardBg) return;
@@ -170,10 +179,10 @@ public class BoardManager : Singleton<BoardManager>
             }
 
             // Cập nhật match history với số lượng chính xác
-            foreach (var kvp in tileTypeCount)
+            foreach (var tile in tileTypeCount)
             {
-                var matchData = new MatchData(kvp.Key, kvp.Value);
-                AddElementMatchHistory(matchData);
+                var matchData = new MatchData(tile.Key, tile.Value);
+                EventManager.TileMatch(matchData);
             }
 
             RefillBoard();
@@ -241,7 +250,7 @@ public class BoardManager : Singleton<BoardManager>
         return uniqueMatches;
     }
 
-    // Helper method để kiểm tra 2 match có giống nhau không
+    // kiểm tra 2 match có giống nhau không
     private bool AreMatchesIdentical(Match match1, Match match2)
     {
         if (match1.Tiles.Count != match2.Tiles.Count) return false;
@@ -270,7 +279,6 @@ public class BoardManager : Singleton<BoardManager>
         var tiles = new List<Tile> { firstTile };
         var type = firstTile.TileType;
 
-        // Extend match to the right as far as possible
         for (int i = 1; y + i < Height; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x, y + i));
@@ -280,7 +288,6 @@ public class BoardManager : Singleton<BoardManager>
                 break;
         }
 
-        // Only return match if we have 3 or more tiles
         if (tiles.Count >= 3)
             return new Match { TileType = type, Tiles = tiles };
         else
@@ -295,7 +302,6 @@ public class BoardManager : Singleton<BoardManager>
         var tiles = new List<Tile> { firstTile };
         var type = firstTile.TileType;
 
-        // Extend match downward as far as possible
         for (int i = 1; x + i < Width; i++)
         {
             Tile nextTile = GetTileAtPos(new Vector2Int(x + i, y));
@@ -305,7 +311,6 @@ public class BoardManager : Singleton<BoardManager>
                 break;
         }
 
-        // Only return match if we have 3 or more tiles
         if (tiles.Count >= 3)
             return new Match { TileType = type, Tiles = tiles };
         else
@@ -419,14 +424,6 @@ public class BoardManager : Singleton<BoardManager>
 
     private void AddElementMatchHistory(MatchData newMatch)
     {
-        //foreach (var matchHistory in _matchsHistory)
-        //{
-        //    if (matchHistory.TileType == newMatch.TileType)
-        //    {
-        //        matchHistory.Count += newMatch.Count;
-        //        return;
-        //    }
-        //}
         _matchsHistory.Add(newMatch);
     }
     private void RefillBoard()

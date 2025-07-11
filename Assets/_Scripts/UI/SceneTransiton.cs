@@ -25,7 +25,7 @@ public class SceneTransiton : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.Append(bgCanvas.DOFade(0, duration).SetUpdate(true));
         sequence.Join(primogemCanvas.DOFade(0, duration/2).SetUpdate(true));
-        sequence.Join(primogemCanvas.transform.DOLocalRotate(newRotate, duration));
+        sequence.Join(primogemCanvas.transform.DOLocalRotate(newRotate, duration).SetEase(Ease.Linear));
         sequence.Join(right.DOAnchorPosX(openPosX, duration).SetUpdate(true));
         sequence.Join(left.DOAnchorPosX(-openPosX, duration).SetUpdate(true));
         sequence.OnComplete(() =>
@@ -49,7 +49,7 @@ public class SceneTransiton : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.Append(bgCanvas.DOFade(1, duration).SetUpdate(true));
         sequence.Join(primogemCanvas.DOFade(1, duration/2).SetUpdate(true));
-        sequence.Join(primogemCanvas.transform.DOLocalRotate(Vector3.zero, duration));
+        sequence.Join(primogemCanvas.transform.DOLocalRotate(Vector3.zero, duration).SetEase(Ease.Linear));
         sequence.Join(right.DOAnchorPosX(closePosX, duration).SetUpdate(true));
         sequence.Join(left.DOAnchorPosX(-closePosX, duration).SetUpdate(true));
     }

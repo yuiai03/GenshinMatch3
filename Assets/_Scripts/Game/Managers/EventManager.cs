@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
+    public static event Action<MatchData> OnTileMatch;
+    public static void TileMatch(MatchData matchData)
+    {
+        OnTileMatch?.Invoke(matchData);
+    }
+
     public static event Action<Tile, Tile> OnEndSwapTile;
     public static void EndSwapTile(Tile selectedTile, Tile targetTile)
     {

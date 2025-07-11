@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class CameraController : MonoBehaviour
+public class MapCamera : CameraBase
 {
     [SerializeField] private float movementSpeed = 3f;
     [SerializeField] private Transform mapContainer;
@@ -13,8 +13,9 @@ public class CameraController : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private Vector2 targetPosition;
     private Bounds mapBounds;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         mainCamera = GetComponent<Camera>();
         targetPosition = transform.position;
     }

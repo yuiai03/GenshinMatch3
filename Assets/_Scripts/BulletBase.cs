@@ -7,18 +7,23 @@ public class BulletBase : MonoBehaviour
     protected int _damage = 0;
     protected float _speed = 10f;
     protected TileConfig _tileConfig;
-    private SpriteRenderer _spriteRenderer;
-    private TrailRenderer _trailRenderer;
-    private Rigidbody2D _rb2d;
-    private Coroutine _moveCoroutine;
+    protected SpriteRenderer _spriteRenderer;
+    protected TrailRenderer _trailRenderer;
+    protected Rigidbody2D _rb2d;
+    protected Coroutine _moveCoroutine;
+    protected Coroutine _followCoroutine;
     protected virtual void Awake()
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _trailRenderer = GetComponent<TrailRenderer>();
     }
+    private void OnDisable()
+    {
+        if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
+    }
 
-    public void Initialize(MatchData matchData)
+    public void Initialize(MatchData matchData, bool followTarget = false, float speed = 10)
     {
         _tileConfig = GameManager.Instance.TileData.GetTileConfig(matchData.TileType);
         if (_tileConfig == null) return;
@@ -26,25 +31,32 @@ public class BulletBase : MonoBehaviour
         _spriteRenderer.color = _tileConfig.color;
         _trailRenderer.colorGradient = _tileConfig.gradient;
         _damage = matchData.Count;
+        _speed = speed;
 
-        MoveToTarget();
+        if (!followTarget) MoveToTarget();
+        else FollowTarget();
+    }
+    protected virtual void FollowTarget()
+    {
+        if (_followCoroutine != null) StopCoroutine(_followCoroutine);
+        _followCoroutine = StartCoroutine(FollowTargetCoroutine());
     }
 
-    public void MoveToTarget()
+    protected virtual IEnumerator FollowTargetCoroutine()
+    {
+        yield return null;
+    }
+    protected virtual void MoveToTarget()
     {
         if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
         _moveCoroutine = StartCoroutine(MoveToTargetCoroutine());
     }
 
-    private void OnDisable()
+    protected virtual IEnumerator MoveToTargetCoroutine()
     {
-        if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
-    }
-
-    private IEnumerator MoveToTargetCoroutine()
-    {
-        float distance = _speed * Time.deltaTime;
         _rb2d.velocity = _direction * _speed;
         yield return null;
     }
+
+
 }

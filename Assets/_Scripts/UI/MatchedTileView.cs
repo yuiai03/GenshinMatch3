@@ -9,6 +9,9 @@ public class MatchedTileView : MonoBehaviour
 
     public void InitialData(TileType type, int quantity)
     {
+        var rect = gameObject.GetComponent<RectTransform>();
+        rect.localScale = Vector3.one;
+
         if (_typeImage) _typeImage.sprite = LoadManager.SpriteLoad($"Tile/{type}");
         if (_quantityText) _quantityText.text = quantity.ToString();
     }
