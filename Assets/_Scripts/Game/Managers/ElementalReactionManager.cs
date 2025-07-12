@@ -95,7 +95,7 @@ public class ElementalReactionManager : Singleton<ElementalReactionManager>
 
             case ReactionType.Bloom:
                 CreateDendroExplosion(target, Config.DendroCoreExplosionDamage);
-                target.CurrentTileType = TileType.Dendro;
+                target.CurrentTileType = TileType.None;
                 break;
 
 

@@ -7,12 +7,6 @@ public class LoadManager : Singleton<LoadManager>
 {
     private Coroutine transitionCoroutine;
 
-    public void ReLoadScene()
-    {
-        SceneManager.LoadScene(0);
-    }
-
-
     public static Sprite SpriteLoad(string path)
     {
         var spritePath = $"Sprites/{path}";
@@ -36,7 +30,7 @@ public class LoadManager : Singleton<LoadManager>
 
     public static T DataLoad<T>(string path) where T : Object
     {
-        var dataPath = $"Datas/{path}";
+        var dataPath = $"SODatas/{path}";
         T data = Resources.Load<T>(dataPath);
         if (data == null)
         {

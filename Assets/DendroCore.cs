@@ -63,9 +63,7 @@ public class DendroCore : MonoBehaviour
             if (enemy)
             {
                 var dendroConfig = Helper.GetTileConfig(TileType.Dendro);
-                var explosionData = new ElementalReactionData(_currentDamage, ReactionType.Bloom);
-                
-                enemy.ApplyDamage(dendroConfig, explosionData);
+                enemy.TakeDamage(_currentDamage, dendroConfig);
             }
         }
     }

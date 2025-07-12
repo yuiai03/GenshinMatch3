@@ -15,10 +15,11 @@ public class GamePanel : MonoBehaviour
     [SerializeField] public ElementalReactionView EnemyElementalReactionView;
 
     [SerializeField] public TextMeshProUGUI TurnText;
-
+    [SerializeField] public Button ReturnButton;
     private void Awake()
     {
         Menu.SetActive(false);
+        ReturnButton.onClick.AddListener(ReturnClick);
     }
 
     private void OnEnable()
@@ -26,11 +27,7 @@ public class GamePanel : MonoBehaviour
         EventManager.OnMaxHPChanged +=  OnMaxHPChanged;
         EventManager.OnHPChanged += OnHPChanged;
         EventManager.OnTurnNumberChanged += SetTurnText;
-        EventManager.OnCurrentTileTypeChanged += (tileType, isPlayer) =>
-        {
-            if (isPlayer) PlayerElementalReactionView.SetTypeImage(tileType);
-            else EnemyElementalReactionView.SetTypeImage(tileType);
-        };
+        EventManager.OnCurrentTileTypeChanged += OnCurrentTileTypeChange;
     }
 
     private void OnDisable()
@@ -38,11 +35,7 @@ public class GamePanel : MonoBehaviour
         EventManager.OnMaxHPChanged -= OnMaxHPChanged;
         EventManager.OnHPChanged -= OnHPChanged;
         EventManager.OnTurnNumberChanged -= SetTurnText;
-        EventManager.OnCurrentTileTypeChanged -= (tileType, isPlayer) =>
-        {
-            if (isPlayer) PlayerElementalReactionView.SetTypeImage(tileType);
-            else EnemyElementalReactionView.SetTypeImage(tileType);
-        };
+        EventManager.OnCurrentTileTypeChanged -= OnCurrentTileTypeChange;
     }
 
     private void OnMaxHPChanged(float hpValue, bool isPlayer)
@@ -60,5 +53,22 @@ public class GamePanel : MonoBehaviour
     {
         TurnText.text = $"{value}";
     }
-
+    private void ReturnClick()
+    {
+        LoadManager.Instance.TransitionLevel(SceneType.Map);
+    }
+    private void OnCurrentTileTypeChange(TileType tileType, bool isPlayer)
+    {
+        SetElementalReactionViewStatus(isPlayer ? PlayerElementalReactionView : EnemyElementalReactionView, tileType);
+    }
+    private void SetElementalReactionViewStatus(ElementalReactionView elementalReactionView, TileType tileType)
+    {
+        if (tileType == TileType.None)
+        {
+            elementalReactionView.gameObject.SetActive(false);
+            return;
+        }
+        elementalReactionView.gameObject.SetActive(true);
+        elementalReactionView.SetTypeImage(tileType);
+    }
 }

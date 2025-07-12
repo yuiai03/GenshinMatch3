@@ -9,13 +9,6 @@ public class ElementalReactionView : MonoBehaviour
 
     public void SetTypeImage(TileType tileType)
     {
-        if(tileType == TileType.None)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-
-        if(!gameObject.activeSelf) gameObject.SetActive(true);
         var sprite = LoadManager.SpriteLoad($"Tile/{tileType.ToString()}");
         if(sprite) tileImage.sprite = sprite;
     }

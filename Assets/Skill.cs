@@ -6,7 +6,8 @@ using DG.Tweening;
 
 public class Skill : MonoBehaviour
 {
-    private bool _canActive;
+    private bool _canActive => energy >= 10 
+        && GameManager.Instance.GameState != GameState.GameEnded;
     private int energy = 0;
 
     [SerializeField] private TileType _tileType;
@@ -51,10 +52,10 @@ public class Skill : MonoBehaviour
     {
         if (!_canActive) return;
 
+        ReSetup();
         var bullet = PoolManager.Instance.GetObject<PlayerBullet>(PoolType.PlayerBullet, transform.position, null);
         var matchData = new MatchData(_tileType, 5);
         bullet.Initialize(matchData, true, 30);
-        ReSetup();
     }
 
     private void SetFillAmount(MatchData matchData)
@@ -69,9 +70,7 @@ public class Skill : MonoBehaviour
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                _canActive = energy >= 10;
                 if(_canActive) _skillImage.fillAmount = 1f;
-
             });
     }
 }

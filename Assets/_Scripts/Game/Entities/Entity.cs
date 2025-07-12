@@ -12,6 +12,8 @@ public class Entity : MonoBehaviour
         {
             _hp = value;
             HPChanged(_hp);
+         
+            if (_hp <= 0) EventManager.GameStateChanged(GameState.GameEnded);
         }
     }
     private TileType _currentTileType;

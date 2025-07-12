@@ -34,7 +34,7 @@ public class Pool
 
     public GameObject GetObject()
     {
-        GameObject obj = objList.Find(o => !o.activeInHierarchy);
+        GameObject obj = objList.Find(o => !o.activeSelf);
         if (!obj)
         {
             obj = CreateNewObject();

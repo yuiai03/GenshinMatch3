@@ -88,16 +88,25 @@ public class GameManager : Singleton<GameManager>
     private void EndRoundAction()
     {
         TurnNumber--;
+        if (GameState == GameState.GameEnded) return;
+
         EventManager.GameStateChanged(GameState.PlayerTurn);
     }
     private void OnGameStart() { }
-    private void OnGameEnded() { }
+    private void OnGameEnded()
+    {
+        Debug.Log("Game Ended");
+    }
     private void OnPlayerTurn()
     {
+        if (GameState == GameState.GameEnded) return;
+
         _boardManager.SetBoardState(true);
     }
     private void OnEnemyTurn()
     {
+        if (GameState == GameState.GameEnded) return;
+
         EventManager.GameStateChanged(GameState.EnemyEndTurn);
     }
 
