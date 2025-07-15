@@ -20,3 +20,4 @@ MonoBehaviour:
     die: {fileID: 11400000, guid: 3bae2fbb08c39ee47aa732d0fb013a6e, type: 2}
     attack: {fileID: 11400000, guid: da3da45005867ab4ab0fa5b7188002f8, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: 7d1ef9104d38443a4b39cf8906cc277d, type: 2}
+    elementalType: 4

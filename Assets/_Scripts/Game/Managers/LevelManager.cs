@@ -36,7 +36,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public void InitializeEntities()
     {
-        var playerPath = $"Entities/Player/{_levelData.levelConfig.playerType}";
+        var playerPath = $"Entities/Player/{GameManager.Instance.PlayerType}";
         var enemyPath = $"Entities/Enemies/{_levelData.levelConfig.enemyType}";
 
         var playerPrefab = LoadManager.PrefabLoad<Player>("Entities/Player");

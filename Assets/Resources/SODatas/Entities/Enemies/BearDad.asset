@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: BearDad
   m_EditorClassIdentifier: 
   entityConfig:
-    entityType: 6
+    entityType: 9
     MaxHP: 100
     idle: {fileID: 11400000, guid: 2a62a1a88ffb38942a7e8083f23dde8b, type: 2}
     hurt: {fileID: 11400000, guid: 247d97302c66bb74b94647c259b063b9, type: 2}
     die: {fileID: 11400000, guid: 018d669b43783e44bb4db14a91da4fa6, type: 2}
     attack: {fileID: 11400000, guid: 2991fbf315fcb9d49b2ddde5c7239ba0, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: 9c5f971d81c5b4ca88949ad1d9548f71, type: 2}
+    elementalType: 7

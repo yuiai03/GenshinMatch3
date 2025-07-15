@@ -86,9 +86,12 @@ public enum EntityType
 {
     //Player
     Buba,
-    Olek,
-    Puffy,
-    Ena,
+    Olek, //Dendro
+    Puffy, //Cryo
+    Pomodoro, //Pyro
+    Machito, //Elec
+    Hybird, //Geo
+    Aquatic, //Hydro
 
     //Enemy
     DryadFighter,
@@ -117,12 +120,21 @@ public enum GameState
 
     EndRound,
     GamePause,
+    
+    // PvP specific states
+    PvPWaiting,
+    PvPGameStart,
+    PvPPlayerTurn,
+    PvPEnemyTurn,
+    PvPGameEnd,
+    PvPDisconnected
 }
 
 public enum SceneType
 {
     Map,
-    Game
+    Game,
+    PvPGame,
 }
 
 public enum LevelType
@@ -132,4 +144,11 @@ public enum LevelType
     Level_1_3,
     Level_1_4,
     Level_1_5,
+}
+
+public enum MainButtonType
+{
+    Map,
+    Character,
+    PvP
 }

@@ -39,4 +39,27 @@ public class Helper : MonoBehaviour
     {
         return GameManager.Instance.TileData.GetTileConfig(tileType);
     }
+
+    public static TileType GetCharacterElemental(EntityType entityType) => entityType switch
+    {
+        EntityType.Buba => TileType.None,  
+        EntityType.Olek => TileType.Dendro,    
+        EntityType.Puffy => TileType.Cryo,  
+        EntityType.Pomodoro => TileType.Pyro,
+        EntityType.Machito => TileType.Electro,
+        EntityType.Hybird => TileType.Geo,
+        EntityType.Aquatic => TileType.Hydro,
+        _ => TileType.None
+    };
+
+    public static string BuffText(EntityType entityType) => entityType switch
+    {
+        EntityType.Olek => "Thảo",
+        EntityType.Puffy => "Băng",
+        EntityType.Pomodoro => "Hỏa",
+        EntityType.Machito => "Lôi",
+        EntityType.Hybird => "Nham",
+        EntityType.Aquatic => "Thủy",
+        _ => ""
+    };
 }

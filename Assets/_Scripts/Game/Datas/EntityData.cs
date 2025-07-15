@@ -18,4 +18,6 @@ public class EntityConfig
     public AnimationReferenceAsset die;
     public AnimationReferenceAsset attack;
     public SkeletonDataAsset skeletonDataAsset;
+
+    public TileType elementalType;
 }

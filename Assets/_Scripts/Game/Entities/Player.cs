@@ -23,6 +23,11 @@ public class Player : Entity
         var matchsHistory = BoardManager.Instance.GetMatchHistory();
         foreach (var matchData in matchsHistory)
         {
+            if(Helper.GetCharacterElemental(GameManager.Instance.PlayerType) == matchData.TileType)
+            {
+                matchData.Count++;
+            }
+
             _entityAnim.Attack();
             yield return new WaitForSeconds(0.3f);
             var bullet = PoolManager.Instance.GetObject<PlayerBullet>(PoolType.PlayerBullet, shootPoint.position, transform);

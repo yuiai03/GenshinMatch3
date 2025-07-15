@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827db7c61af0ba7419fd61d74cd3e3c7, type: 3}
+  m_Name: Machito
+  m_EditorClassIdentifier: 
+  entityConfig:
+    entityType: 4
+    MaxHP: 100
+    idle: {fileID: 11400000, guid: 6a6390ba78ca21f43a84f6a41f761141, type: 2}
+    hurt: {fileID: 11400000, guid: 5c8b14ef76e3df74d88e76320044c721, type: 2}
+    die: {fileID: 11400000, guid: 6763ab12ce4869141b63382d00ce5263, type: 2}
+    attack: {fileID: 11400000, guid: 810b7e6a175979e468dc20c595c76bbd, type: 2}
+    skeletonDataAsset: {fileID: 11400000, guid: 5e6bc02efa6c543a68cb6e2ed6d78347, type: 2}
+    elementalType: 3

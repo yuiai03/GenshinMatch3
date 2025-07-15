@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: 
   entityConfig:
-    entityType: 7
+    entityType: 10
     MaxHP: 100
     idle: {fileID: 11400000, guid: e20f602467da3a04ab80294c53b09306, type: 2}
     hurt: {fileID: 11400000, guid: 28fcf1cd9f4179948863d0eb0e2c0770, type: 2}
     die: {fileID: 11400000, guid: f94ff0e7c44be7a4f86f25ec6aaf3284, type: 2}
     attack: {fileID: 11400000, guid: cbc6e12c7241e0b468ec8d90104ca069, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: 1d6eb067ba60547e3b2f10def4a9850c, type: 2}
+    elementalType: 7

@@ -28,6 +28,7 @@ public class GameManager : Singleton<GameManager>
             TurnNumber = _currentLevelData.levelConfig.turnsNumber;
         }
     }
+    public EntityType PlayerType { get; set; }
     public SceneType SceneType { get; private set; }
     public GameState GameState { get; private set; }
     public TileData TileData { get; private set; }
@@ -38,9 +39,6 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         TileData = LoadManager.DataLoad<TileData>("TileData");
-    }
-    private void Start()
-    {
         EventManager.GameStateChanged(GameState.GameWaiting);
     }
 

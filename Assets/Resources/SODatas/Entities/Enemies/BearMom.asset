@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: BearMom
   m_EditorClassIdentifier: 
   entityConfig:
-    entityType: 5
+    entityType: 8
     MaxHP: 100
     idle: {fileID: 11400000, guid: 7738a6359c09f704aa09923d3ad3da53, type: 2}
     hurt: {fileID: 11400000, guid: 75721c917dd0a604e81286d9c570c5ab, type: 2}
     die: {fileID: 11400000, guid: 9b6da3657950a8243bb18e6c7226d761, type: 2}
     attack: {fileID: 11400000, guid: c5d871d2ed761f44eacbfadd43ccae71, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: c0518a4cd06cd434bbcb5ec67d068f37, type: 2}
+    elementalType: 7

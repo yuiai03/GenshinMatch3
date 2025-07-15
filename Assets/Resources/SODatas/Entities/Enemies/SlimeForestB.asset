@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SlimeForestB
   m_EditorClassIdentifier: 
   entityConfig:
-    entityType: 8
+    entityType: 11
     MaxHP: 100
     idle: {fileID: 11400000, guid: 0dd497ddea2aae14f8fb6b6d1d5d2d45, type: 2}
     hurt: {fileID: 11400000, guid: 38bc0c407f065374ea5d1b40e45671ae, type: 2}
     die: {fileID: 11400000, guid: b5b6cd0754ceaea40a13ddcd712fa09d, type: 2}
     attack: {fileID: 11400000, guid: d9b9d840bebf61f4eb46bda123d3dc41, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: 648d8617c47bd4562b8ab27f94baf779, type: 2}
+    elementalType: 7

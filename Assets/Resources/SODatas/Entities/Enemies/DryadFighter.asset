@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: DryadFighter
   m_EditorClassIdentifier: 
   entityConfig:
-    entityType: 4
+    entityType: 7
     MaxHP: 100
     idle: {fileID: 11400000, guid: 68f98db945905634da8c46cbcff85055, type: 2}
     hurt: {fileID: 11400000, guid: 04b7b8c3873ff5b42a0fcc38201bdf83, type: 2}
     die: {fileID: 11400000, guid: ab223cf941c951e4b91392d0ea502a81, type: 2}
     attack: {fileID: 11400000, guid: c9b22a0c395f30948bbd57b4cd011cba, type: 2}
     skeletonDataAsset: {fileID: 11400000, guid: 746488e4088634ceabd3bca7e9fb5f89, type: 2}
+    elementalType: 7
