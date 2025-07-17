@@ -162,68 +162,6 @@ public void InitializeBoard()
         return (TileType)UnityEngine.Random.Range(0, Config.TileTypesCount);
     }
 
-    [PunRPC]
-    public void HandleSwapTilesRPC(Vector2 selectedPos, Vector2 targetPos)
-    {
-        Tile selectedTile = GetTileAtPos(Vector2Int.RoundToInt(selectedPos));
-        Tile targetTile = GetTileAtPos(Vector2Int.RoundToInt(targetPos));
-        EventManager.StartSwapTile(selectedTile, targetTile);
-        Helper.SwapEmpty(selectedTile, targetTile);
-    }
-
-    public void HandleSwapTiles(Tile selectedTile, Tile targetTile)
-    {
-        EventManager.StartSwapTile(selectedTile, targetTile);
-        Helper.SwapEmpty(selectedTile, targetTile);
-    }
-
-    public void CheckAndDeleteMatches()
-    {
-        var matches = FindAllMatches();
-        if (matches.Count > 0)
-        {
-            var allTilesToRemove = new HashSet<Tile>();
-            var tileTypeCount = new Dictionary<TileType, int>();
-
-            foreach (var match in matches)
-            {
-                foreach (var tile in match.Tiles)
-                {
-                    if (allTilesToRemove.Add(tile))
-                    {
-                        if (tileTypeCount.ContainsKey(tile.TileType))
-                            tileTypeCount[tile.TileType]++;
-                        else
-                            tileTypeCount[tile.TileType] = 1;
-                    }
-                }
-            }
-
-            foreach (var tile in allTilesToRemove)
-            {
-                _emptys[tile.Empty.IntPos.x, tile.Empty.IntPos.y].Tile = null;
-                PoolManager.Instance.ReturnObject(PoolType.Tile, tile.gameObject);
-            }
-
-            foreach (var tile in tileTypeCount)
-            {
-                var matchData = new MatchData(tile.Key, tile.Value);
-                EventManager.TileMatch(matchData);
-            }
-
-            RefillBoard();
-        }
-        else
-        {
-            if (!BoardCanMatches()) RecreateBoard();
-            else
-            {
-                if (_matchsHistory.Count == 0) return;
-                EventManager.GameStateChanged(GameState.PlayerEndTurn);
-            }
-        }
-    }
-
     private List<Match> FindAllMatches()
     {
         var matches = new List<Match>();
@@ -546,6 +484,67 @@ public void InitializeBoard()
     }
     public void SetBoardState(bool state) => BoardBg.SetActive(state);
 
+    public void CheckAndDeleteMatches()
+    {
+        var matches = FindAllMatches();
+        if (matches.Count > 0)
+        {
+            var allTilesToRemove = new HashSet<Tile>();
+            var tileTypeCount = new Dictionary<TileType, int>();
+
+            foreach (var match in matches)
+            {
+                foreach (var tile in match.Tiles)
+                {
+                    if (allTilesToRemove.Add(tile))
+                    {
+                        if (tileTypeCount.ContainsKey(tile.TileType))
+                            tileTypeCount[tile.TileType]++;
+                        else
+                            tileTypeCount[tile.TileType] = 1;
+                    }
+                }
+            }
+
+            foreach (var tile in allTilesToRemove)
+            {
+                _emptys[tile.Empty.IntPos.x, tile.Empty.IntPos.y].Tile = null;
+                PoolManager.Instance.ReturnObject(PoolType.Tile, tile.gameObject);
+            }
+
+            foreach (var tile in tileTypeCount)
+            {
+                var matchData = new MatchData(tile.Key, tile.Value);
+                EventManager.TileMatch(matchData);
+            }
+
+            RefillBoard();
+        }
+        else
+        {
+            if (!BoardCanMatches()) RecreateBoard();
+            else
+            {
+                if (_matchsHistory.Count == 0) return;
+                EventManager.GameStateChanged(GameState.PlayerEndTurn);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void HandleSwapTilesRPC(Vector2 selectedPos, Vector2 targetPos)
+    {
+        Tile selectedTile = GetTileAtPos(Vector2Int.RoundToInt(selectedPos));
+        Tile targetTile = GetTileAtPos(Vector2Int.RoundToInt(targetPos));
+        EventManager.StartSwapTile(selectedTile, targetTile);
+        Helper.SwapEmpty(selectedTile, targetTile);
+    }
+
+    public void HandleSwapTiles(Tile selectedTile, Tile targetTile)
+    {
+        EventManager.StartSwapTile(selectedTile, targetTile);
+        Helper.SwapEmpty(selectedTile, targetTile);
+    }
     public void OnEndSwap(Vector2 selectedPos, Vector2 targetPos)
     {
         Tile selectedTile = GetTileAtPos(Vector2Int.RoundToInt(selectedPos));

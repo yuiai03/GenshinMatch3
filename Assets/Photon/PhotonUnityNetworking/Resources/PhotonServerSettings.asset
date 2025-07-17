@@ -77,6 +77,8 @@ MonoBehaviour:
   - HandleSwapTilesRPC
   - OnEndSwap
   - HandleSwapTiles
+  - HandleSwapBackRPC
+  - SyncMatchResultRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
