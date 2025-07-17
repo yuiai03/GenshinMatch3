@@ -17,7 +17,7 @@ public class Teleport : MonoBehaviour
     public void OpenLevelPanel()
     {
         if (!_levelData) return;
-        EventManager.OpenLevelPanel(_levelData, _levelData.levelConfig.enemyType);
+        EventManager.OpenLevelPanel(_levelData);
     }
 
     public void InitializeData()

@@ -106,11 +106,8 @@ public enum EntityType
 
 public enum GameState
 {
-    GameWaiting,
     GameEnded,
     GameStart,
-    GameOver,
-    GameWin,
 
     PlayerTurn,
     EnemyTurn,
@@ -119,22 +116,14 @@ public enum GameState
     EnemyEndTurn,
 
     EndRound,
-    GamePause,
     
-    // PvP specific states
-    PvPWaiting,
-    PvPGameStart,
-    PvPPlayerTurn,
-    PvPEnemyTurn,
-    PvPGameEnd,
-    PvPDisconnected
 }
 
 public enum SceneType
 {
-    Map,
-    Game,
-    PvPGame,
+    MainMenu,
+    SinglePlayer,
+    Multiplayer,
 }
 
 public enum LevelType

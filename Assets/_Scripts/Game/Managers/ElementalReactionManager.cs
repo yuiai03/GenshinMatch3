@@ -126,7 +126,7 @@ public class ElementalReactionManager : Singleton<ElementalReactionManager>
 
     private void CreateShield(Entity target)
     {
-        var player = LevelManager.Instance.Player;
+        var player = SinglePlayerLevelManager.Instance.Player;
         var pos = new Vector2(player.transform.position.x + 0.1f, player.transform.position.y + 0.6f);
         var shield = PoolManager.Instance.GetObject<Shield>(PoolType.Shield, pos, player.transform);
     }

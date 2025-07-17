@@ -18,7 +18,7 @@ public class PlayerBullet : BulletBase
 
     protected override IEnumerator FollowTargetCoroutine()
     {
-        Vector2 targetPosition = LevelManager.Instance.Enemy.transform.position;
+        Vector2 targetPosition = SinglePlayerLevelManager.Instance.Enemy.transform.position;
         _direction = (targetPosition - (Vector2)transform.position).normalized;
         _rb2d.velocity = _direction * _speed;
         yield return null;

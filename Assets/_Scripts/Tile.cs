@@ -1,5 +1,6 @@
-﻿using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
+using Photon.Pun;
+using DG.Tweening;
 
 public class Tile : MonoBehaviour
 {
@@ -10,16 +11,25 @@ public class Tile : MonoBehaviour
         set
         {
             _empty = value;
-            if (_empty)
+            if (_empty != null)
             {
                 _empty.Tile = this;
-                transform.SetParent(_empty.transform); //Set parent sau khi nhận Empty
+                transform.SetParent(_empty.transform);
                 if (_moveTween != null && _moveTween.IsActive()) _moveTween.Kill();
                 _moveTween = transform.DOLocalMove(Vector2.zero, Config.TileMoveDuration).OnComplete(() =>
                 {
-                    var selectedTile = GameInputManager.Instance.SelectedTile;
-                    var targetTile = GameInputManager.Instance.TargetTile;
-                    if (this == selectedTile) EventManager.EndSwapTile(selectedTile, targetTile);
+                    var selectedTile = GameManager.Instance.CurrentSceneType == SceneType.Multiplayer
+                        ? MultiplayerInputManager.Instance.SelectedTile
+                        : SinglePlayerInputManager.Instance.SelectedTile;
+
+                    var targetTile = GameManager.Instance.CurrentSceneType == SceneType.Multiplayer
+                        ? MultiplayerInputManager.Instance.TargetTile
+                        : SinglePlayerInputManager.Instance.TargetTile;
+
+                    if (this == selectedTile) 
+                    {
+                        EventManager.EndSwapTile(selectedTile, targetTile);
+                    }
                 });
             }
         }
@@ -28,11 +38,22 @@ public class Tile : MonoBehaviour
     public TileType TileType { get; set; }
     private Tween _moveTween;
     private SpriteRenderer spriteRenderer;
+    private PhotonView photonView;
+
+    private void Awake()
+    {
+        photonView = GetComponent<PhotonView>();
+        if (photonView == null)
+        {
+            Debug.LogError("PhotonView component is missing on Tile.");
+        }
+    }
+
     public void InitialData(TileType type, Empty empty)
     {
         TileType = type;
-        Empty = empty;
-        spriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
+        Empty = empty; 
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = LoadManager.SpriteLoad($"Tile/{type}");
     }
 
@@ -40,4 +61,5 @@ public class Tile : MonoBehaviour
     {
         _moveTween?.Kill();
     }
+
 }

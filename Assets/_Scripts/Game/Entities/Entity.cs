@@ -1,9 +1,9 @@
 using System.Net.Http.Headers;
 using UnityEngine;
+using Photon.Pun;
 
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviourPunCallbacks
 {
-
     private float _hp;
     public float HP
     {
@@ -42,13 +42,16 @@ public class Entity : MonoBehaviour
         CurrentTileType = TileType.None;
         
         _entityAnim = GetComponent<EntityAnim>();
-        _entityAnim.idle = _entityData.entityConfig.idle;
-        _entityAnim.hurt = _entityData.entityConfig.hurt;
-        _entityAnim.die = _entityData.entityConfig.die;
-        _entityAnim.attack = _entityData.entityConfig.attack;
-        _entityAnim.anim.skeletonDataAsset = _entityData.entityConfig.skeletonDataAsset;
-        _entityAnim.anim.Initialize(true);
-        _entityAnim.Idle();
+        if (_entityAnim != null)
+        {
+            _entityAnim.idle = _entityData.entityConfig.idle;
+            _entityAnim.hurt = _entityData.entityConfig.hurt;
+            _entityAnim.die = _entityData.entityConfig.die;
+            _entityAnim.attack = _entityData.entityConfig.attack;
+            _entityAnim.anim.skeletonDataAsset = _entityData.entityConfig.skeletonDataAsset;
+            _entityAnim.anim.Initialize(true);
+            _entityAnim.Idle();
+        }
     }
 
     public virtual void TakeDamage(float damage, TileConfig tileConfig)

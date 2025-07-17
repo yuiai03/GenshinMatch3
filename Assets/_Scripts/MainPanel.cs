@@ -12,7 +12,8 @@ public class MainPanel : PanelBase
 
     protected override void Awake()
     {
-        base.Awake();        _mapButton._button.onClick.AddListener(OnMapButtonClicked);
+        base.Awake();        
+        _mapButton._button.onClick.AddListener(OnMapButtonClicked);
         _characterButton._button.onClick.AddListener(OnCharacterButtonClicked);
         _pvpButton._button.onClick.AddListener(OnPvPButtonClicked);
     }

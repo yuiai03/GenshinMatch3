@@ -6,14 +6,12 @@ public class UIManager : Singleton<UIManager>
     public MapPanel MapPanel { get; private set; }
     public CharacterPanel CharacterPanel { get; private set; }
     public PvPPanel PvpPanel { get; private set; }
-    public GamePanel GamePanel { get; private set; }
     public SceneTransiton SceneTransiton { get; private set; }
     protected override void Awake()
     {
         base.Awake();
         if(!MapPanel) MapPanel = GetComponentInChildren<MapPanel>();
         if (!PvpPanel) PvpPanel = GetComponentInChildren<PvPPanel>();
-        if (!GamePanel) GamePanel = GetComponentInChildren<GamePanel>();
         if (!MainPanel) MainPanel = GetComponentInChildren<MainPanel>();
         if (!CharacterPanel) CharacterPanel = GetComponentInChildren<CharacterPanel>();
         if (!SceneTransiton) SceneTransiton = GetComponentInChildren<SceneTransiton>();
@@ -31,11 +29,9 @@ public class UIManager : Singleton<UIManager>
 
     private void OnSceneChanged(SceneType sceneType)
     {
-        GamePanel.Menu.SetActive(sceneType == SceneType.Game);
-        MapPanel.MainBgState(sceneType == SceneType.Map);
-        MainPanel.MainBgState(sceneType == SceneType.Map);
-        PvpPanel.MainBgState(sceneType == SceneType.Map);
-        
+        MapPanel.MainBgState(sceneType == SceneType.MainMenu);
+        MainPanel.MainBgState(sceneType == SceneType.MainMenu);
+        PvpPanel.MainBgState(sceneType == SceneType.MainMenu);
         CharacterPanel.MainBgState(false);
     }
 

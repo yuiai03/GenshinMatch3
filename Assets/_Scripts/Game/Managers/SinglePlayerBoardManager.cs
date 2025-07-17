@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : Singleton<BoardManager>
+public class SinglePlayerBoardManager : Singleton<SinglePlayerBoardManager>
 {
     [SerializeField] private GameObject BoardBg;
     [SerializeField] private GameObject EmptyHolder;
@@ -50,7 +50,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         foreach (var match in _matchsHistory)
         {
-            var holder = UIManager.Instance.GamePanel.MatchedTilesViewHolder;
+            var holder = SinglePlayerPanel.Instance.MatchedTilesViewHolder;
             MatchedTileView matchedTileView = 
                 PoolManager.Instance.GetObject<MatchedTileView>(
                 PoolType.MatchedTileView, Vector2.zero, holder.transform);

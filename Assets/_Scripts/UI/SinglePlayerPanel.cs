@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GamePanel : MonoBehaviour
+public class SinglePlayerPanel : Singleton<SinglePlayerPanel>
 {
     [SerializeField] public GameObject Menu;
     [SerializeField] public GameObject MatchedTilesViewHolder;
@@ -16,9 +16,9 @@ public class GamePanel : MonoBehaviour
 
     [SerializeField] public TextMeshProUGUI TurnText;
     [SerializeField] public Button ReturnButton;
-    private void Awake()
+    protected override void Awake()
     {
-        Menu.SetActive(false);
+        base.Awake();
         ReturnButton.onClick.AddListener(ReturnClick);
     }
 
@@ -55,7 +55,7 @@ public class GamePanel : MonoBehaviour
     }
     private void ReturnClick()
     {
-        LoadManager.Instance.TransitionLevel(SceneType.Map);
+        LoadManager.Instance.TransitionLevel(SceneType.MainMenu);
     }
     private void OnCurrentTileTypeChange(TileType tileType, bool isPlayer)
     {

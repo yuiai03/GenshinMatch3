@@ -27,8 +27,8 @@ MonoBehaviour:
     EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
-    NetworkLogging: 1
-  DevRegion: 
+    NetworkLogging: 0
+  DevRegion: asia
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -40,6 +40,43 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - StartPvPGame
+  - ChangePvPGameScene
+  - InitializePlayerData
+  - PlayAttackAnimation
+  - PlayDieAnimation
+  - PlayHurtAnimation
+  - PlayIdleAnimation
+  - InitializeEmpty
+  - InitializeTiles
+  - InitializeBoardWithSeed
+  - StartMultiplayerGame
+  - SyncNewTiles
+  - SyncSwapTiles
+  - SyncTileMatches
+  - HandleSwapTilesWithNetwork
+  - RecreateBoard
+  - SyncMatchesAndDelete
+  - CompleteRefill
+  - CreateNewTiles
+  - ExecuteSwapTiles
+  - ValidateClientBoardState
+  - InitialData
+  - InitializeMatchedTiles
+  - InitialTilesCoroutine
+  - SwapTiles
+  - AddMatchHistory
+  - AddNewTiles
+  - RecreateBoardRPC
+  - RemoveTiles
+  - EndSwap
+  - EndSwapTileRPC
+  - SwapTilesRPC
+  - OnTilesMatched
+  - CheckAndDeleteMatches
+  - SyncedCheckAndDeleteMatches
+  - HandleSwapTilesRPC
+  - OnEndSwap
+  - HandleSwapTiles
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

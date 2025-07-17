@@ -11,6 +11,8 @@ public class MapPanel : PanelBase
     [SerializeField] private Image _enemyImage;
     [SerializeField] private GameObject _teleportHolder;
     [SerializeField] protected CanvasGroup infoBg, infoMenu;
+
+    private Sequence _sequence;
     protected override void Awake()
     {
         base.Awake();
@@ -33,15 +35,15 @@ public class MapPanel : PanelBase
     {
         EventManager.OnOpenLevelPanel -= OnOpenLevelPanel;
     }
-    private void OnOpenLevelPanel(LevelData levelData, EntityType entityType)
+    private void OnOpenLevelPanel(LevelData levelData)
     {
         ShowInfoPanel();
-        SetInfo(levelData.levelConfig.turnsNumber, entityType);
+        SetInfo(levelData.levelConfig.turnsNumber, levelData.levelConfig.enemyType);
     }
     private void OnActionButtonClicked()
     {
         HideInfoPanel();
-        LoadManager.Instance.TransitionLevel(SceneType.Game);
+        LoadManager.Instance.TransitionLevel(SceneType.SinglePlayer);
     }
 
     public void SetInfo(int turn, EntityType entityType)
@@ -78,16 +80,18 @@ public class MapPanel : PanelBase
         infoBg.gameObject.SetActive(true);
         infoBg.alpha = infoMenu.alpha = 0;
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(infoBg.DOFade(1, time).SetUpdate(true));
-        sequence.Join(infoMenu.DOFade(1, time).SetUpdate(true));
+        if (_sequence != null && _sequence.IsActive()) _sequence.Kill();
+        _sequence = DOTween.Sequence();
+        _sequence.Append(infoBg.DOFade(1, time).SetUpdate(true));
+        _sequence.Join(infoMenu.DOFade(1, time).SetUpdate(true));
     }
     public virtual void HideInfoPanel(float time = 0.5f)
     {
-        var sequence = DOTween.Sequence();
-        sequence.Append(infoBg.DOFade(0, time).SetUpdate(true));
-        sequence.Join(infoMenu.DOFade(0, time).SetUpdate(true));
-        sequence.OnComplete(() =>
+        if (_sequence != null && _sequence.IsActive()) _sequence.Kill();
+        _sequence = DOTween.Sequence();
+        _sequence.Append(infoBg.DOFade(0, time).SetUpdate(true));
+        _sequence.Join(infoMenu.DOFade(0, time).SetUpdate(true));
+        _sequence.OnComplete(() =>
         {
             infoMenu.gameObject.SetActive(false);
             infoBg.gameObject.SetActive(false);

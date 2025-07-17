@@ -39,10 +39,10 @@ public class EventManager : MonoBehaviour
         OnSceneChanged?.Invoke(sceneType);
     }
 
-    public static event Action<LevelData, EntityType> OnOpenLevelPanel;
-    public static void OpenLevelPanel(LevelData levelData, EntityType entityType)
+    public static event Action<LevelData> OnOpenLevelPanel;
+    public static void OpenLevelPanel(LevelData levelData)
     {
-        OnOpenLevelPanel?.Invoke(levelData, entityType);
+        OnOpenLevelPanel?.Invoke(levelData);
     }
 
     public static event Action<float, bool> OnMaxHPChanged;

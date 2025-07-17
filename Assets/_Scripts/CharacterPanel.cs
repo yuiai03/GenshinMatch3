@@ -24,7 +24,6 @@ public class CharacterPanel : PanelBase
 
         _SkeletonGraphic_1.rectTransform.anchoredPosition = new Vector2(_currentPosX, 0);
         _SkeletonGraphic_2.rectTransform.anchoredPosition = new Vector2(_tempPosX, 0);
-
     }
 
     private void Start()
@@ -107,12 +106,12 @@ public class CharacterPanel : PanelBase
 
     public void SetCurrentCharacterType()
     {
-        GameManager.Instance.PlayerType = _characterTypes[currentIndex];
+        GameManager.Instance.CurrentPlayerType = _characterTypes[currentIndex];
         SelectedButtonState();
     }
     public void SelectedButtonState()
     {
-        var state = GameManager.Instance.PlayerType == _characterTypes[currentIndex];
+        var state = GameManager.Instance.CurrentPlayerType == _characterTypes[currentIndex];
         var text = _selectButton.GetComponentInChildren<TextMeshProUGUI>();
         text.text = state ? "Đã chọn" : "Chọn";
         _selectButton.interactable = state ? false : true;

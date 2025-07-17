@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class GameInputManager : Singleton<GameInputManager>
+public class SinglePlayerInputManager : Singleton<SinglePlayerInputManager>
 {
     public bool CanSwap { get; set; }
     public bool IsSwapping { get; set; }
@@ -10,13 +12,13 @@ public class GameInputManager : Singleton<GameInputManager>
 
     [SerializeField] private Vector2 _touchStartPosition;
     [SerializeField] private Vector2Int _currentSwapDirection;
-    private BoardManager _boardManager => BoardManager.Instance;
+    private SinglePlayerBoardManager _boardManager => SinglePlayerBoardManager.Instance;
 
     private void OnEnable()
     {
         EventManager.OnEndSwapTile += OnEndSwapTile;
         EventManager.OnStartSwapTile += OnStartSwapTile;
-        EventManager.OnBoardStateChanged +=  (isBusy) => CanSwap = !isBusy;
+        EventManager.OnBoardStateChanged += (isBusy) => CanSwap = !isBusy;
     }
     private void OnDisable()
     {
@@ -35,7 +37,7 @@ public class GameInputManager : Singleton<GameInputManager>
         _boardManager.CheckAndDeleteMatches();
 
         //Nếu không matches thì hoán đổi lại như cũ
-        if (_boardManager.GetMatchHistory().Count == 0) 
+        if (_boardManager.GetMatchHistory().Count == 0)
         {
             IsBackSwapping = !IsBackSwapping;
             if (IsBackSwapping)
@@ -50,14 +52,14 @@ public class GameInputManager : Singleton<GameInputManager>
 
     private void OnStartSwapTile(Tile selectedTile, Tile targetTile)
     {
-        if(!selectedTile || !targetTile) return;
+        if (!selectedTile || !targetTile) return;
         IsSwapping = true;
         _boardManager.ClearMatchHistory();
     }
     private void HandleGameInput()
     {
-        if (!CanSwap || GameManager.Instance.GameState != GameState.PlayerTurn) return;
-        if (Input.touchCount > 0 && GameManager.Instance.SceneType == SceneType.Game)
+        if (!CanSwap || !CanInput()) return;
+        if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
             var touchPos = Camera.main.ScreenToWorldPoint(touch.position);
@@ -101,22 +103,22 @@ public class GameInputManager : Singleton<GameInputManager>
     }
     private void EndedPhase(Touch touch, RaycastHit2D hit)
     {
-        if(IsSwapping) return;
+        if (IsSwapping) return;
         SelectedTile = TargetTile = null;
     }
 
     private Vector2Int GetSwapDirection(Vector2 direction)
     {
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-            return new Vector2Int(Mathf.RoundToInt(Mathf.Sign(direction.x)), 0); 
+            return new Vector2Int(Mathf.RoundToInt(Mathf.Sign(direction.x)), 0);
         else
-            return new Vector2Int(0, Mathf.RoundToInt(Mathf.Sign(direction.y))); 
+            return new Vector2Int(0, Mathf.RoundToInt(Mathf.Sign(direction.y)));
     }
 
     private void CheckToSwapTiles()
     {
         Vector2Int newPos = SelectedTile.Empty.IntPos + _currentSwapDirection;
-        if(IsValidPos(newPos) && newPos == TargetTile.Empty.IntPos)
+        if (IsValidPos(newPos) && newPos == TargetTile.Empty.IntPos)
         {
             _boardManager.HandleSwapTiles(SelectedTile, TargetTile);
         }
@@ -124,7 +126,12 @@ public class GameInputManager : Singleton<GameInputManager>
 
     private bool IsValidPos(Vector2Int pos)
     {
-        return pos.x >= 0 && pos.x < _boardManager.Width 
+        return pos.x >= 0 && pos.x < _boardManager.Width
             && pos.y >= 0 && pos.y < _boardManager.Height;
+    }
+
+    private bool CanInput()
+    {
+        return SinglePlayerGameManager.Instance.GameState == GameState.PlayerTurn;
     }
 }
