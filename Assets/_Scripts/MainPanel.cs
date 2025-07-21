@@ -17,19 +17,15 @@ public class MainPanel : PanelBase
         _characterButton._button.onClick.AddListener(OnCharacterButtonClicked);
         _pvpButton._button.onClick.AddListener(OnPvPButtonClicked);
     }
-    private void Start()
-    {
-        OnClickButton(_pvpButton);
-    }
-    private void OnMapButtonClicked()
+    public void OnMapButtonClicked()
     {
         OnClickButton(_mapButton);
     }
-    private void OnCharacterButtonClicked()
+    public void OnCharacterButtonClicked()
     {
         OnClickButton(_characterButton);
     }
-    private void OnPvPButtonClicked()
+    public void OnPvPButtonClicked()
     {
         OnClickButton(_pvpButton);
     }
@@ -37,7 +33,6 @@ public class MainPanel : PanelBase
     private void OnClickButton(MainButton mainButton)
     {
         if(mainButton.IsSelected) return;
-
         var listButton = new List<MainButton> { _mapButton, _characterButton, _pvpButton };
         foreach (var btn in listButton)
         {

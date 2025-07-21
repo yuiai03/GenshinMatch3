@@ -8,25 +8,21 @@ public class Player : Entity, IPunObservable
 
     protected override void CurrentTileTypeChanged()
     {
-        EventManager.CurrentTileTypeChanged(CurrentTileType, this == MultiplayerLevelManager.Instance.Player1);
+        if(GameManager.Instance.IsSingleScene()) EventManager.CurrentTileTypeChanged(CurrentTileType, true);
+        else EventManager.CurrentTileTypeChanged(CurrentTileType, this == MultiplayerLevelManager.Instance.Player1);
     }
     
     public override void GetData(EntityData entityData)
     {
         base.GetData(entityData);
-        EventManager.MaxHPChanged(entityData.entityConfig.MaxHP, this == MultiplayerLevelManager.Instance.Player1);
-
-    }
-
-    [PunRPC]
-    public void Temp(float hp, bool isPlayer1)
-    {
-        EventManager.MaxHPChanged(hp, isPlayer1);
+        if (GameManager.Instance.IsSingleScene()) EventManager.MaxHPChanged(entityData.entityConfig.MaxHP, true);
+        else EventManager.MaxHPChanged(entityData.entityConfig.MaxHP, this == MultiplayerLevelManager.Instance.Player1);
     }
 
     protected override void HPChanged(float hp)
     {
-        EventManager.HPChanged(hp, this == MultiplayerLevelManager.Instance.Player1);
+        if (GameManager.Instance.IsSingleScene()) EventManager.HPChanged(hp, true);
+        else EventManager.HPChanged(hp, this == MultiplayerLevelManager.Instance.Player1);
     }
 
     public override void Attack(Entity target)
@@ -37,51 +33,71 @@ public class Player : Entity, IPunObservable
     
     private System.Collections.IEnumerator AttackCoroutine(Entity target)
     {
-        var matchsHistory = MultiplayerLevelManager.Instance.MultiplayerBoardManager.GetMatchHistory();
+        var matchsHistory = GameManager.Instance.IsSingleScene() 
+            ? SinglePlayerBoardManager.Instance.GetMatchHistory() 
+            : MultiplayerBoardManager.Instance.GetMatchHistory();
         foreach (var matchData in matchsHistory)
         {
             var data = matchData;
-            Hashtable roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
 
-            if (MultiplayerLevelManager.Instance.IsPlayer1EndTurn())
+            if(GameManager.Instance.IsSingleScene())
             {
-                if (roomProps.TryGetValue($"Player{0}EntityType", out object entityTypeObj))
+                if (Helper.GetCharacterElemental(GameManager.Instance.CurrentPlayerType) == data.TileType)
                 {
-                    if (Helper.GetCharacterElemental((EntityType)entityTypeObj) == data.TileType)
+                    data.Count++;
+                }
+            }
+            else
+            {
+                Hashtable roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
+                if (MultiplayerGameManager.Instance.IsPlayer1EndTurn())
+                {
+                    if (roomProps.TryGetValue($"Player{0}EntityType", out object entityTypeObj))
                     {
-                        data.Count++;
+                        if (Helper.GetCharacterElemental((EntityType)entityTypeObj) == data.TileType)
+                        {
+                            data.Count++;
+                        }
+                    }
+                }
+                else if (MultiplayerGameManager.Instance.IsPlayer2EndTurn())
+                {
+                    if (roomProps.TryGetValue($"Player{1}EntityType", out object entityTypeObj))
+                    {
+                        if (Helper.GetCharacterElemental((EntityType)entityTypeObj) == data.TileType)
+                        {
+                            data.Count++;
+                        }
                     }
                 }
             }
-            else if (MultiplayerLevelManager.Instance.IsPlayer2EndTurn())
-            {
-                if (roomProps.TryGetValue($"Player{1}EntityType", out object entityTypeObj))
-                {
-                    if (Helper.GetCharacterElemental((EntityType)entityTypeObj) == data.TileType)
-                    {
-                        data.Count++;
-                    }
-                }
-            }
-            //if (Helper.GetCharacterElemental(GameManager.Instance.CurrentPlayerType) == data.TileType)
-            //{
-            //    data.Count++;
-            //}
             _entityAnim.Attack();
-            
-            yield return new WaitForSeconds(0.3f);
-            var bullet = PoolManager.Instance.GetObject<PlayerBullet>(PoolType.PlayerBullet, shootPoint.position, transform);
+            yield return new WaitForSeconds(0.5f);
+            var bullet = PoolManager.Instance.GetObject<PlayerBullet>(
+                PoolType.PlayerBullet, shootPoint.position, transform);
             bullet.Initialize(data);
             yield return new WaitForSeconds(0.5f); 
         }
         yield return new WaitForSeconds(1f);
-        if (MultiplayerLevelManager.Instance.IsPlayer1EndTurn())
+        HandleAfterAttack();
+    }
+
+    private void HandleAfterAttack()
+    {
+        if (GameManager.Instance.IsSingleScene())
         {
-            EventManager.GameStateChanged(GameState.Player2Turn);
+            EventManager.GameStateChanged(GameState.EnemyTurn);
         }
-        else if (MultiplayerLevelManager.Instance.IsPlayer2EndTurn())
+        else
         {
-            EventManager.GameStateChanged(GameState.EndRound);
+            if (MultiplayerGameManager.Instance.IsPlayer1EndTurn())
+            {
+                EventManager.GameStateChanged(GameState.Player2Turn);
+            }
+            else if (MultiplayerGameManager.Instance.IsPlayer2EndTurn())
+            {
+                EventManager.GameStateChanged(GameState.EndRound);
+            }
         }
     }
     

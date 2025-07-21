@@ -98,27 +98,4 @@ public class MultiplayerLevelManager : MonoBehaviourPunCallbacks
     {
         Player2.Attack(Player1);
     }
-
-    public Player CurrentPlayer()
-    {
-        if (PhotonNetwork.IsMasterClient && MultiplayerGameManager.Instance.GameState == GameState.Player1EndTurn) return Player1;
-        else return Player2;
-    }
-    public bool IsPlayer1Turn()
-    {
-        return MultiplayerGameManager.Instance.GameState == GameState.Player1Turn;
-    }
-    public bool IsPlayer1EndTurn()
-    {
-        return MultiplayerGameManager.Instance.GameState == GameState.Player1EndTurn;
-    }
-    public bool IsPlayer2Turn()
-    {
-        return MultiplayerGameManager.Instance.GameState == GameState.Player2Turn;
-    }
-    public bool IsPlayer2EndTurn()
-    {
-        return MultiplayerGameManager.Instance.GameState == GameState.Player2EndTurn;
-    }
-
 }

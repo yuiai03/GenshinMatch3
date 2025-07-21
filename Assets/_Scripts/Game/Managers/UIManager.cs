@@ -15,6 +15,9 @@ public class UIManager : Singleton<UIManager>
         if (!MainPanel) MainPanel = GetComponentInChildren<MainPanel>();
         if (!CharacterPanel) CharacterPanel = GetComponentInChildren<CharacterPanel>();
         if (!SceneTransiton) SceneTransiton = GetComponentInChildren<SceneTransiton>();
+
+        MainPanel.OnMapButtonClicked();
+
     }
 
     private void OnEnable()
@@ -31,8 +34,13 @@ public class UIManager : Singleton<UIManager>
     {
         MapPanel.MainBgState(sceneType == SceneType.MainMenu);
         MainPanel.MainBgState(sceneType == SceneType.MainMenu);
-        PvpPanel.MainBgState(sceneType == SceneType.MainMenu);
         CharacterPanel.MainBgState(false);
+        PvpPanel.MainBgState(false);
+
+        if(sceneType == SceneType.MainMenu)
+        {
+            MainPanel.OnMapButtonClicked();
+        }
     }
 
     public void ShowPanel(MainButtonType  mainButtonType)

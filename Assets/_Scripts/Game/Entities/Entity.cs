@@ -13,7 +13,10 @@ public class Entity : MonoBehaviourPunCallbacks
             _hp = value;
             HPChanged(_hp);
          
-            if (_hp <= 0) EventManager.GameStateChanged(GameState.GameEnded);
+            if (_hp <= 0)
+            {
+                EventManager.GameStateChanged(GameState.GameEnded);
+            }
         }
     }
     private TileType _currentTileType;
@@ -63,12 +66,8 @@ public class Entity : MonoBehaviourPunCallbacks
     public virtual void TakeDamage(float damage, TileType tileType)
     {
         if (IsShield) return;
-        Debug.LogError($"Current Type truoc khi phan ung: {CurrentTileType} ");
-        Debug.LogError($"kieu TakeDamage: {tileType}");
         var tileConfig = Helper.GetTileConfig(tileType);
         var elementalReactionData = ElementalReactionManager.Instance.ElementalReaction(tileConfig, damage, this);
-        Debug.LogError($"Current Type Sau khi kiem tra phan ung: {CurrentTileType}");
-        Debug.LogError($"Loai phan ung: {elementalReactionData.reactionType}");
         ApplyDamage(tileConfig, elementalReactionData);
     }
 
@@ -79,7 +78,6 @@ public class Entity : MonoBehaviourPunCallbacks
         _entityAnim.Hurt();
         if (HP <= 0)
         {
-            HP = 0;
             _entityAnim.Die();
         }
 

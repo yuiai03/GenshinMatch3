@@ -107,8 +107,8 @@ public enum EntityType
 
 public enum GameState
 {
-    GameEnded,
     GameStart,
+    GameEnded,
 
     PlayerTurn,
     EnemyTurn,

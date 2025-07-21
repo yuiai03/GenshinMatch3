@@ -46,8 +46,11 @@ public class SkillBullet : BulletBase
         }
         else
         {
-            var isPlayer1 = MultiplayerLevelManager.Instance.IsPlayer1Turn() || MultiplayerLevelManager.Instance.IsPlayer1EndTurn();
-            Vector2 targetPosition = isPlayer1 ? MultiplayerLevelManager.Instance.Player2.transform.position : MultiplayerLevelManager.Instance.Player1.transform.position;
+            var isPlayer1 = MultiplayerGameManager.Instance.IsPlayer1Turn() 
+                || MultiplayerGameManager.Instance.IsPlayer1EndTurn();
+            Vector2 targetPosition = isPlayer1 
+                ? MultiplayerLevelManager.Instance.Player2.transform.position 
+                : MultiplayerLevelManager.Instance.Player1.transform.position;
             _direction = (targetPosition - (Vector2)transform.position).normalized;
             _rb2d.velocity = _direction * _speed;
             yield return null;

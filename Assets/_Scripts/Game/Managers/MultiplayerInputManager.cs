@@ -46,7 +46,6 @@ public class MultiplayerInputManager : MonoBehaviourPunCallbacks
     private void OnEndSwapTile(Tile selectedTile, Tile targetTile)
     {
         IsSwapping = false;
-        EventManager.BoardStateChanged(IsSwapping);
 
          _boardManager.CheckAndDeleteMatches();
 
@@ -69,7 +68,6 @@ public class MultiplayerInputManager : MonoBehaviourPunCallbacks
     public void TileEndSwap(Vector2 selectedPos, Vector2 targetPos)
     {
         IsSwapping = false;
-        EventManager.BoardStateChanged(IsSwapping);
 
         _boardManager.CheckAndDeleteMatches();
 

@@ -545,7 +545,9 @@ public void InitializeBoard()
             else
             {
                 if (_matchsHistory.Count == 0) return;
-                EventManager.GameStateChanged(MultiplayerGameManager.Instance.GameState == GameState.Player1Turn ? GameState.Player1EndTurn : GameState.Player2EndTurn);
+                EventManager.BoardStateChanged(MultiplayerInputManager.Instance.IsSwapping);
+                EventManager.GameStateChanged(MultiplayerGameManager.Instance.GameState 
+                    == GameState.Player1Turn ? GameState.Player1EndTurn : GameState.Player2EndTurn);
             }
         }
     }

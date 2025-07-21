@@ -32,19 +32,12 @@ public class BulletBase : MonoBehaviourPunCallbacks
     {
         _tileConfig = GameManager.Instance.TileData.GetTileConfig(matchData.TileType);
         if (_tileConfig == null) return;
-        if (MultiplayerLevelManager.Instance.IsPlayer1EndTurn())
-        {
-            gameObject.tag = "Player1Bullet";
-        }
-        else if (MultiplayerLevelManager.Instance.IsPlayer2EndTurn())
-        {
-            gameObject.tag = "Player2Bullet";
-        }
 
         _spriteRenderer.color = _tileConfig.color;
         _trailRenderer.colorGradient = _tileConfig.gradient;
         _damage = matchData.Count;
         _speed = speed;
+        SetTagWithScene();
 
         if (!followTarget) 
             MoveToTarget();
@@ -73,5 +66,20 @@ public class BulletBase : MonoBehaviourPunCallbacks
     {
         _rb2d.velocity = _direction * _speed;
         yield return null;
+    }
+
+    private void SetTagWithScene()
+    {
+        if (!GameManager.Instance.IsSingleScene())
+        {
+            if (MultiplayerGameManager.Instance.IsPlayer1EndTurn())
+            {
+                gameObject.tag = "Player1Bullet";
+            }
+            else if (MultiplayerGameManager.Instance.IsPlayer2EndTurn())
+            {
+                gameObject.tag = "Player2Bullet";
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class SinglePlayerPanel : Singleton<SinglePlayerPanel>
     [SerializeField] public ElementalReactionView PlayerElementalReactionView;
     [SerializeField] public ElementalReactionView EnemyElementalReactionView;
 
-    [SerializeField] public TextMeshProUGUI TurnText;
+    [SerializeField] public TextMeshProUGUI TurnText, PlayerTurnText;
     [SerializeField] public Button ReturnButton;
     protected override void Awake()
     {
@@ -52,6 +53,11 @@ public class SinglePlayerPanel : Singleton<SinglePlayerPanel>
     public void SetTurnText(int value)
     {
         TurnText.text = $"{value}";
+    }
+
+    public void SetTurnNameText(string name)
+    {
+        PlayerTurnText.text = $"{name}";
     }
     private void ReturnClick()
     {

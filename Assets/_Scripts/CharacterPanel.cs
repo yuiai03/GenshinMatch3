@@ -25,12 +25,10 @@ public class CharacterPanel : PanelBase
         _SkeletonGraphic_1.rectTransform.anchoredPosition = new Vector2(_currentPosX, 0);
         _SkeletonGraphic_2.rectTransform.anchoredPosition = new Vector2(_tempPosX, 0);
     }
-
     private void Start()
     {
         Init();
     }
-
     private void Init()
     {
         if (_characterTypes.Length == 0) return;

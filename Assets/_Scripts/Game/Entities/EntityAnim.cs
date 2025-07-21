@@ -44,10 +44,9 @@ public class EntityAnim : MonoBehaviour
         this.anim.state.AddAnimation(0, anim, loop, 0f);
     }
 
-    private IEnumerator DieCoroutine()
+    protected virtual IEnumerator DieCoroutine()
     {
-        yield return new WaitForSeconds(0.5f);
-        anim.timeScale = 0f;
+        yield return null;
     }
 
 }

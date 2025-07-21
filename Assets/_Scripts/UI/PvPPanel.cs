@@ -4,6 +4,7 @@ using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using UnityEngine.SceneManagement;
 
 public class PvPPanel : MonoBehaviourPunCallbacks
 {
@@ -100,20 +101,13 @@ public class PvPPanel : MonoBehaviourPunCallbacks
         
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
         PhotonNetwork.CurrentRoom.IsOpen = false;
-        
-        // Start game for all players
-        photonView.RPC("StartMultiplayerGame", RpcTarget.AllViaServer);
+
+        Temp.Instance.photonView.RPC("StartMultiplayerGame", RpcTarget.AllViaServer);
     }
 
     private void OnLeaveRoomClicked()
     {
         networkManager.LeaveRoom();
-    }
-
-    [PunRPC]
-    public void StartMultiplayerGame()
-    {
-        LoadManager.Instance.TransitionLevel(SceneType.Multiplayer);
     }
 
     public void OnRoomActionFailed(string message)

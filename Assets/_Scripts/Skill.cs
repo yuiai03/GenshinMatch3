@@ -57,32 +57,41 @@ public class Skill : MonoBehaviourPunCallbacks
         SkillAction();
     }
 
-    [PunRPC]
     public void SkillAction()
     {
         if (!CanActive()) return;
 
-        if (PhotonNetwork.IsMasterClient)
+        if(GameManager.Instance.IsSingleScene())
         {
-            if (MultiplayerLevelManager.Instance.IsPlayer1Turn() || MultiplayerLevelManager.Instance.IsPlayer1EndTurn())
-            {
-                photonView.RPC("SpawnSkill", RpcTarget.AllViaServer);
-            }
+            SpawnSkill();
         }
         else
         {
-            if (MultiplayerLevelManager.Instance.IsPlayer2Turn() || MultiplayerLevelManager.Instance.IsPlayer2EndTurn())
+            var multiplayerGameManager = MultiplayerGameManager.Instance;
+            if (PhotonNetwork.IsMasterClient)
             {
-                photonView.RPC("SpawnSkill", RpcTarget.AllViaServer);
+                if (multiplayerGameManager.IsPlayer1Turn() 
+                    || multiplayerGameManager.IsPlayer1EndTurn())
+                {
+                    photonView.RPC("SpawnSkill", RpcTarget.AllViaServer);
+                }
+            }
+            else
+            {
+                if (multiplayerGameManager.IsPlayer2Turn() 
+                    || multiplayerGameManager.IsPlayer2EndTurn())
+                {
+                    photonView.RPC("SpawnSkill", RpcTarget.AllViaServer);
+                }
             }
         }
-
     }
     [PunRPC]
     public void SpawnSkill()
     {
         ReSetup();
-        var bullet = PoolManager.Instance.GetObject<SkillBullet>(PoolType.SkillBullet, transform.position, null);
+        var bullet = PoolManager.Instance.GetObject<SkillBullet>(
+            PoolType.SkillBullet, transform.position, null);
         var matchData = new MatchData(_tileType, 5);
         bullet.Initialize(matchData, true, 30);
     }
@@ -90,39 +99,45 @@ public class Skill : MonoBehaviourPunCallbacks
     private void SetFillAmount(MatchData matchData)
     {
         if(matchData.TileType != _tileType) return;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            if (MultiplayerLevelManager.Instance.IsPlayer1Turn() || MultiplayerLevelManager.Instance.IsPlayer1EndTurn())
-            {
-                energy += matchData.Count;
-                float targetFillAmount = energy / 10f;
 
-                _fillTween?.Kill();
-                _fillTween = _skillImage.DOFillAmount(targetFillAmount, 0.3f)
-                    .SetEase(Ease.OutQuad)
-                    .OnComplete(() =>
-                    {
-                        if (CanActive()) _skillImage.fillAmount = 1f;
-                    });
-            }
+        if(GameManager.Instance.IsSingleScene())
+        {
+            FillChanged(matchData);
         }
         else
         {
-            if (MultiplayerLevelManager.Instance.IsPlayer2Turn() || MultiplayerLevelManager.Instance.IsPlayer2EndTurn())
+            var multiplayerGameManager = MultiplayerGameManager.Instance;
+            if (PhotonNetwork.IsMasterClient)
             {
-                energy += matchData.Count;
-                float targetFillAmount = energy / 10f;
-
-                _fillTween?.Kill();
-                _fillTween = _skillImage.DOFillAmount(targetFillAmount, 0.3f)
-                    .SetEase(Ease.OutQuad)
-                    .OnComplete(() =>
-                    {
-                        if (CanActive()) _skillImage.fillAmount = 1f;
-                    });
+                if (multiplayerGameManager.IsPlayer1Turn() 
+                    || multiplayerGameManager.IsPlayer1EndTurn())
+                {
+                    FillChanged(matchData);
+                }
+            }
+            else
+            {
+                if (multiplayerGameManager.IsPlayer2Turn() 
+                    || multiplayerGameManager.IsPlayer2EndTurn())
+                {
+                    FillChanged(matchData);
+                }
             }
         }
+    }
 
+    private void FillChanged(MatchData matchData)
+    {
+        energy += matchData.Count;
+        float targetFillAmount = energy / 10f;
+
+        _fillTween?.Kill();
+        _fillTween = _skillImage.DOFillAmount(targetFillAmount, 0.3f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                if (CanActive()) _skillImage.fillAmount = 1f;
+            });
     }
 
     private bool CanActive()

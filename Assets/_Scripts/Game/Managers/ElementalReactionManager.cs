@@ -134,7 +134,14 @@ public class ElementalReactionManager : MonoBehaviourPunCallbacks
 
     private void CreateShield(Entity target)
     {
-        var currentPlayer = target == MultiplayerLevelManager.Instance.Player1 ? MultiplayerLevelManager.Instance.Player2 : MultiplayerLevelManager.Instance.Player1;   
+        Player currentPlayer = null;
+        if (!GameManager.Instance.IsSingleScene())
+        {
+            currentPlayer = MultiplayerLevelManager.Instance.Player1 
+                ? MultiplayerLevelManager.Instance.Player2 
+                : MultiplayerLevelManager.Instance.Player1;
+        }
+
         var player = GameManager.Instance.IsSingleScene() ? SinglePlayerLevelManager.Instance.Player : currentPlayer;
         var pos = new Vector2(player.transform.position.x, player.transform.position.y + 0.6f);
         var shield = PoolManager.Instance.GetObject<Shield>(PoolType.Shield, pos, player.transform);

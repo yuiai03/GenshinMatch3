@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,9 +29,10 @@ public class SinglePlayerGameManager : Singleton<SinglePlayerGameManager>
             TurnNumber = _currentLevelData.levelConfig.turnsNumber;
         }
     }
-    public GameState GameState { get; private set; }
+    public GameState GameState { get; private set; } = GameState.GameStart;
     public EntityType PlayerType { get; set; }
-    private Coroutine _onPlayerEndedActionCoroutine;
+    private Coroutine _onPlayerTurnEndedCoroutine;
+    private Coroutine _onGameEndedCoroutine;
     protected SinglePlayerBoardManager _boardManager => SinglePlayerBoardManager.Instance;
 
     protected override void Awake()
@@ -52,6 +54,8 @@ public class SinglePlayerGameManager : Singleton<SinglePlayerGameManager>
 
     public void SetGameState(GameState state)
     {
+        if(GameState == GameState.GameEnded) return;
+
         GameState = state;
         switch (state)
         {
@@ -81,21 +85,19 @@ public class SinglePlayerGameManager : Singleton<SinglePlayerGameManager>
 
     private void OnPlayerTurn()
     {
-        if (GameState == GameState.GameEnded) return;
-
+        SinglePlayerPanel.Instance.SetTurnNameText("Player Turn");
         _boardManager.SetBoardState(true);
     }
     private void OnEnemyTurn()
     {
-        if (GameState == GameState.GameEnded) return;
-
+        SinglePlayerPanel.Instance.SetTurnNameText("Enemy Turn");
         EventManager.GameStateChanged(GameState.EnemyEndTurn);
     }
 
     private void OnPlayerEndedAction()
     {
-        if (_onPlayerEndedActionCoroutine != null) StopCoroutine(_onPlayerEndedActionCoroutine);
-        _onPlayerEndedActionCoroutine = StartCoroutine(OnPlayerEndedActionCoroutine());
+        if (_onPlayerTurnEndedCoroutine != null) StopCoroutine(_onPlayerTurnEndedCoroutine);
+        _onPlayerTurnEndedCoroutine = StartCoroutine(OnPlayerEndedActionCoroutine());
     }
     private void OnEnemyEndedAction()
     {
@@ -106,16 +108,15 @@ public class SinglePlayerGameManager : Singleton<SinglePlayerGameManager>
     private void OnEndRoundAction()
     {
         TurnNumber--;
-        if (GameState == GameState.GameEnded) return;
-
         EventManager.GameStateChanged(GameState.PlayerTurn);
+    }
+    private void OnGameEnded()
+    {
+        if (_onGameEndedCoroutine != null) StopCoroutine(_onGameEndedCoroutine);
+        _onGameEndedCoroutine = StartCoroutine(OnGameEndedCoroutine());
     }
 
     private void OnGameStart() { }
-    private void OnGameEnded() { }
-
-
-
 
     private IEnumerator OnPlayerEndedActionCoroutine()
     {
@@ -124,5 +125,19 @@ public class SinglePlayerGameManager : Singleton<SinglePlayerGameManager>
         _boardManager.InitializeMatchedTiles();
         yield return new WaitForSeconds(1f);
         SinglePlayerLevelManager.Instance.PlayerAction();
+    }
+    private IEnumerator OnGameEndedCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        if (SinglePlayerLevelManager.Instance.Player.HP <= 0)
+        {
+            SinglePlayerPanel.Instance.SetTurnNameText("You Lost");
+        }
+        else if(SinglePlayerLevelManager.Instance.Enemy.HP <= 0)
+        {
+            SinglePlayerPanel.Instance.SetTurnNameText("You Won");
+        }
+        yield return new WaitForSeconds(3f);
+        LoadManager.Instance.TransitionLevel(SceneType.MainMenu);
     }
 }

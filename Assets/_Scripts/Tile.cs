@@ -16,22 +16,28 @@ public class Tile : MonoBehaviour
                 _empty.Tile = this;
                 transform.SetParent(_empty.transform);
                 if (_moveTween != null && _moveTween.IsActive()) _moveTween.Kill();
-                _moveTween = transform.DOLocalMove(Vector2.zero, Config.TileMoveDuration).OnComplete(() =>
-                {
-                    var selectedTile = GameManager.Instance.CurrentSceneType == SceneType.Multiplayer
-                        ? MultiplayerInputManager.Instance.SelectedTile
-                        : SinglePlayerInputManager.Instance.SelectedTile;
-
-                    var targetTile = GameManager.Instance.CurrentSceneType == SceneType.Multiplayer
-                        ? MultiplayerInputManager.Instance.TargetTile
-                        : SinglePlayerInputManager.Instance.TargetTile;
-
-                    if (this == selectedTile) 
+                _moveTween = transform.DOLocalMove(Vector2.zero, Config.TileMoveDuration)
+                    .OnComplete(() =>
                     {
-                        EventManager.EndSwapTile(selectedTile, targetTile);
-                        MultiplayerInputManager.Instance.photonView.RPC("TileEndSwap", RpcTarget.Others, (Vector2)selectedTile.Empty.IntPos, (Vector2)targetTile.Empty.IntPos);
-                    }
-                });
+                        var selectedTile = !GameManager.Instance.IsSingleScene()
+                            ? MultiplayerInputManager.Instance.SelectedTile
+                            : SinglePlayerInputManager.Instance.SelectedTile;
+
+                        var targetTile = !GameManager.Instance.IsSingleScene()
+                            ? MultiplayerInputManager.Instance.TargetTile
+                            : SinglePlayerInputManager.Instance.TargetTile;
+
+                        if (this == selectedTile)
+                        {
+                            EventManager.EndSwapTile(selectedTile, targetTile);
+                            if (GameManager.Instance.IsSingleScene()) return;
+
+                            MultiplayerInputManager.Instance.photonView.RPC(
+                                "TileEndSwap", RpcTarget.Others,
+                                (Vector2)selectedTile.Empty.IntPos,
+                                (Vector2)targetTile.Empty.IntPos);
+                        }
+                    });
             }
         }
     }
@@ -39,16 +45,6 @@ public class Tile : MonoBehaviour
     public TileType TileType { get; set; }
     private Tween _moveTween;
     private SpriteRenderer spriteRenderer;
-    private PhotonView photonView;
-
-    private void Awake()
-    {
-        photonView = GetComponent<PhotonView>();
-        if (photonView == null)
-        {
-            Debug.LogError("PhotonView component is missing on Tile.");
-        }
-    }
 
     public void InitialData(TileType type, Empty empty)
     {

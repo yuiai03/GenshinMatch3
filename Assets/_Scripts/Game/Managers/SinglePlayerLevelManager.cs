@@ -14,11 +14,9 @@ public class SinglePlayerLevelManager : Singleton<SinglePlayerLevelManager>
     public Enemy Enemy { get; private set; }
 
     private LevelData _levelData;
-    private SinglePlayerBoardManager _singlePlayerBoardManager;
     protected override void Awake()
     {
         base.Awake();
-        _singlePlayerBoardManager = GetComponentInChildren<SinglePlayerBoardManager>();
     }
     private void Start()
     {
@@ -30,8 +28,9 @@ public class SinglePlayerLevelManager : Singleton<SinglePlayerLevelManager>
         if (!SinglePlayerGameManager.Instance.CurrentLevelData) return;
         _levelData = SinglePlayerGameManager.Instance.CurrentLevelData;
 
-        _singlePlayerBoardManager.InitializeEmpty();
-        _singlePlayerBoardManager.InitializeTiles();
+        SinglePlayerBoardManager.Instance.InitializeEmpty();
+        SinglePlayerBoardManager.Instance.InitializeTiles();
+
         InitializeEntities();
     }
 

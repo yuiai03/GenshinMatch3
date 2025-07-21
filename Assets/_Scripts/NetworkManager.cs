@@ -28,7 +28,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log($"Joined room: {PhotonNetwork.CurrentRoom.Name}");
         
-        // Set player properties
         Hashtable playerProps = new Hashtable();
         playerProps["EntityType"] = (int)GameManager.Instance.CurrentPlayerType;
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);

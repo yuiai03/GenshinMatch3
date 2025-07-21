@@ -16,9 +16,11 @@ public class MultiplayerGameManager : MonoBehaviourPunCallbacks
         }
     }
     public EntityType PlayerType { get; private set; }
-    public GameState GameState { get; private set; }
+    public GameState GameState { get; private set; } = GameState.GameStart;
     private Coroutine _onPlayer1EndedActionCoroutine;
     private Coroutine _onPlayer2EndedActionCoroutine;
+    private Coroutine _onGameEndedCoroutine;
+
     protected MultiplayerBoardManager _boardManager => MultiplayerLevelManager.Instance.MultiplayerBoardManager;
     public static MultiplayerGameManager Instance { get; private set; }
 
@@ -158,12 +160,18 @@ public class MultiplayerGameManager : MonoBehaviourPunCallbacks
     private void OnGameStart() { }
     private void OnGameEnded()
     {
+        if (_onGameEndedCoroutine != null) StopCoroutine(_onGameEndedCoroutine);
+        _onGameEndedCoroutine = StartCoroutine(OnGameEndedCoroutine());
+    }
+
+    private IEnumerator OnGameEndedCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
         if (PhotonNetwork.IsMasterClient)
         {
             if (MultiplayerLevelManager.Instance.Player2.HP <= 0)
             {
                 MultiplayerPanel.Instance.SetTurnNameText("You Won");
-
             }
             else if (MultiplayerLevelManager.Instance.Player1.HP <= 0)
             {
@@ -175,15 +183,16 @@ public class MultiplayerGameManager : MonoBehaviourPunCallbacks
             if (MultiplayerLevelManager.Instance.Player1.HP <= 0)
             {
                 MultiplayerPanel.Instance.SetTurnNameText("You Won");
-
             }
             else if (MultiplayerLevelManager.Instance.Player2.HP <= 0)
             {
                 MultiplayerPanel.Instance.SetTurnNameText("You Lost");
             }
         }
-    }
+        yield return new WaitForSeconds(3f);
+        //photonView.RPC("ChangeMainMenuScene", RpcTarget.AllViaServer);
 
+    }
     private IEnumerator OnPlayer1EndedActionCoroutine()
     {
         yield return new WaitForSeconds(1f);
@@ -206,5 +215,36 @@ public class MultiplayerGameManager : MonoBehaviourPunCallbacks
     {
         return (PhotonNetwork.IsMasterClient && GameState != GameState.Player1Turn)
             || (!PhotonNetwork.IsMasterClient && GameState == GameState.Player1Turn);
+    }
+
+    public Player CurrentPlayer()
+    {
+        if (PhotonNetwork.IsMasterClient && GameState == GameState.Player1EndTurn) 
+            return MultiplayerLevelManager.Instance.Player1;
+        else 
+            return MultiplayerLevelManager.Instance.Player2;
+    }
+    public bool IsPlayer1Turn()
+    {
+        return GameState == GameState.Player1Turn;
+    }
+    public bool IsPlayer1EndTurn()
+    {
+        return GameState == GameState.Player1EndTurn;
+    }
+    public bool IsPlayer2Turn()
+    {
+        return GameState == GameState.Player2Turn;
+    }
+    public bool IsPlayer2EndTurn()
+    {
+        return GameState == GameState.Player2EndTurn;
+    }
+
+    [PunRPC]
+    public void ChangeMainMenuScene()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+        LoadManager.Instance.TransitionLevel(SceneType.MainMenu);
     }
 }

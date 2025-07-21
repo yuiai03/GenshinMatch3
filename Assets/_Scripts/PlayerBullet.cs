@@ -17,6 +17,7 @@ public class PlayerBullet : BulletBase
         }
         else if (collision.CompareTag("Shield"))
         {
+            if (GameManager.Instance.IsSingleScene()) return;
             var shield = collision.GetComponent<Shield>();
             if (shield)
             {
@@ -35,15 +36,16 @@ public class PlayerBullet : BulletBase
         }
         else if (collision.CompareTag("Player"))
         {
+            if (GameManager.Instance.IsSingleScene()) return;
             var player = collision.GetComponent<Player>();
             if (player)
             {
-                if (player == MultiplayerLevelManager.Instance.Player2 && MultiplayerGameManager.Instance.GameState == GameState.Player1EndTurn)
+                if (player == MultiplayerLevelManager.Instance.Player2 && MultiplayerGameManager.Instance.IsPlayer1EndTurn())
                 {
                     player.TakeDamage(_damage, _tileConfig.tileType);
                     PoolManager.Instance.ReturnObject(PoolType.PlayerBullet, gameObject);
                 }
-                else if (player == MultiplayerLevelManager.Instance.Player1 && MultiplayerGameManager.Instance.GameState == GameState.Player2EndTurn)
+                else if (player == MultiplayerLevelManager.Instance.Player1 && MultiplayerGameManager.Instance.IsPlayer2EndTurn())
                 {
                     player.TakeDamage(_damage, _tileConfig.tileType);
                     PoolManager.Instance.ReturnObject(PoolType.PlayerBullet, gameObject);
@@ -60,7 +62,7 @@ public class PlayerBullet : BulletBase
         }
         else
         {
-            _direction = MultiplayerGameManager.Instance.GameState == GameState.Player1EndTurn ? Vector2.right : Vector2.left;
+            _direction = MultiplayerGameManager.Instance.IsPlayer1EndTurn() ? Vector2.right : Vector2.left;
         }
         base.MoveToTarget();
     }
