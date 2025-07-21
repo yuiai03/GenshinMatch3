@@ -7,6 +7,12 @@ TagManager:
   - Enemy
   - EnemyBullet
   - PlayerBullet
+  - Player1
+  - Player2
+  - SkillBullet
+  - Shield
+  - Player1Bullet
+  - Player2Bullet
   layers:
   - Default
   - TransparentFX

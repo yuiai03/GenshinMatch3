@@ -1,28 +1,39 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiplayerInputManager : Singleton<MultiplayerInputManager>
+public class MultiplayerInputManager : MonoBehaviourPunCallbacks
 {
     public bool CanSwap { get; set; }
     public bool IsSwapping { get; set; }
     public bool IsBackSwapping { get; set; }
     public Tile SelectedTile { get; private set; }
     public Tile TargetTile { get; private set; }
+    public static MultiplayerInputManager Instance;
 
     [SerializeField] private Vector2 _inputStartPosition;
     [SerializeField] private Vector2Int _currentSwapDirection;
+
     private MultiplayerBoardManager _boardManager => MultiplayerLevelManager.Instance.MultiplayerBoardManager;
 
     // Mouse input tracking
     private bool _isMousePressed = false;
 
-    private void OnEnable()
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
+    public override void OnEnable()
     {
         EventManager.OnEndSwapTile += OnEndSwapTile;
         EventManager.OnStartSwapTile += OnStartSwapTile;
         EventManager.OnBoardStateChanged +=  (isBusy) => CanSwap = !isBusy;
     }
-    private void OnDisable()
+    public override void OnDisable()
     {
         EventManager.OnEndSwapTile -= OnEndSwapTile;
         EventManager.OnStartSwapTile -= OnStartSwapTile;
@@ -44,11 +55,32 @@ public class MultiplayerInputManager : Singleton<MultiplayerInputManager>
             IsBackSwapping = !IsBackSwapping;
             if (IsBackSwapping)
             {
+                if (MultiplayerGameManager.Instance.IsNotMyTurn()) return;
                 _boardManager.HandleSwapTiles(selectedTile, targetTile);
-                return;
             }
         }
-        SelectedTile = TargetTile = null;
+        else
+        {
+            SelectedTile = TargetTile = null;
+        }
+    }
+
+    [PunRPC]
+    public void TileEndSwap(Vector2 selectedPos, Vector2 targetPos)
+    {
+        IsSwapping = false;
+        EventManager.BoardStateChanged(IsSwapping);
+
+        _boardManager.CheckAndDeleteMatches();
+
+        if (_boardManager.GetMatchHistory().Count == 0)
+        {
+            IsBackSwapping = !IsBackSwapping;
+        }
+        else
+        {
+            SelectedTile = TargetTile = null;
+        }
     }
 
     private void OnStartSwapTile(Tile selectedTile, Tile targetTile)
@@ -56,7 +88,6 @@ public class MultiplayerInputManager : Singleton<MultiplayerInputManager>
         if (!selectedTile || !targetTile) return;
 
         IsSwapping = true;
-        _boardManager.ClearMatchHistory();
     }
     private void HandleGameInput()
     {
@@ -153,8 +184,27 @@ public class MultiplayerInputManager : Singleton<MultiplayerInputManager>
         Vector2Int newPos = SelectedTile.Empty.IntPos + _currentSwapDirection;
         if(IsValidPos(newPos) && newPos == TargetTile.Empty.IntPos)
         {
+            if (MultiplayerGameManager.Instance.IsNotMyTurn()) return;
             _boardManager.HandleSwapTiles(SelectedTile, TargetTile);
+
+            var matches = _boardManager.GetType()
+                .GetMethod("FindAllMatches", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .Invoke(_boardManager, null) as List<Match>;
+            if (matches != null && matches.Count > 0)
+            {
+                var selectedPos = (Vector2)SelectedTile.Empty.IntPos;
+                var targetPos = (Vector2)TargetTile.Empty.IntPos;
+                photonView.RPC("SyncSwapTiles", RpcTarget.Others, selectedPos, targetPos);
+            }
         }
+    }
+
+    [PunRPC]
+    public void SyncSwapTiles(Vector2 selectedPos, Vector2 targetPos)
+    {
+        Tile selectedTile = _boardManager.GetTileAtPos(Vector2Int.RoundToInt(selectedPos));
+        Tile targetTile = _boardManager.GetTileAtPos(Vector2Int.RoundToInt(targetPos));
+        _boardManager.HandleSwapTiles(selectedTile, targetTile);
     }
 
     private bool IsValidPos(Vector2Int pos)
@@ -165,6 +215,7 @@ public class MultiplayerInputManager : Singleton<MultiplayerInputManager>
 
     private bool CanInput()
     {
-        return MultiplayerGameManager.Instance.GameState == GameState.PlayerTurn;
+        return MultiplayerGameManager.Instance.GameState == GameState.Player1Turn
+            || MultiplayerGameManager.Instance.GameState == GameState.Player2Turn;
     }
 }

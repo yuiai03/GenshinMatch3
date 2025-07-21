@@ -33,6 +33,7 @@ public class Entity : MonoBehaviourPunCallbacks
     protected EntityData _entityData {get; private set;}
 
     [SerializeField] protected Transform shootPoint;
+    [SerializeField] protected GameObject arrow;
 
     public virtual void GetData(EntityData entityData)
     {
@@ -53,16 +54,25 @@ public class Entity : MonoBehaviourPunCallbacks
             _entityAnim.Idle();
         }
     }
+    public void ArrowState(bool state)
+    {
+        arrow.SetActive(state);
+    }
 
-    public virtual void TakeDamage(float damage, TileConfig tileConfig)
+    [PunRPC]
+    public virtual void TakeDamage(float damage, TileType tileType)
     {
         if (IsShield) return;
-
+        Debug.LogError($"Current Type truoc khi phan ung: {CurrentTileType} ");
+        Debug.LogError($"kieu TakeDamage: {tileType}");
+        var tileConfig = Helper.GetTileConfig(tileType);
         var elementalReactionData = ElementalReactionManager.Instance.ElementalReaction(tileConfig, damage, this);
+        Debug.LogError($"Current Type Sau khi kiem tra phan ung: {CurrentTileType}");
+        Debug.LogError($"Loai phan ung: {elementalReactionData.reactionType}");
         ApplyDamage(tileConfig, elementalReactionData);
     }
 
-    public virtual void ApplyDamage( TileConfig tileConfig, ElementalReactionData elementalReactionData)
+    public virtual void ApplyDamage(TileConfig tileConfig, ElementalReactionData elementalReactionData)
     {
         var data = elementalReactionData;
         HP -= data.damage;

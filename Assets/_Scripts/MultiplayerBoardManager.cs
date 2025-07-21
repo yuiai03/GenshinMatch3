@@ -16,11 +16,14 @@ public class MultiplayerBoardManager : MonoBehaviourPunCallbacks
     private List<MatchedTileView> _matchedTileViews = new List<MatchedTileView>();
 
     private Coroutine _initialTilesCoroutine;
-    private PhotonView _photonView;
+    public static MultiplayerBoardManager Instance { get; private set; }
 
     private void Awake()
     {
-        _photonView = GetComponent<PhotonView>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     public override void OnEnable()
@@ -34,11 +37,11 @@ public class MultiplayerBoardManager : MonoBehaviourPunCallbacks
 
 public void InitializeBoard()
 {
-    if (_photonView.IsMine)
+    if (photonView.IsMine)
     {
-        int randomSeed = Random.Range(0, int.MaxValue); 
-        _photonView.RPC("InitializeEmpty", RpcTarget.AllBuffered);
-        _photonView.RPC("InitializeTiles", RpcTarget.AllBuffered, randomSeed);
+        int randomSeed = Random.Range(0, int.MaxValue);
+            photonView.RPC("InitializeEmpty", RpcTarget.AllBufferedViaServer);
+            photonView.RPC("InitializeTiles", RpcTarget.AllBufferedViaServer, randomSeed);
     }
 }
 
@@ -73,7 +76,7 @@ public void InitializeBoard()
     {
         foreach (var match in _matchsHistory)
         {
-            var holder = SinglePlayerPanel.Instance.MatchedTilesViewHolder;
+            var holder = MultiplayerPanel.Instance.MatchedTilesViewHolder;
             MatchedTileView matchedTileView =
                 PoolManager.Instance.GetObject<MatchedTileView>(
                 PoolType.MatchedTileView, Vector2.zero, holder.transform);
@@ -83,7 +86,6 @@ public void InitializeBoard()
         }
     }
 
-    [PunRPC]
     private IEnumerator InitialTilesCoroutine()
     {
         if (_emptys.Length == 0) yield break;
@@ -109,7 +111,7 @@ public void InitializeBoard()
         else
         {
             EventManager.BoardStateChanged(false);
-            EventManager.GameStateChanged(GameState.PlayerTurn);
+            EventManager.GameStateChanged(GameState.Player1Turn);
         }
     }
 
@@ -388,13 +390,24 @@ public void InitializeBoard()
     }
     private void RefillBoard()
     {
+        if (photonView.IsMine)
+        {
+            int refillSeed = Random.Range(0, int.MaxValue);
+            photonView.RPC("RefillBoardRPC", RpcTarget.AllViaServer, refillSeed);
+        }
+    }
+
+    [PunRPC]
+    public void RefillBoardRPC(int seed)
+    {
+        UnityEngine.Random.InitState(seed);
         StartCoroutine(RefillBoardCoroutine());
     }
 
     private IEnumerator RefillBoardCoroutine()
     {
         EventManager.BoardStateChanged(true);
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.1f);
 
         for (int x = 0; x < Width; x++)
         {
@@ -468,7 +481,11 @@ public void InitializeBoard()
     }
 
     public List<MatchData> GetMatchHistory() => new List<MatchData>(_matchsHistory);
+
+    [PunRPC]
     public void ClearMatchHistory() => _matchsHistory.Clear();
+
+    [PunRPC]
     public void ClearMatchedTileViews()
     {
         foreach (var matchedTileView in _matchedTileViews)
@@ -482,6 +499,8 @@ public void InitializeBoard()
     {
         return _emptys[position.x, position.y].Tile;
     }
+
+    [PunRPC]
     public void SetBoardState(bool state) => BoardBg.SetActive(state);
 
     public void CheckAndDeleteMatches()
@@ -526,7 +545,7 @@ public void InitializeBoard()
             else
             {
                 if (_matchsHistory.Count == 0) return;
-                EventManager.GameStateChanged(GameState.PlayerEndTurn);
+                EventManager.GameStateChanged(MultiplayerGameManager.Instance.GameState == GameState.Player1Turn ? GameState.Player1EndTurn : GameState.Player2EndTurn);
             }
         }
     }
@@ -534,6 +553,8 @@ public void InitializeBoard()
     [PunRPC]
     public void HandleSwapTilesRPC(Vector2 selectedPos, Vector2 targetPos)
     {
+        if(photonView.IsMine == false) return;
+
         Tile selectedTile = GetTileAtPos(Vector2Int.RoundToInt(selectedPos));
         Tile targetTile = GetTileAtPos(Vector2Int.RoundToInt(targetPos));
         EventManager.StartSwapTile(selectedTile, targetTile);
@@ -549,8 +570,6 @@ public void InitializeBoard()
     {
         Tile selectedTile = GetTileAtPos(Vector2Int.RoundToInt(selectedPos));
         Tile targetTile = GetTileAtPos(Vector2Int.RoundToInt(targetPos));
-        Debug.LogError(selectedTile);
-        Debug.LogError(targetTile);
         if (selectedTile != null && targetTile != null)
         {
             EventManager.EndSwapTile(selectedTile, targetTile);

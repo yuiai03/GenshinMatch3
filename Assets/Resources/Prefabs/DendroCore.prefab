@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1811206963287823993}
   - component: {fileID: 8475096527910974306}
   - component: {fileID: 1400813011015476171}
+  - component: {fileID: 1964259045171221784}
   m_Layer: 0
   m_Name: DendroCore
   m_TagString: Untagged
@@ -97,7 +98,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86880ae8bff6d7746823956c01148c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropEase: 30
-  preExplosionDuration: 0.5
-  explosionScale: 1.5
   explosionRadius: 1
+--- !u!114 &1964259045171221784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6581018738372729512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

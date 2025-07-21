@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 4068285623773889726}
   - component: {fileID: 6852331498350399234}
   - component: {fileID: 6458767434445300668}
+  - component: {fileID: 3084784089965646610}
   m_Layer: 5
   m_Name: Skill
   m_TagString: Untagged
@@ -378,13 +379,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9dc4956484b83f46b165094461d42c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canActive: 0
   _tileType: 6
   _borderImage: {fileID: 2020038172604015922}
   _bgImage: {fileID: 633635953042259440}
   _iconImage: {fileID: 8857402051258502240}
   _skillImage: {fileID: 7647698473833643308}
   _skillButton: {fileID: 6852331498350399234}
+--- !u!114 &3084784089965646610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2633000320130085501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents:
+  - {fileID: 0}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5831373790895418521
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +478,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 0.488
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

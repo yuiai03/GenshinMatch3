@@ -59,11 +59,23 @@ public class DendroCore : MonoBehaviour
         
         foreach (var collider in colliders)
         {
-            var enemy = collider.GetComponent<Enemy>();
-            if (enemy)
+            if (GameManager.Instance.IsSingleScene())
             {
-                var dendroConfig = Helper.GetTileConfig(TileType.Dendro);
-                enemy.TakeDamage(_currentDamage, dendroConfig);
+                var enemy = collider.GetComponent<Enemy>();
+                if (enemy)
+                {
+                    var dendroConfig = Helper.GetTileConfig(TileType.Dendro);
+                    enemy.TakeDamage(_currentDamage, dendroConfig.tileType);
+                }
+            }
+            else
+            {
+                var player = collider.GetComponent<Player>();
+                if (player)
+                {
+                    var dendroConfig = Helper.GetTileConfig(TileType.Dendro);
+                    player.TakeDamage(_currentDamage, dendroConfig.tileType);
+                }
             }
         }
     }

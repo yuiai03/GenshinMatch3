@@ -29,6 +29,7 @@ public class Tile : MonoBehaviour
                     if (this == selectedTile) 
                     {
                         EventManager.EndSwapTile(selectedTile, targetTile);
+                        MultiplayerInputManager.Instance.photonView.RPC("TileEndSwap", RpcTarget.Others, (Vector2)selectedTile.Empty.IntPos, (Vector2)targetTile.Empty.IntPos);
                     }
                 });
             }

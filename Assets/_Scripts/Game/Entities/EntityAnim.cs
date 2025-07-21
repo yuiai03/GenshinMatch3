@@ -1,4 +1,5 @@
 using Spine.Unity;
+using System.Collections;
 using UnityEngine;
 
 public class EntityAnim : MonoBehaviour
@@ -8,6 +9,7 @@ public class EntityAnim : MonoBehaviour
     public AnimationReferenceAsset die {get; set;}
     public AnimationReferenceAsset attack {get; set;}
     public SkeletonAnimation anim {get; set;}
+    private Coroutine dieCoroutine;
 
 
     protected virtual void Awake()
@@ -18,11 +20,14 @@ public class EntityAnim : MonoBehaviour
     private void OnEnable() { }
     public void Idle()
     {
+        anim.timeScale = 1f;
         anim.state.SetAnimation(0, idle, true);
     }
     public void Die()
     {
         anim.state.SetAnimation(0, die, false);
+        if (dieCoroutine != null) StopCoroutine(dieCoroutine);
+        dieCoroutine = StartCoroutine(DieCoroutine());
     }
     public void Hurt()
     {
@@ -37,6 +42,12 @@ public class EntityAnim : MonoBehaviour
     public void AddAnim(AnimationReferenceAsset anim, bool loop)
     {
         this.anim.state.AddAnimation(0, anim, loop, 0f);
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        anim.timeScale = 0f;
     }
 
 }

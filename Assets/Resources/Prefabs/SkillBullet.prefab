@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2534435443017891806}
   - component: {fileID: 360462424090283405}
-  - component: {fileID: 8454413229337452082}
   - component: {fileID: 7417914256488950656}
   - component: {fileID: 7332390042132958870}
   - component: {fileID: 2457820279499467178}
   - component: {fileID: 5108758994561360001}
+  - component: {fileID: -1165497294228669068}
   m_Layer: 0
-  m_Name: PlayerBullet
+  m_Name: SkillBullet
   m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,18 +89,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8454413229337452082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4578113506373232608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52ab3904e9626094f8575f2131faa6b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!96 &7417914256488950656
 TrailRenderer:
   serializedVersion: 3
@@ -316,3 +304,15 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-1165497294228669068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4578113506373232608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2515b238776ed4ebdfeedaeb09fc55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

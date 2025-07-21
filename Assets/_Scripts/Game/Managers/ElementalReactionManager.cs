@@ -1,9 +1,11 @@
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElementalReactionManager : Singleton<ElementalReactionManager>
+public class ElementalReactionManager : MonoBehaviourPunCallbacks
 {
+    public static ElementalReactionManager Instance { get; private set; }
     private Coroutine _targetApplyDamageCoroutine;
     private Dictionary<(TileType, TileType), ReactionType> _elementalReactionDictionary =
         new Dictionary<(TileType, TileType), ReactionType>
@@ -41,7 +43,13 @@ public class ElementalReactionManager : Singleton<ElementalReactionManager>
             { (TileType.Anemo, TileType.Cryo), ReactionType.Swirl },
             { (TileType.Anemo, TileType.Electro), ReactionType.Swirl }
         };
-
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
     public ElementalReactionData ElementalReaction(TileConfig activeTileConfig, float baseDamage, Entity target)
     {
         if (target.CurrentTileType == TileType.None)
@@ -72,6 +80,7 @@ public class ElementalReactionManager : Singleton<ElementalReactionManager>
                 break;
 
             case ReactionType.ElectroCharged or ReactionType.Overloaded or ReactionType.Superconduct or ReactionType.Aggravate:
+                finalDamage = Config.ReactionDamageBonus;
                 TargetApplyDamage(new ElementalReactionData(Config.ReactionDamageBonus, elementalReactionData.reactionType), target, activeTileConfig);
                 target.CurrentTileType = TileType.None;
                 break;
@@ -92,17 +101,16 @@ public class ElementalReactionManager : Singleton<ElementalReactionManager>
                 target.CurrentTileType = TileType.None;
                 break;
 
-
             case ReactionType.Bloom:
                 CreateDendroExplosion(target, Config.DendroCoreExplosionDamage);
                 target.CurrentTileType = TileType.None;
                 break;
 
-
             case ReactionType.Freeze:
+                finalDamage = Config.FreezeDamage;
                 TargetApplyDamage(new ElementalReactionData(Config.FreezeDamage, elementalReactionData.reactionType), target, activeTileConfig);
-                target.CurrentTileType = TileType.None;
                 target.IsFreeze = true;
+                target.CurrentTileType = TileType.None;
                 break;
         }
 
@@ -126,9 +134,11 @@ public class ElementalReactionManager : Singleton<ElementalReactionManager>
 
     private void CreateShield(Entity target)
     {
-        var player = SinglePlayerLevelManager.Instance.Player;
-        var pos = new Vector2(player.transform.position.x + 0.1f, player.transform.position.y + 0.6f);
+        var currentPlayer = target == MultiplayerLevelManager.Instance.Player1 ? MultiplayerLevelManager.Instance.Player2 : MultiplayerLevelManager.Instance.Player1;   
+        var player = GameManager.Instance.IsSingleScene() ? SinglePlayerLevelManager.Instance.Player : currentPlayer;
+        var pos = new Vector2(player.transform.position.x, player.transform.position.y + 0.6f);
         var shield = PoolManager.Instance.GetObject<Shield>(PoolType.Shield, pos, player.transform);
+        shield.PlayerOwner = player;
     }
 
     private void CreateDendroExplosion(Entity target, float damage)

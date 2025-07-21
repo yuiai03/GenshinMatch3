@@ -88,7 +88,6 @@ public class PvPPanel : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) return;
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2) return;
         
-        // Set room properties for game
         Hashtable roomProps = new Hashtable();
         Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
         
@@ -96,13 +95,14 @@ public class PvPPanel : MonoBehaviourPunCallbacks
         {
             EntityType entityType = GetPlayerEntityType(players[i]);
             roomProps[$"Player{i}EntityType"] = (int)entityType;
+            Debug.LogError(entityType);
         }
         
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
         PhotonNetwork.CurrentRoom.IsOpen = false;
         
         // Start game for all players
-        photonView.RPC("StartMultiplayerGame", RpcTarget.All);
+        photonView.RPC("StartMultiplayerGame", RpcTarget.AllViaServer);
     }
 
     private void OnLeaveRoomClicked()

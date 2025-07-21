@@ -1,10 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultiplayerPanel : MonoBehaviour
+public class MultiplayerPanel : Singleton<MultiplayerPanel>
 {
     [SerializeField] public GameObject Menu;
     [SerializeField] public GameObject MatchedTilesViewHolder;
@@ -15,10 +15,11 @@ public class MultiplayerPanel : MonoBehaviour
     [SerializeField] public ElementalReactionView Player1ElementalReactionView;
     [SerializeField] public ElementalReactionView Player2ElementalReactionView;
 
-    [SerializeField] public TextMeshProUGUI TurnText;
+    [SerializeField] public TextMeshProUGUI TurnText, PlayerTurnText;
     [SerializeField] public Button ReturnButton;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         ReturnButton.onClick.AddListener(ReturnClick);
     }
 
@@ -52,6 +53,10 @@ public class MultiplayerPanel : MonoBehaviour
     public void SetTurnText(int value)
     {
         TurnText.text = $"{value}";
+    }
+    public void SetTurnNameText(string name)
+    {
+        PlayerTurnText.text = $"{name}";
     }
     private void ReturnClick()
     {

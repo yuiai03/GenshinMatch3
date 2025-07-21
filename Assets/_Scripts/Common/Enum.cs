@@ -80,6 +80,7 @@ public enum PoolType
     TextDamagePopup,
     Shield,
     DendroCore,
+    SkillBullet,
 }
 
 public enum EntityType
@@ -111,9 +112,13 @@ public enum GameState
 
     PlayerTurn,
     EnemyTurn,
-    
+    Player1Turn,
+    Player2Turn,
+
     PlayerEndTurn,
     EnemyEndTurn,
+    Player1EndTurn,
+    Player2EndTurn,
 
     EndRound,
     

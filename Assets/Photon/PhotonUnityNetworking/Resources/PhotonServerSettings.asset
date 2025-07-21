@@ -79,6 +79,33 @@ MonoBehaviour:
   - HandleSwapTiles
   - HandleSwapBackRPC
   - SyncMatchResultRPC
+  - Temp
+  - Temp2
+  - OnTileMatch
+  - MoveToTarget
+  - Player1Action
+  - InitializeEntities
+  - SyncPlayerReferences
+  - AssignPlayerReference
+  - Player2Action
+  - ClearMatchedTileViews
+  - SetBoardState
+  - ClearMatchHistory
+  - SetGameState
+  - GameStateChange
+  - ApplyDamageToPlayer
+  - TakeDamage
+  - CheckAndDeleteMatchesTemp
+  - ClearMatchHistoryRPC
+  - OnEndSwapTileRPC
+  - TileEndSwap
+  - RefillBoardRPC
+  - CreateShieldRPC
+  - CreateShield
+  - SetTag
+  - SkillAction
+  - CreateSkillBullet
+  - SpawnSkill
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
